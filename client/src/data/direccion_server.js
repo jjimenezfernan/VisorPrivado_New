@@ -1,10 +1,11 @@
+// Direccion del servidor de la API
 
 let DIRECTION;
 
 if (process.env.NODE_ENV === 'production') {
-    DIRECTION = 'https://api.observatoriodedatosepiu.khoraurbanthinkers.es:443';
+    DIRECTION = 'https://visorprivadoemsv.khoraurbanthinkers.es';
 } else {
-    DIRECTION = 'http://localhost:3030';
+    DIRECTION = 'http://localhost:3050';
 }
 
 export { DIRECTION };

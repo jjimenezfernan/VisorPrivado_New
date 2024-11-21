@@ -6,6 +6,8 @@ const fs = require("fs");
 const path = require("path");
 // const { da } = require("date-fns/locale");
 const app = express();
+import { PORT } from "./ip_constants.js";
+
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -2245,8 +2247,8 @@ app.get("/api/getPathsArray", async (req, res) => {
   res.json(data);
 });
 
-app.listen(3030, () => {
-  console.log("Server listening on port 3030");
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
 
 /*-------- Khora credits --------*/
