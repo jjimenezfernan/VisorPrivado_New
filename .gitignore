@@ -1,0 +1,8 @@
+node_modules/
+npm-debug.log
+.DS_store
+visor_privado_emsv_nginx_node_server/imagen_js_server/servers_backend/visor_privado_emsv_server
+visor_privado_emsv_nginx_node_server/visor_privado_emsv_client
+**.tar
+**.zip
+**.tar.gz
