@@ -4,9 +4,9 @@ var XLSX = require("xlsx");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const path = require("path");
-// const { da } = require("date-fns/locale");
+const PORT = require("./ip_constants.js");
+
 const app = express();
-import { PORT } from "./ip_constants.js";
 
 app.use(cors());
 app.use(bodyParser.json());
