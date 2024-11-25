@@ -128,12 +128,6 @@ function loadExcelData(dataPath, isRow, sheetN) {
       }
     }
   }
-
-  // code too clean out undefines:
-  // const resultCleaned = result.map((arr) => arr.filter((k) => !!k));
-  // return resultCleaned;
-  //we actuallt dont want to clean out undefines bc we need the
-  //columns to be fixed
   return result;
 }
 
@@ -764,6 +758,24 @@ app.get("/api/dashboard", (req, res) => {
   // console.log("lineData", lineData[1]);
   // console.log("lineAxis", lineAxis);
 
+  // Harcode data para informacion socioeconomica e informacion evolutiva
+  const infoSocialEco = [
+    ["Mujeres(%)", 59.33],
+    ["Hombres(%)", 40.67],
+    ["Usuarios Propietarios(%)",38.01],
+    ["Edad media de los usuarios", 20.60],
+    ["Mujeres(años)", 20.60],
+    ["Hombres(años)", 20.60],
+    ["Usuario Empleados(%)", "S/D"],
+    ["Bono Social(%)", 15.04],
+    ["Disponibilidad de ascensor(% viviendas)", "S/D"]
+  ];
+
+  const infoEvol = [
+    ["Poblacion Alcanzada(%)", 100],
+    ["Edificios Rehabilitados(nº)", 187]
+  ];
+
   const data = {
     globalData,
     barChart1: [barChart1, headers1],
@@ -771,6 +783,8 @@ app.get("/api/dashboard", (req, res) => {
     barChart3,
     barChart4,
     lineChart1: [lineData, lineAxis],
+    infoSocialEco,
+    infoEvol
   };
   res.json(data);
 });

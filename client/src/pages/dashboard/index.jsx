@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import SubBar from "../global/SubBar";
@@ -13,18 +13,26 @@ import FamilyRestroomIcon from "@mui/icons-material/FamilyRestroom";
 import AdfScannerIcon from "@mui/icons-material/AdfScanner";
 import CallIcon from "@mui/icons-material/Call";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import WcIcon from '@mui/icons-material/Wc';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
+import HouseIcon from '@mui/icons-material/House';
+import HailIcon from '@mui/icons-material/Hail';
+import Diversity1Icon from '@mui/icons-material/Diversity1';
+import ElevatorIcon from '@mui/icons-material/Elevator';
+import PercentIcon from '@mui/icons-material/Percent';
+import ApartmentIcon from '@mui/icons-material/Apartment';
 import {DIRECTION} from "../../data/direccion_server";
+import { display } from "@mui/system";
 
 const baseURL = DIRECTION + "/api/dashboard";
-
- // "https://observatoriodedatosepiu.khoraurbanthinkers.es/api/dashboard";
-// const storageKey = "dashboardData"; // Key for storing/retrieving data from localStorage
 
 function Dashboard() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const [globalData, setGlobalData] = useState([]);
+  const [infoSocialEco, setInfoSocialEco] = useState([]);
+  const [infoEvol, setInfoEvol] = useState([]);
   const [barData1, setBarData1] = useState([]);
   const [barHeaders1, setHeadersData1] = useState([]);
   const [barData2, setBarData2] = useState([]);
@@ -34,14 +42,13 @@ function Dashboard() {
   const [lineMarkers1, setLineMarkers1] = useState([]);
 
   useEffect(() => {
-    // const storedData = sessionStorage.getItem(storageKey);
-    // if (storedData) {
-    //   const parsedData = JSON.parse(storedData);
-    //   setSunburstData(parsedData[0]);
-    // } else {
+
+    // Peticion para obtener los datos 
     axios.get(baseURL).then((res) => {
       const data = res.data;
       setGlobalData(data.globalData);
+      setInfoSocialEco(data.infoSocialEco);
+      setInfoEvol(data.infoEvol);
       setBarData1(data.barChart1[0]);
       setHeadersData1(data.barChart1[1]);
       setBarData2(data.barChart2);
@@ -53,9 +60,8 @@ function Dashboard() {
       console.log("Contact with us in https://khoraurbanthinkers.es/en/home-en/")
       console.log("Our X account https://x.com/khoraurban")
       console.log("Our Linkedin account https://www.linkedin.com/company/khora-urban-thinkers/posts/?feedView=all")
-      // sessionStorage.setItem(storageKey, JSON.stringify(data));
+
     });
-    // }
   }, []);
 
   return (
@@ -82,47 +88,64 @@ function Dashboard() {
           gap={"10px"}
         >
           <Box
-            gridColumn={"span 2"}
-            gridRow={"span 2"}
+            gridColumn={"span 5"}
+            gridRow={"span 1"}
             backgroundColor={colors.gray[900]}
-            display={"flex"}
-            // alignItems={"center"}
-            justifyContent={"space-evenly"}
+            display={"grid"}
+            gridTemplateColumns={"repeat(2,1fr)"}
+            gridTemplateRows={"repeat(3, 1fr)"}
+            // justifyContent={"space-evenly"}
             padding={"10px 5px 10px 20px"}
-            flexDirection={"column"}
+            // flexDirection={"column"}
           >
             {globalData.length > 0 ? (
               <>
                 <Typography
-                  variant={"h5"}
+                  variant={"h3"}
                   color={colors.gray[100]}
-                  // textAlign={"center"}
+                  gridColumn={"span 2"}
+                  gridRow={"span 1"}
                 >
-                  <FamilyRestroomIcon fontSize={"medium"} sx={{ mr: "15px" }} />
-                  <strong>{globalData[0][1]}</strong> usuarios de la OHS
+                  <strong>INFORAMACIÓN OPERATIVA</strong>
                 </Typography>
                 <Typography
                   variant={"h5"}
                   color={colors.gray[100]}
+                  gridColumn={"span 1"}
+                  gridRow={"span 1"}
+                  // textAlign={"center"}
+                >
+                  <FamilyRestroomIcon fontSize={"large"} sx={{ mr: "15px" }} />
+                  Usuarios de la OHS: <strong>{globalData[0][1]}</strong>
+                </Typography>
+                <Typography
+                  variant={"h5"}
+                  color={colors.gray[100]}
+                  gridColumn={"span 1"}
+                  gridRow={"span 1"}
                   // textAlign={"start"}
                 >
-                  <AdfScannerIcon fontSize={"medium"} sx={{ mr: "15px" }} />
+                  <AdfScannerIcon fontSize={"large"} sx={{ mr: "15px" }} />
                   {globalData[1][0]}: <strong>{globalData[1][1]}</strong>
                 </Typography>
                 <Typography
                   variant={"h5"}
                   color={colors.gray[100]}
+                  gridColumn={"span 1"}
+                  gridRow={"span 1"}
                   // textAlign={"start"}
                 >
-                  <CallIcon fontSize={"medium"} sx={{ mr: "15px" }} />
+                  <CallIcon fontSize={"large"} sx={{ mr: "15px" }} />
                   {globalData[2][0]}: <strong>{globalData[2][1]}</strong>
                 </Typography>
                 <Typography
                   variant={"h5"}
                   color={colors.gray[100]}
-                  // textAlign={"start"}
+                  gridColumn={"span 1"}
+                  gridRow={"span 1"}
+  
                 >
-                  <AlternateEmailIcon fontSize={"medium"} sx={{ mr: "15px" }} />
+                  <AlternateEmailIcon fontSize={"large"} sx={{ mr: "15px" }} />
                   {globalData[3][0]}: <strong>{globalData[3][1]}</strong>
                 </Typography>
               </>
@@ -131,21 +154,6 @@ function Dashboard() {
                 Loading...
               </Typography>
             )}
-          </Box>
-          <Box
-            gridColumn={"span 3"}
-            gridRow={"span 2"}
-            backgroundColor={colors.gray[900]}
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            padding={"10px 5px 10px 5px"}
-            flexDirection={"column"}
-          >
-            <Typography variant={"h5"} color={colors.gray[100]}>
-              Motivo de la visita
-            </Typography>
-            <BarChartDash2 data={barData2} />
           </Box>
           <Box
             gridColumn={"span 3"}
@@ -179,18 +187,187 @@ function Dashboard() {
           </Box>
           <Box
             gridColumn={"span 5"}
-            gridRow={"span 4"}
+            gridRow={"span 2"}
             backgroundColor={colors.gray[900]}
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            padding={"10px 5px 10px 5px"}
-            flexDirection={"column"}
+            display={"grid"}
+            gridTemplateColumns={"repeat(2,1fr)"}
+            gridTemplateRows={"repeat(4, 1fr)"}
+            padding={"10px 5px 10px 20px"}
           >
-            <Typography variant={"h5"} color={colors.gray[100]}>
-              Número de usuarios diarios
-            </Typography>
-            <BarChartDash1 data={barData1} headers={barHeaders1} />
+            {infoSocialEco.length > 0 ? (
+              <>
+                <Typography
+                  variant={"h3"}
+                  color={colors.gray[100]}
+                  gridColumn={"span 2"}
+                  gridRow={"span 1"}
+                >
+                  <strong>INFORAMACIÓN SOCIOECONÓMICA</strong>
+                </Typography>
+                {/* Mujeres y Hombres*/}
+                <Typography
+                  variant={"h5"}
+                  color={colors.gray[100]}
+                  gridColumn={"span 1"}
+                  gridRow={"span 1"}
+                  display={"grid"}
+                  gridTemplateColumns={"repeat(2,50px)"}
+                  gridTemplateRows={"repeat(2, 1fr)"}
+                >
+                  <Box
+                    gridColumn={"span 1"} 
+                    gridRow={"span 2"}  
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"             
+                  >
+                    <WcIcon 
+                      fontSize={"large"}
+                      sx={{ mr: "15px" }}
+                    />
+                  </Box>
+                  <Typography
+                    gridColumn={"4/2"} 
+                    gridRow={"0.5"}
+                    variant={"h5"}
+                  > 
+                    {infoSocialEco[0][0]}: <strong>{infoSocialEco[0][1]}</strong> 
+                  </Typography>
+                  <Typography
+                    gridColumn={"4/2"} 
+                    gridRow={"0.5"}  
+                    variant={"h5"}
+                  > 
+                    {infoSocialEco[1][0]}: <strong>{infoSocialEco[1][1]}</strong> 
+                  </Typography>
+                </Typography>
+                {/* Usuarios Propietarios */}
+                <Typography
+                  variant={"h5"}
+                  color={colors.gray[100]}
+                  gridColumn={"span 1"}
+                  gridRow={"span 1"}
+                >
+                  <HouseIcon fontSize={"large"} sx={{ mr: "15px" }} />
+                  {infoSocialEco[2][0]}: <strong>{infoSocialEco[2][1]}</strong>
+                </Typography>
+                {/* Edad Media de los usuarios */}
+                <Typography
+                  variant={"h5"}
+                  color={colors.gray[100]}
+                  gridColumn={"span 1"}
+                  gridRow={"span 1"}
+                  display={"grid"}
+                  gridTemplateColumns={"repeat(2,150px)"}
+                  gridTemplateRows={"repeat(2, 1fr)"}
+                >
+                  <Box
+                    gridColumn={"span 2"} 
+                    gridRow={"span 2"}  
+
+                  >
+                    <Diversity3Icon 
+                      fontSize={"large"} 
+                      sx={{ mr: "15px" }} 
+                    />
+                    {infoSocialEco[3][0]}: <strong>{infoSocialEco[3][1]}</strong>
+                  </Box>
+                  <Box 
+                    component="ul" 
+                    sx={{ marginLeft: 6, }}
+                  >
+                    <li >
+                      <Box display="flex" alignItems="center" gap={0.5}>
+                        {infoSocialEco[4][0]}: <strong>{infoSocialEco[4][1]}</strong>
+                      </Box>
+                    </li>
+                    <li >
+                      <Box display="flex" alignItems="center" gap={0.5}>
+                        {infoSocialEco[5][0]}: <strong>{infoSocialEco[5][1]}</strong>
+                      </Box>
+                    </li>
+                  </Box>
+                </Typography>
+                {/* Usuarios Empleados */}
+                <Typography
+                  variant={"h5"}
+                  color={colors.gray[100]}
+                  gridColumn={"span 1"}
+                  gridRow={"span 1"}
+                >
+                  <HailIcon fontSize={"large"} sx={{ mr: "15px" }} />
+                  {infoSocialEco[6][0]}: <strong>{infoSocialEco[6][1]}</strong>
+                </Typography>
+                {/* Bono Social */}
+                <Typography
+                  variant={"h5"}
+                  color={colors.gray[100]}
+                  gridColumn={"span 1"}
+                  gridRow={"span 1"}
+                >
+                  <Diversity1Icon fontSize={"large"} sx={{ mr: "15px" }} />
+                  {infoSocialEco[7][0]}: <strong>{infoSocialEco[7][1]}</strong>
+                </Typography>
+                {/* Disponibilidad de Ascensor */}
+                <Typography
+                  variant={"h5"}
+                  color={colors.gray[100]}
+                  gridColumn={"span 1"}
+                  gridRow={"span 1"}
+                >
+                  <ElevatorIcon fontSize={"large"} sx={{ mr: "15px" }} />
+                  {infoSocialEco[8][0]}: <strong>{infoSocialEco[8][1]}</strong>
+                </Typography>
+              </>
+            ) : (
+              <Typography variant={"h5"} color={colors.gray[100]}>
+                Loading...
+              </Typography>
+            )}
+          </Box>          
+          <Box
+            gridColumn={"span 5"}
+            gridRow={"span 1"}
+            backgroundColor={colors.gray[900]}
+            display={"grid"}
+            gridTemplateColumns={"repeat(2,1fr)"}
+            gridTemplateRows={"repeat(2, 1fr)"}
+            padding={"10px 5px 10px 20px"}
+          >
+            {infoEvol.length > 0 ? (
+              <>
+                <Typography
+                  variant={"h3"}
+                  color={colors.gray[100]}
+                  gridColumn={"span 2"}
+                  gridRow={"span 1"}
+                >
+                  <strong>INFORAMACIÓN DE EVOLUCIÓN</strong>
+                </Typography>
+                <Typography
+                  variant={"h5"}
+                  color={colors.gray[100]}
+                  gridColumn={"span 1"}
+                  gridRow={"span 1"}
+                >
+                  <PercentIcon fontSize={"large"} sx={{ mr: "15px" }} />
+                  {infoEvol[0][0]}: <strong>{infoEvol[0][1]}</strong>
+                </Typography>
+                <Typography
+                  variant={"h5"}
+                  color={colors.gray[100]}
+                  gridColumn={"span 1"}
+                  gridRow={"span 1"}
+                >
+                  <ApartmentIcon fontSize={"large"} sx={{ mr: "15px" }} />
+                  {infoEvol[1][0]}: <strong>{infoEvol[1][1]}</strong>
+                </Typography>
+              </>
+            ) : (
+              <Typography variant={"h5"} color={colors.gray[100]}>
+                Loading...
+              </Typography>
+            )}
           </Box>
           <Box
             gridColumn={"span 7"}
@@ -207,6 +384,21 @@ function Dashboard() {
               Servicios Sociales
             </Typography>
             <LineChart data={lineData1} markers={lineMarkers1} />
+          </Box>
+          <Box
+            gridColumn={"span 5"}
+            gridRow={"span 2"}
+            backgroundColor={colors.gray[900]}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            padding={"10px 5px 10px 5px"}
+            flexDirection={"column"}
+          >
+            <Typography variant={"h5"} color={colors.gray[100]}>
+              Motivo de la visita
+            </Typography>
+            <BarChartDash2 data={barData2} />
           </Box>
         </Box>
       </Box>

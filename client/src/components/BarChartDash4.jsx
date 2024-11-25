@@ -3,13 +3,11 @@ import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import { getLastPartOfString } from "../utils/auxUtils";
 
-// import { mockBarData as data } from "../data/mockData";
-
 function BarChartDash4({ data }) {
+  console.log("DASH4",data);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const getLabelTextColor = (value) => {
-    // return value < 4.5 ? colors.primary[900] : colors.primary[100];
     return "#fff";
   };
 
@@ -65,52 +63,6 @@ function BarChartDash4({ data }) {
       }}
       axisTop={null}
       axisRight={null}
-      //   axisBottom={{
-      //     tickSize: 5,
-      //     tickPadding: 5,
-      //     tickRotation: 0,
-      //     legend: "Motivo de la visita",
-      //     legendPosition: "middle",
-      //     legendOffset: 40,
-      //     renderTick: ({
-      //       opacity,
-      //       textAnchor,
-      //       textBaseline,
-      //       textX,
-      //       textY,
-      //       theme,
-      //       value,
-      //       x,
-      //       y,
-      //     }) => {
-      //       const values = splitString(value, 15).split("\n");
-      //       return (
-      //         <g transform={`translate(${x},${y})`} style={{ opacity }}>
-      //           {values.map((val, i) => (
-      //             <text
-      //               key={i}
-      //               alignmentBaseline={textBaseline}
-      //               //   style={themeMap.axis.ticks.text}
-      //               textAnchor={"middle"}
-      //               transform={`translate(${textX},${i * 10})`}
-      //             >
-      //               <tspan x="0" dy="2em">
-      //                 {val}
-      //               </tspan>
-      //             </text>
-      //           ))}
-      //           {/* <text
-      //             alignmentBaseline={textBaseline}
-      //             style={themeMap.axis.ticks.text}
-      //             textAnchor={"middle"}
-      //             transform={`translate(${textX},${textY})`}
-      //           >
-      //             {value}
-      //           </text> */}
-      //         </g>
-      //       );
-      //     },
-      //   }}
       axisBottom={{
         tickSize: 0,
         tickPadding: 5,
@@ -123,7 +75,6 @@ function BarChartDash4({ data }) {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        // legend: "Barrios",
         legendPosition: "middle",
         legendOffset: -90,
       }}
