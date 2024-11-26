@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import SubBar from "../global/SubBar";
-import BarChartDash1 from "../../components/BarChartDash1";
 import BarChartDash2 from "../../components/BarChartDash2";
 import BarChartDash3 from "../../components/BarChartDash3";
 import BarChartDash4 from "../../components/BarChartDash4";
@@ -19,8 +18,8 @@ import HouseIcon from '@mui/icons-material/House';
 import HailIcon from '@mui/icons-material/Hail';
 import Diversity1Icon from '@mui/icons-material/Diversity1';
 import ElevatorIcon from '@mui/icons-material/Elevator';
-import PercentIcon from '@mui/icons-material/Percent';
 import ApartmentIcon from '@mui/icons-material/Apartment';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import {DIRECTION} from "../../data/direccion_server";
 import { display } from "@mui/system";
 
@@ -33,8 +32,6 @@ function Dashboard() {
   const [globalData, setGlobalData] = useState([]);
   const [infoSocialEco, setInfoSocialEco] = useState([]);
   const [infoEvol, setInfoEvol] = useState([]);
-  const [barData1, setBarData1] = useState([]);
-  const [barHeaders1, setHeadersData1] = useState([]);
   const [barData2, setBarData2] = useState([]);
   const [barData3, setBarData3] = useState([]);
   const [barData4, setBarData4] = useState([]);
@@ -49,8 +46,6 @@ function Dashboard() {
       setGlobalData(data.globalData);
       setInfoSocialEco(data.infoSocialEco);
       setInfoEvol(data.infoEvol);
-      setBarData1(data.barChart1[0]);
-      setHeadersData1(data.barChart1[1]);
       setBarData2(data.barChart2);
       setBarData3(data.barChart3);
       setBarData4(data.barChart4);
@@ -231,14 +226,14 @@ function Dashboard() {
                     gridRow={"0.5"}
                     variant={"h5"}
                   > 
-                    {infoSocialEco[0][0]}: <strong>{infoSocialEco[0][1]}</strong> 
+                    {infoSocialEco[0][0]}: <strong>{infoSocialEco[0][1].toFixed(2)}</strong> 
                   </Typography>
                   <Typography
                     gridColumn={"4/2"} 
                     gridRow={"0.5"}  
                     variant={"h5"}
                   > 
-                    {infoSocialEco[1][0]}: <strong>{infoSocialEco[1][1]}</strong> 
+                    {infoSocialEco[1][0]}: <strong>{infoSocialEco[1][1].toFixed(2)}</strong> 
                   </Typography>
                 </Typography>
                 {/* Usuarios Propietarios */}
@@ -249,7 +244,7 @@ function Dashboard() {
                   gridRow={"span 1"}
                 >
                   <HouseIcon fontSize={"large"} sx={{ mr: "15px" }} />
-                  {infoSocialEco[2][0]}: <strong>{infoSocialEco[2][1]}</strong>
+                  {infoSocialEco[6][0]}: <strong>{infoSocialEco[6][1].toFixed(2)}</strong>
                 </Typography>
                 {/* Edad Media de los usuarios */}
                 <Typography
@@ -270,20 +265,20 @@ function Dashboard() {
                       fontSize={"large"} 
                       sx={{ mr: "15px" }} 
                     />
-                    {infoSocialEco[3][0]}: <strong>{infoSocialEco[3][1]}</strong>
+                    {infoSocialEco[2][0]}: <strong>{infoSocialEco[2][1]}</strong>
                   </Box>
                   <Box 
                     component="ul" 
-                    sx={{ marginLeft: 6, }}
+                    sx={{ marginLeft: 5, }}
                   >
                     <li >
-                      <Box display="flex" alignItems="center" gap={0.5}>
-                        {infoSocialEco[4][0]}: <strong>{infoSocialEco[4][1]}</strong>
+                      <Box sx={{ whiteSpace: "nowrap" }}>
+                        {infoSocialEco[3][0]}: <strong>{infoSocialEco[3][1]}</strong>
                       </Box>
                     </li>
                     <li >
-                      <Box display="flex" alignItems="center" gap={0.5}>
-                        {infoSocialEco[5][0]}: <strong>{infoSocialEco[5][1]}</strong>
+                      <Box sx={{ whiteSpace: "nowrap" }}>
+                        {infoSocialEco[4][0]}: <strong>{infoSocialEco[4][1]}</strong>
                       </Box>
                     </li>
                   </Box>
@@ -296,7 +291,7 @@ function Dashboard() {
                   gridRow={"span 1"}
                 >
                   <HailIcon fontSize={"large"} sx={{ mr: "15px" }} />
-                  {infoSocialEco[6][0]}: <strong>{infoSocialEco[6][1]}</strong>
+                  {infoSocialEco[7][0]}: <strong>{infoSocialEco[7][1]}</strong>
                 </Typography>
                 {/* Bono Social */}
                 <Typography
@@ -306,7 +301,7 @@ function Dashboard() {
                   gridRow={"span 1"}
                 >
                   <Diversity1Icon fontSize={"large"} sx={{ mr: "15px" }} />
-                  {infoSocialEco[7][0]}: <strong>{infoSocialEco[7][1]}</strong>
+                  {infoSocialEco[5][0]}: <strong>{infoSocialEco[5][1].toFixed(2)}</strong>
                 </Typography>
                 {/* Disponibilidad de Ascensor */}
                 <Typography
@@ -350,8 +345,8 @@ function Dashboard() {
                   gridColumn={"span 1"}
                   gridRow={"span 1"}
                 >
-                  <PercentIcon fontSize={"large"} sx={{ mr: "15px" }} />
-                  {infoEvol[0][0]}: <strong>{infoEvol[0][1]}</strong>
+                  <GroupAddIcon fontSize={"large"} sx={{ mr: "15px" }} />
+                  {infoEvol[0][0]}: <strong>{infoEvol[0][1].toFixed(2)}</strong>
                 </Typography>
                 <Typography
                   variant={"h5"}

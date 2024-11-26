@@ -673,68 +673,56 @@ app.get("/api/visor-epiu", async (req, res) => {
 });
 
 app.get("/api/dashboard", (req, res) => {
-  let data1 = loadExcelData(dataPathExcel_dashboard, true, 0);
-  let data2 = loadExcelData(dataPathExcel_dashboard, true, 1);
-  let data3 = loadExcelData(dataPathExcel_dashboard, true, 2);
-  let data4 = loadExcelData(dataPathExcel_dashboard, true, 3);
-  let data5 = loadExcelData(dataPathExcel_dashboard, true, 4);
-  let data6 = loadExcelData(dataPathExcel_dashboard, true, 5);
+  let globalDataRaw = loadExcelData(dataPathExcel_dashboard, true, 0);
+  let infoSocialEcoDataRaw = loadExcelData(dataPathExcel_dashboard, true, 1);
+  let infoEvolDataRaw = loadExcelData(dataPathExcel_dashboard, true, 2);
+  let barChart2Data = loadExcelData(dataPathExcel_dashboard, true, 3);
+  let barChart3Data = loadExcelData(dataPathExcel_dashboard, true, 4);
+  let barChart4Data = loadExcelData(dataPathExcel_dashboard, true, 5);
+  let lineChart1Data = loadExcelData(dataPathExcel_dashboard, true, 6);
 
   //filter out empty arrays
-  const globalData = data1.filter(
+  const globalData = globalDataRaw.filter(
     (item) => Array.isArray(item) && item.length > 0
   );
-  data2 = data2.filter((item) => Array.isArray(item) && item.length > 0);
-  data3 = data3.filter((item) => Array.isArray(item) && item.length > 0);
-  data4 = data4.filter((item) => Array.isArray(item) && item.length > 0);
-  data5 = data5.filter((item) => Array.isArray(item) && item.length > 0);
-  data6 = data6.filter((item) => Array.isArray(item) && item.length > 0);
+  const infoSocialEco = infoSocialEcoDataRaw.filter(
+    (item) => Array.isArray(item) && item.length > 0
+  );
+  const infoEvol = infoEvolDataRaw.filter(
+    (item) => Array.isArray(item) && item.length > 0
+  );
+
+  barChart2Data = barChart2Data.filter((item) => Array.isArray(item) && item.length > 0);
+  barChart3Data = barChart3Data.filter((item) => Array.isArray(item) && item.length > 0);
+  barChart4Data = barChart4Data.filter((item) => Array.isArray(item) && item.length > 0);
+  lineChart1Data = lineChart1Data.filter((item) => Array.isArray(item) && item.length > 0);
 
   //remove headers
-  data3 = data3.slice(1);
-  data4 = data4.slice(1);
-  data5 = data5.slice(1);
-
-  //grouped barchart
-  const barChart1 = [];
-  const headers1 = data2[0].slice(1);
-  data2 = data2.slice(1);
-
-  // console.log(stacks);
-  // console.log(data3);
-
-  for (let i = 0; i < data2.length; i++) {
-    let obj = {};
-    obj["id"] = data2[i][0];
-    for (let j = 0; j < headers1.length; j++) {
-      obj[headers1[j]] = data2[i][j + 1];
-    }
-    barChart1.push(obj);
-  }
+  barChart2Data = barChart2Data.slice(1);
+  barChart3Data = barChart3Data.slice(1);
+  barChart4Data = barChart4Data.slice(1);
 
   //barchart
-  const barChart2 = createBarChart(data3, false);
-  const barChart3 = createBarChart(data4, false);
-  const barChart4 = createBarChart(data5, false);
+  const barChart2 = createBarChart(barChart2Data, false);
+  const barChart3 = createBarChart(barChart3Data, false);
+  const barChart4 = createBarChart(barChart4Data, false);
 
-  const lineHeaders = data6[0].slice(1);
-  const lineRawAxis = data6.slice(3, 6);
+  const lineHeaders = lineChart1Data[0].slice(1);
+  const lineRawAxis = lineChart1Data.slice(3, 6);
   const lineData = [];
   const lineAxis = [];
 
-  data6 = data6.slice(1, 3); //remove headers row
+  lineChart1Data = lineChart1Data.slice(1, 3); //remove headers row
 
-  // console.log(lineRawAxis);
-
-  for (let i = 0; i < data6.length; i++) {
+  for (let i = 0; i < lineChart1Data.length; i++) {
     let obj = {};
     let data = [];
-    obj["id"] = data6[i][0];
+    obj["id"] = lineChart1Data[i][0];
     obj["color"] = colors[i];
-    for (let j = 1; j < data6[i].length; j++) {
+    for (let j = 1; j < lineChart1Data[i].length; j++) {
       data.push({
         x: lineHeaders[j - 1],
-        y: data6[i][j],
+        y: lineChart1Data[i][j],
       });
     }
     obj["data"] = data;
@@ -755,30 +743,8 @@ app.get("/api/dashboard", (req, res) => {
     lineAxis.push(obj);
   }
 
-  // console.log("lineData", lineData[1]);
-  // console.log("lineAxis", lineAxis);
-
-  // Harcode data para informacion socioeconomica e informacion evolutiva
-  const infoSocialEco = [
-    ["Mujeres(%)", 59.33],
-    ["Hombres(%)", 40.67],
-    ["Usuarios Propietarios(%)",38.01],
-    ["Edad media de los usuarios", 20.60],
-    ["Mujeres(años)", 20.60],
-    ["Hombres(años)", 20.60],
-    ["Usuario Empleados(%)", "S/D"],
-    ["Bono Social(%)", 15.04],
-    ["Disponibilidad de ascensor(% viviendas)", "S/D"]
-  ];
-
-  const infoEvol = [
-    ["Poblacion Alcanzada(%)", 100],
-    ["Edificios Rehabilitados(nº)", 187]
-  ];
-
   const data = {
     globalData,
-    barChart1: [barChart1, headers1],
     barChart2,
     barChart3,
     barChart4,

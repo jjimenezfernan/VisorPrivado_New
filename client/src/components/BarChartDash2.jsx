@@ -4,7 +4,6 @@ import { tokens } from "../theme";
 import { getLastPartOfString } from "../utils/auxUtils";
 
 function BarChartDash2({ data }) {
-  console.log("DASH2",data);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const getLabelTextColor = (value) => {
@@ -69,7 +68,7 @@ function BarChartDash2({ data }) {
         tickRotation: 0,
         legend: "Nº de personas",
         legendPosition: "middle",
-        legendOffset: 25,
+        legendOffset: 21,
       }}
       axisLeft={{
         tickSize: 5,

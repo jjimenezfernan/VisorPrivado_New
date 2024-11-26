@@ -118,7 +118,7 @@ function Overlay({ closeOverlay }) {
           Para su visualización óptima le recomendamos:
           <br />
           <strong>En portátiles:</strong> Reducir el zoom del navegador al{" "}
-          <strong>80%</strong> <ZoomOutIcon />
+          <strong>67%</strong> <ZoomOutIcon />
           <br />
           <strong>En monitores:</strong> No es necesario realizar ningún ajuste
           de zoom.

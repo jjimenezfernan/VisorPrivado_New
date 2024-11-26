@@ -4,7 +4,6 @@ import { tokens } from "../theme";
 import { getLastPartOfString } from "../utils/auxUtils";
 
 function BarChartDash4({ data }) {
-  console.log("DASH4",data);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const getLabelTextColor = (value) => {

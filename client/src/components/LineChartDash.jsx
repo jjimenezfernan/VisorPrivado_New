@@ -11,7 +11,6 @@ function LineChartDash({ data, markers }) {
         min: "auto",
         max: "auto",
       }}
-      //   yFormat=" >-.2f"
       colors={{
         datum: "color",
       }}
@@ -31,7 +30,7 @@ function LineChartDash({ data, markers }) {
         tickPadding: 5,
         tickRotation: 0,
         legend: "Nº de usuarios",
-        legendOffset: -40,
+        legendOffset: -50,
         legendPosition: "middle",
       }}
       pointSize={10}

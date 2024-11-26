@@ -68,7 +68,7 @@ function BarChartDash3({ data }) {
       margin={{ top: 20, right: 20, bottom: 35, left: 100 }}
       padding={0.4}
       valueScale={{ type: "linear" }}
-      valueFormat=" >-.2%"
+      valueFormat=" >-"
       layout="horizontal"
       indexScale={{ type: "band", round: true }}
       colors={({ id, data }) => String(data[`${id}Color`])}
