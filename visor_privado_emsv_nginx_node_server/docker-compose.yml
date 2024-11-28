@@ -8,9 +8,9 @@ services:
       args:
         - NAME_DIRRECTORY=visor_privado_emsv_server # puedes ajustar esto según sea necesario
         - NODE_ENV=production # puede ser localhost o production
-        - PORT=3040
+        - PORT=3050
     image: node-docker-visor-privado-emsv-image # imagen oficial de Node.js; reemplázala con la tuya si tienes una personalizada
-    working_dir: /app/visor_privado_emsv_client/ # directorio de trabajo
+    working_dir: /app/visor_privado_emsv_server/ # directorio de trabajo
     command: ["node", "server.js"] # el comando para ejecutar tu servidor Node.js
     ports:
       - "3050:3050" 
