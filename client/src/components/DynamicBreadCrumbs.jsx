@@ -18,10 +18,10 @@ function DynamicBreadcrumbs({ crumbs }) {
           const isLastCrumb = index === crumbs.length - 1;
           return isLastCrumb ? (
             <Typography
-              color={colors.blueAccent[400]}
+              color={colors.gray[900]}
               fontWeight={600}
               key={name}
-              sx={{ ":hover": { color: colors.blueAccent[400] } }}
+              sx={{ ":hover": { color: colors.gray[300] } }}
             >
               {name}
             </Typography>
@@ -30,9 +30,9 @@ function DynamicBreadcrumbs({ crumbs }) {
               component={RouterLink}
               key={name}
               underline="hover"
-              color={colors.gray[400]}
+              color={colors.gray[900]}
               to={link}
-              sx={{ ":hover": { color: colors.blueAccent[400] } }}
+              sx={{ ":hover": { color: colors.gray[300] } }}
             >
               {name}
             </Link>

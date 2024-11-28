@@ -88,24 +88,7 @@ function SideBar() {
               >
                 Inicio
               </MenuItem>
-              <MenuItem
-                style={{
-                  color: colors.gray[100],
-                }}
-                icon={<QueryStatsRoundedIcon />}
-                component={<Link to="/analisis" />}
-              >
-                Análisis
-              </MenuItem>
               <SubMenu icon={<HomeRepairServiceRoundedIcon />} label="Servicio">
-                <MenuItem
-                  style={{
-                    color: colors.gray[100],
-                  }}
-                  component={<Link to="/ohs" />}
-                >
-                  Formación
-                </MenuItem>
                 <MenuItem
                   style={{
                     color: colors.gray[100],
@@ -123,15 +106,6 @@ function SideBar() {
                   Concienciación
                 </MenuItem>
               </SubMenu>
-              <MenuItem
-                style={{
-                  color: colors.gray[100],
-                }}
-                icon={<EngineeringRoundedIcon />}
-                component={<Link to="/intervenciones" />}
-              >
-                Intervenciones
-              </MenuItem>
               <SubMenu icon={<MapIcon />} label="Visores Cartográficos">
                 <MenuItem
                   style={{

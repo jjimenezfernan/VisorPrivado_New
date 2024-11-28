@@ -1,11 +1,10 @@
+// Componente que se muestra al cargar la página, con información sobre la aplicación y la empresa
+
 import React from "react";
 import { Button, Typography, Box, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import logoOhsText from "../../assets/logo_ohs_text.png";
-import logoAyunt from "../../assets/logo_ayunt.png";
-import logoEuro from "../../assets/logo_euro.png";
-import logoUrban from "../../assets/logo_urban.png";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
+import emsv_color_imagen_institucional from "../../assets/emsv_color_imagen_institucional.png";
 
 function Overlay({ closeOverlay }) {
   const theme = useTheme();
@@ -46,13 +45,12 @@ function Overlay({ closeOverlay }) {
           <Typography
             variant="h1"
             align="center"
-            // letterSpacing={"0.05rem"}
             color={colors.gray[200]}
             fontWeight={400}
             paddingBottom={"1rem"}
             borderBottom={`1px solid ${colors.gray[800]}`}
           >
-            OBSERVATORIO DE DATOS EPIU GETAFE
+            EMSV Visor Interno
           </Typography>
           <Typography
             variant="h5"
@@ -63,41 +61,20 @@ function Overlay({ closeOverlay }) {
             color={colors.gray[200]}
             paddingBottom={"1rem"}
           >
-            Este observatorio forma parte de la actividad de Seguimiento y
-            Evaluación del proyecto EPIU (Energy Poverty Intelligence Unit) para
-            el municipio de Getafe. Se trata de un proyecto cofinanciado por el
-            programa europeo UIA que tiene como objetivo el desarrollo de
-            soluciones urbanas innovadoras en las ciudades.
             <br />
-            <br />
-            El reto ha consistido en el diseño de un visor analítico y
-            cartográfico capaz de facilitar el seguimiento de los objetivos del
-            proyecto y de generar nuevas cartografías mediante el análisis de
-            grandes volúmenes de datos procedentes de diferentes fuentes de
-            información.
-            <br />
-            <br />
-            La herramienta espacial desarrollada para el observatorio, en línea
-            con el objetivo innovador del programa, explora nuevas formas de
-            representación en diferentes escalas que facilitan el análisis
-            estratégico (a escala de sección censal y de barrio) y el
-            seguimiento operativo (a escala de catastro) en un mismo visor.
+            Bienvenido al visor interno de la Empresa Municipal del Suelo y la Vivienda de Getafe.
           </Typography>
           <Box
-            // backgroundColor={colors.gray[800]}
             display={"flex"}
             alignItems={"center"}
             justifyContent={"space-between"}
             paddingTop={"1.5rem"}
           >
             <img
-              src={logoOhsText}
-              alt="Oficina de Hogares Saludables (OHS)"
-              height={"60px"}
+              src={emsv_color_imagen_institucional}
+              alt="Empresa municipal del suelo y la vivienda de Getafe"
+              height={"40px"}
             />
-            <img src={logoAyunt} alt="Ayuntamiento de Getafe" height={"60px"} />
-            <img src={logoEuro} alt="UIA" height={"60px"} />
-            <img src={logoUrban} alt="Urban Poverty" height={"60px"} />
           </Box>
         </Box>
       </Box>
@@ -107,7 +84,6 @@ function Overlay({ closeOverlay }) {
         left={0}
         height={"7rem"}
         width={"100%"}
-        // backgroundColor={colors.gray[800]}
         display={"flex"}
         flexDirection={"column"}
         alignItems={"flex-start"}
@@ -118,7 +94,7 @@ function Overlay({ closeOverlay }) {
           Para su visualización óptima le recomendamos:
           <br />
           <strong>En portátiles:</strong> Reducir el zoom del navegador al{" "}
-          <strong>67%</strong> <ZoomOutIcon />
+          <strong>80%</strong> <ZoomOutIcon />
           <br />
           <strong>En monitores:</strong> No es necesario realizar ningún ajuste
           de zoom.

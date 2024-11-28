@@ -10,9 +10,6 @@ import {DIRECTION} from "../../data/direccion_server";
 
 const baseURL = DIRECTION + "/api/concienciacion";
 
-//  "https://observatoriodedatosepiu.khoraurbanthinkers.es/api/concienciacion";
-const storageKey = "concienciacionData"; // Key for storing/retrieving data from localStorage
-
 function Concienciacion() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -24,16 +21,7 @@ function Concienciacion() {
   const [pieData, setPieData] = useState([]);
 
   useEffect(() => {
-    // const storedData = sessionStorage.getItem(storageKey);
 
-    // if (storedData) {
-    //   const parsedData = JSON.parse(storedData);
-    //   setCirclesData(parsedData[0]);
-    //   setGlobal1(parsedData[1][0][1]);
-    //   setGlobal2(parsedData[1][1][1]);
-    //   setGlobal3(parsedData[1][2][1]);
-    //   setPieData(parsedData[2]);
-    // } else {
     axios.get(baseURL).then((res) => {
       const data = res.data;
       setCirclesData(data[0]);
@@ -41,9 +29,7 @@ function Concienciacion() {
       setGlobal2(data[1][1][1]);
       setGlobal3(data[1][2][1]);
       setPieData(data[2]);
-      // sessionStorage.setItem(storageKey, JSON.stringify(data));
-    });
-    // }
+      });
   }, []);
 
   return (
@@ -109,7 +95,7 @@ function Concienciacion() {
         >
           {/* Row 1 */}
           <Box
-            gridColumn={"span 6"}
+            gridColumn={"span 10"}
             gridRow={"span 6"}
             backgroundColor={colors.gray[900]}
             display={"flex"}
@@ -127,7 +113,7 @@ function Concienciacion() {
             )}
           </Box>
           <Box
-            gridColumn={"span 6"}
+            gridColumn={"span 2"}
             gridRow={"span 1"}
             backgroundColor={colors.gray[900]}
             display={"flex"}
@@ -158,7 +144,7 @@ function Concienciacion() {
             )}
           </Box>
           <Box
-            gridColumn={"span 3"}
+            gridColumn={"span 2"}
             gridRow={"span 1"}
             backgroundColor={colors.gray[900]}
             display={"flex"}
@@ -189,7 +175,7 @@ function Concienciacion() {
             )}
           </Box>
           <Box
-            gridColumn={"span 3"}
+            gridColumn={"span 2"}
             gridRow={"span 1"}
             backgroundColor={colors.gray[900]}
             display={"flex"}
@@ -218,21 +204,6 @@ function Concienciacion() {
                 {(global3 * 100).toFixed(2)}%
               </Typography>
             )}
-          </Box>
-          <Box
-            gridColumn={"span 6"}
-            gridRow={"span 4"}
-            backgroundColor={colors.gray[900]}
-            display={"flex"}
-            flexDirection={"column"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            pt={"10px"}
-          >
-            <Typography variant={"h4"} color={colors.gray[100]}>
-              Dedicación de cada socio (en horas)
-            </Typography>
-            <PieChart data={pieData} />
           </Box>
         </Box>
       </Box>

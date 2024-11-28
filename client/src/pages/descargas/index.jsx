@@ -10,8 +10,6 @@ import {DIRECTION} from "../../data/direccion_server";
 
 const baseURL = DIRECTION + "/api/descargas";
 
-//  "https://observatoriodedatosepiu.khoraurbanthinkers.es/api/descargas";
-// const storageKey = "visorData"; // Key for storing/retrieving data from localStorage
 function Descargas() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -73,22 +71,6 @@ function Descargas() {
           >
             <Stack direction="row" spacing={2}>
               <Button
-                onClick={() => handleDownload("analisis")}
-                variant="contained"
-                color="success"
-                endIcon={<DownloadIcon />}
-              >
-                Análisis
-              </Button>
-              <Button
-                onClick={() => handleDownload("formacion")}
-                variant="contained"
-                color="success"
-                endIcon={<DownloadIcon />}
-              >
-                Formación
-              </Button>
-              <Button
                 onClick={() => handleDownload("derivacion")}
                 variant="contained"
                 color="success"
@@ -103,14 +85,6 @@ function Descargas() {
                 endIcon={<DownloadIcon />}
               >
                 Concienciación
-              </Button>
-              <Button
-                onClick={() => handleDownload("intervencion")}
-                variant="contained"
-                color="success"
-                endIcon={<DownloadIcon />}
-              >
-                Intervención
               </Button>
               <Button
                 onClick={() => handleDownload("geojson")}
