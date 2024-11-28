@@ -13,5 +13,5 @@ services:
     working_dir: /app/visor_privado_emsv_client/ # directorio de trabajo
     command: ["node", "server.js"] # el comando para ejecutar tu servidor Node.js
     ports:
-      - "3040:3040" 
+      - "3050:3050" 
 
