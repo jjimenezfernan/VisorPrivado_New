@@ -1,18 +1,11 @@
 import {
   Box,
   IconButton,
-  InputBase,
   useTheme,
   Link,
-  Typography,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
-import { ColorModeContext, tokens } from "../../theme";
-import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import { useState } from "react";
+import { tokens } from "../../theme";
 import StorageRoundedIcon from "@mui/icons-material/StorageRounded";
 import ContactSupportRoundedIcon from "@mui/icons-material/ContactSupportRounded";
 import { Link as RouterLink } from "react-router-dom";
@@ -22,7 +15,6 @@ import { useLocation } from "react-router-dom";
 function Topbar() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const colorMode = useContext(ColorModeContext);
   const location = useLocation(); // <-- use the useLocation hook to get the current location
 
   const [dashColor, setDashColor] = useState(
@@ -93,22 +85,6 @@ function Topbar() {
         <IconButton>
           <ContactSupportRoundedIcon />
         </IconButton>
-        {/* <IconButton onClick={colorMode.toggleColorMode}>
-          {theme.palette.mode === "dark" ? (
-            <DarkModeOutlinedIcon />
-          ) : (
-            <LightModeOutlinedIcon />
-          )}
-        </IconButton>
-        <IconButton>
-          <NotificationsOutlinedIcon />
-        </IconButton>
-        <IconButton>
-          <SettingsOutlinedIcon />
-        </IconButton>
-        <IconButton>
-          <PersonOutlinedIcon />
-        </IconButton> */}
       </Box>
     </Box>
   );

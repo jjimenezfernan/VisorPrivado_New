@@ -11,19 +11,14 @@ import { tokens } from "../../theme";
 import { Link } from "react-router-dom";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
 import HomeRepairServiceRoundedIcon from "@mui/icons-material/HomeRepairServiceRounded";
-import EngineeringRoundedIcon from "@mui/icons-material/EngineeringRounded";
-// import StorageRoundedIcon from "@mui/icons-material/StorageRounded";
-// import ContactSupportRoundedIcon from "@mui/icons-material/ContactSupportRounded";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import MapIcon from "@mui/icons-material/Map";
-import MapsHomeWorkIcon from "@mui/icons-material/MapsHomeWork";
 
 function SideBar() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { collapseSidebar, toggleSidebar, collapsed, toggled, broken, rtl } =
+  const { collapseSidebar, collapsed } =
     useProSidebar();
   return (
     //zIndex so the leaflet map isnt on top of the sidebar
@@ -36,12 +31,6 @@ function SideBar() {
           },
         }}
         width="210px"
-        // onClick={() => {
-        //   if (!collapsed) {
-        //     collapseSidebar();
-        //     console.log("collapsed", collapsed);
-        //   }
-        // }}
       >
         <Menu>
           <MenuItem
@@ -53,7 +42,6 @@ function SideBar() {
             icon={collapsed ? <MenuOutlinedIcon color="red" /> : undefined}
             style={{
               margin: "5px 0 10px 0",
-              // color: colors.gray[200],
             }}
           >
             {!collapsed && (
@@ -61,7 +49,6 @@ function SideBar() {
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
-                // ml="15px"
               >
                 <Typography variant="h3" color={colors.gray[200]}>
                   EPIU Getafe
@@ -150,14 +137,8 @@ function SideBar() {
                 justifyContent={"end"}
                 flexGrow={1}
                 height={"15vh"}
-                // alignItems={"space-between"}
-                // backgroundColor={colors.gray[800]}
               >
                 <MenuItem
-                  // style={{
-                  //   color: colors.blueAccent[300],
-                  //   fontSize: "0.65rem",
-                  // }}
                   href="https://khoraurbanthinkers.es/"
                   target="_blank"
                 >

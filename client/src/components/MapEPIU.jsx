@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -7,8 +7,6 @@ import {
   useMapEvent,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-// import MapInfoEPIU from "./MapInfoEPIU";
-// import MapSelectEPIU from "./MapSelectEPIU";
 import MapLegendEPIU from "./MapLegendEPIU";
 import { useMapEPIUContext } from "./MapEPIUProvider";
 import {
@@ -16,10 +14,6 @@ import {
   pathToSelect,
 } from "../constants/MapConstantsEPIU";
 import { splitString } from "../utils/auxUtils";
-// import L from "leaflet";
-// import { useTheme } from "@mui/material";
-// import { alpha } from "@mui/system";
-// import { tokens } from "../theme";
 
 /*
 MAPA DE ZONAS EPIU

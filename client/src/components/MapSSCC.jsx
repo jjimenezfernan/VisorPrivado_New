@@ -1,16 +1,11 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   MapContainer,
   TileLayer,
   GeoJSON,
   ZoomControl,
-  useMapEvent,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-// import L from "leaflet";
-// import { Box, Typography, useTheme } from "@mui/material";
-// import { alpha } from "@mui/system";
-// import { tokens } from "../theme";
 import { useMapSSCCContext } from "./MapSSCCProvider";
 import {
   Selections as Selections,

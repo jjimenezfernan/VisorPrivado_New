@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   MapContainer,
   TileLayer,
   GeoJSON,
   ZoomControl,
-  Popup,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useMapBarrioContext } from "./MapBarrioProvider";

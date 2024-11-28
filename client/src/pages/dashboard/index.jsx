@@ -21,7 +21,6 @@ import ElevatorIcon from '@mui/icons-material/Elevator';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import {DIRECTION} from "../../data/direccion_server";
-import { display } from "@mui/system";
 
 const baseURL = DIRECTION + "/api/dashboard";
 

@@ -1,6 +1,5 @@
 // Componente que se muestra al cargar la página, con información sobre la aplicación y la empresa
 
-import React from "react";
 import { Button, Typography, Box, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";

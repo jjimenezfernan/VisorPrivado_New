@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Box, useTheme, Typography } from "@mui/material";
 import { tokens } from "../../theme";
 
@@ -14,7 +14,6 @@ function TitleBar({ title }) {
       pb={1}
       height={"40px"}
       sx={{
-        // backgroundColor: "#ededed",
         backgroundColor: colors.blueAccent[900],
       }}
     >
