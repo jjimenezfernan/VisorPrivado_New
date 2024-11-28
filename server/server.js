@@ -28,7 +28,7 @@ const dataPathExcel_dashboard = "resources/data_dashboard.xlsx";
 const dataPathExcel_derivacion = "resources/data_derivacion.xlsx";
 const dataPathExcel_concienciacion = "resources/data_awareness.xlsx";
 
-const colors = [
+const colors_2 = [
   "#9a031e",
   "#0074D9",
   "#3D9970",
@@ -45,6 +45,24 @@ const colors = [
   "#9C27B0",
   "#39CCCC",
   "#e04abd",
+];
+
+const colors = [
+  "#F53652",
+  "#F57036",
+  "#A0588E",
+  "#F54F36",
+  "#f59f36",
+  "#e13bb7",
+  "#A06E58",
+  "#9258A0",
+  "#A06258",
+  "#F5B0BB",
+  "#F57387",
+  "#4B4342",
+  "#4B4249",
+  "#be22e3",
+  "#49424B",
 ];
 
 /*

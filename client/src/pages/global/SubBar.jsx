@@ -18,8 +18,8 @@ function SubBar({ title, crumbs, info }) {
       height={"auto"} // Ajustado para que la altura sea automática según el contenido
       sx={{
         borderBottom: 1,
-        borderColor: '#f43c51',
-        backgroundColor: '#f43c51', 
+        borderColor: '#f43653',
+        backgroundColor: '#f43653', 
       }}
     >
       {/* Sección de título e información */}
