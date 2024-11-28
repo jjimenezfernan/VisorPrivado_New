@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon ./server"
+    "dev": "env NODE_ENV=development node --watch server.js",
+    "prod": "env NODE_ENV=production node server.js"
   },
   "keywords": [],
   "author": "",
