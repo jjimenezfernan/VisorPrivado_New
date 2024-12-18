@@ -3,246 +3,199 @@ const COLORMAP = {
 };
 
 export const Selections = {
-  "n viviendas": {
-    key: "n viviendas",
-    path: `feature.properties["n viviendas"]`,
+  "t18_1": {
+    key: "t18_1",
+    path: `feature.properties["t18_1"]`,
     label: "Número de viviendas",
     legend: {
       values: [16000, 10000, 7500, 5000, 0],
       gradient: COLORMAP.primary,
     },
   },
-  "ano constru barrio": {
-    key: "ano constru barrio",
-    path: `feature.properties["ano constru barrio"]`,
+  "ano": {
+    key: "ano",
+    path: `feature.properties["ano"]`,
     label: "Año de construcción del barrio",
     legend: {
       values: [1990, 1985, 1975, 1970, 0],
       gradient: COLORMAP.primary,
     },
   },
-  "porc exptes": {
-    key: "porc exptes",
-    path: `feature.properties["porc exptes"]`,
+  "ac_porc_expedientes": {
+    key: "ac_porc_expedientes",
+    path: `feature.properties["ac_porc_expedientes"]`,
     label: "Porcentaje de expedientes",
     legend: {
       values: [20, 15, 10, 3, 0],
       gradient: COLORMAP.primary,
     },
   },
-  "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION": {
-    key: "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION",
-    path: `feature.properties["porc motivo TRAMITACION_AYUDAS_A_REHABILITACION"]`,
-    label: "Porcentaje de expedientes por ayudas a la rehabilitación",
+  "ac_motivo_rehab": {
+    key: "ac_motivo_rehab",
+    path: `feature.properties["ac_motivo_rehab"]`,
+    label: "Solicitud de Ayudas a la rehabilitación (%)",
     legend: {
       values: [30, 20, 15, 0],
       gradient: COLORMAP.primary.slice(0, 4),
     },
   },
-  "porc motivo INFORMACION_GENERAL": {
-    key: "porc motivo INFORMACION_GENERAL",
-    path: `feature.properties["porc motivo INFORMACION_GENERAL"]`,
-    label: "Porcentaje de expedientes por información general",
+  "ac_motivo_infogeneral": {
+    key: "ac_motivo_infogeneral",
+    path: `feature.properties["ac_motivo_infogeneral"]`,
+    label: "Solicitud de información general (%)",
     legend: {
       values: [75, 50, 25, 0],
       gradient: COLORMAP.primary.slice(0, 4),
     },
   },
-  "porc motivo TRAMITACION_BONO_SOCIAL": {
-    key: "porc motivo TRAMITACION_BONO_SOCIAL",
-    path: `feature.properties["porc motivo TRAMITACION_BONO_SOCIAL"]`,
-    label: "Porcentaje de expedientes por bono social",
+  "ac_motivo_suminsitros": {
+    key: "ac_motivo_suminsitros",
+    path: `feature.properties["ac_motivo_suminsitros"]`,
+    label: "Solicitud de gestión de suministros (%)",
     legend: {
       values: [20, 10, 5, 0],
       gradient: COLORMAP.primary.slice(0, 4),
     },
   },
-  "porc motivo OPTIMIZACION_FACTURA barrio": {
-    key: "porc motivo OPTIMIZACION_FACTURA barrio",
-    path: `feature.properties["porc motivo OPTIMIZACION_FACTURA barrio"]`,
-    label: "Porcentaje de expedientes por optimización de factura",
+  "ac_motivo_comener": {
+    key: "ac_motivo_comener",
+    path: `feature.properties["ac_motivo_comener"]`,
+    label: "Solicitud de información sobre comunidad energética (%)",
     legend: {
-      values: [40, 35, 30, 0],
+      values: [20, 10, 5, 0],
       gradient: COLORMAP.primary.slice(0, 4),
     },
   },
-  "porc A través de una persona conocida": {
-    key: "porc A través de una persona conocida",
-    path: `feature.properties["porc A través de una persona conocida"]`,
-    label: "Porcentaje de expedientes por recomendación",
-    legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "porc Comunicaciones del Ayuntamiento": {
-    key: "porc Comunicaciones del Ayuntamiento",
-    path: `feature.properties["porc Comunicaciones del Ayuntamiento"]`,
-    label: "Porcentaje de expedientes por comunicaciones del ayuntamiento",
+  "ac_origen_ayto": {
+    key: "ac_origen_ayto",
+    path: `feature.properties["ac_origen_ayto"]`,
+    label: "Visita a OHS por Comunicaciones del Ayuntamiento (%)",
     legend: {
       values: [40, 25, 20, 10, 0],
       gradient: COLORMAP.primary,
     },
   },
-  "porc Otros departamentos (SAV y otros)": {
-    key: "porc Otros departamentos (SAV y otros)",
-    path: `feature.properties["porc Otros departamentos (SAV y otros)"]`,
-    label: "Porcentaje de expedientes por otros departamentos",
-    legend: {
-      values: [30, 20, 10, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "porc SS.SS": {
-    key: "porc SS.SS",
-    path: `feature.properties["porc SS.SS"]`,
-    label: "Porcentaje de expedientes por servicios sociales",
+  "ac_origen_ssss": {
+    key: "ac_origen_ssss",
+    path: `feature.properties["ac_origen_ssss"]`,
+    label: "Visita a OHS a través de SS.SS (%)",
     legend: {
       values: [20, 10, 5, 0],
       gradient: COLORMAP.primary.slice(0, 4),
     },
   },
-  "porc Asociaciones y ONG's": {
-    key: "porc Asociaciones y ONG's",
-    path: `feature.properties["porc Asociaciones y ONG's"]`,
-    label: "Porcentaje de expedientes por asociaciones y ONG's",
+  "ac_origen_errp": {
+    key: "ac_origen_errp",
+    path: `feature.properties["ac_origen_errp"]`,
+    label: "Visita a OHS a través de ERRP y OTC (%)",
     legend: {
-      values: [75, 50, 25, 0],
+      values: [20, 10, 5, 0],
       gradient: COLORMAP.primary.slice(0, 4),
     },
   },
-  "Intervalo de confianza (%)": {
-    key: "Intervalo de confianza (%)",
-    path: `feature.properties["Intervalo de confianza (%)"]`,
-    label: "Intervalo de confianza",
+  "ac_origen_eventos": {
+    key: "ac_origen_eventos",
+    path: `feature.properties["ac_origen_eventos"]`,
+    label: "Visita a OHS a través de eventos de difusión (%)",
     legend: {
-      values: [10, 7, 4, 2, 0],
-      gradient: COLORMAP.primary,
+      values: [20, 10, 5, 0],
+      gradient: COLORMAP.primary.slice(0, 4),
     },
   },
-  "pob total (INE 22)": {
-    key: "pob total (INE 22)",
-    path: `feature.properties["pob total (INE 22)"]`,
+  "ac_origen_conocido": {
+    key: "ac_origen_conocido",
+    path: `feature.properties["ac_origen_conocido"]`,
+    label: "Visita a OHS a través de una persona conocida (%)",
+    legend: {
+      values: [20, 10, 5, 0],
+      gradient: COLORMAP.primary.slice(0, 4),
+    },
+  },
+  "t1_1": {
+    key: "t1_1",
+    path: `feature.properties["t1_1"]`,
     label: "Población total",
     legend: {
       values: [35000, 25000, 10000, 0],
       gradient: COLORMAP.primary.slice(0, 4),
     },
   },
-  "porc pob menor de 14 años (INE 22)": {
-    key: "porc pob menor de 14 años (INE 22)",
-    path: `feature.properties["porc pob menor de 14 años (INE 22)"]`,
+  "t4_1": {
+    key: "t4_1",
+    path: `feature.properties["t4_1"]`,
     label: "Porcentaje de población menor de 14 años",
     legend: {
       values: [20, 15, 10, 0],
       gradient: COLORMAP.primary.slice(0, 4),
     },
   },
-  "porc pob de 65 y más años (INE 22)": {
-    key: "porc pob de 65 y más años (INE 22)",
-    path: `feature.properties["porc pob de 65 y más años (INE 22)"]`,
+  "t4_3": {
+    key: "t4_3",
+    path: `feature.properties["t4_3"]`,
     label: "Porcentaje de población mayor de 65 años",
     legend: {
       values: [30, 25, 20, 15, 0],
       gradient: COLORMAP.primary,
     },
   },
-  "edad media pob (INE 20)": {
-    key: "edad media pob (INE 20)",
-    path: `feature.properties["edad media pob (INE 20)"]`,
+  "t3_1": {
+    key: "t3_1",
+    path: `feature.properties["t3_1"]`,
     label: "Edad media de la población",
     legend: {
       values: [45, 43, 40, 0],
       gradient: COLORMAP.primary.slice(0, 4),
     },
   },
-  "Educación primaria e inferior": {
-    key: "Educación primaria e inferior",
-    path: `feature.properties["Educación primaria e inferior"]`,
-    label: "Educación primaria e inferior",
-    legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "Primera etapa de Educación Secundaria y similar": {
-    key: "Primera etapa de Educación Secundaria y similar",
-    path: `feature.properties["Primera etapa de Educación Secundaria y similar"]`,
-    label: "Primera etapa de Educación Secundaria y similar",
-    legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior":
-    {
-      key: "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior",
-      path: `feature.properties["Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior"]`,
-      label:
-        "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior",
-      legend: {
-        values: [75, 50, 25, 0],
-        gradient: COLORMAP.primary.slice(0, 4),
-      },
-    },
-  "Educación Superior": {
-    key: "Educación Superior",
-    path: `feature.properties["Educación Superior"]`,
-    label: "Educación Superior",
-    legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "Índice de dependencia infantil (%)": {
-    key: "Índice de dependencia infantil (%)",
-    path: `feature.properties["Índice de dependencia infantil (%)"]`,
-    label: "Índice de dependencia infantil",
-    legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "Índice de dependencia de mayores (%)": {
-    key: "Índice de dependencia de mayores (%)",
-    path: `feature.properties["Índice de dependencia de mayores (%)"]`,
+  "t31_2dm": {
+    key: "t31_2dm",
+    path: `feature.properties["t31_2dm"]`,
     label: "Índice de dependencia de mayores",
     legend: {
       values: [75, 50, 25, 0],
       gradient: COLORMAP.primary.slice(0, 4),
     },
   },
-  "Índice de dependencia total (%)": {
-    key: "Índice de dependencia total (%)",
-    path: `feature.properties["Índice de dependencia total (%)"]`,
+  "t31_3dt": {
+    key: "t31_3dt",
+    path: `feature.properties["t31_3dt"]`,
     label: "Índice de dependencia total",
     legend: {
       values: [75, 50, 25, 0],
       gradient: COLORMAP.primary.slice(0, 4),
     },
   },
-  "renta media hogar": {
-    key: "renta media hogar",
-    path: `feature.properties["renta media hogar"]`,
-    label: "Renta media del hogar",
+  "n_alquiler": {
+    key: "n_alquiler",
+    path: `feature.properties["n_alquiler"]`,
+    label: "Viviendas en alquiler",
+    legend: {
+      values: [2500, 2000, 1500, 1000, 500],
+      gradient: COLORMAP.primary,
+    },
+  },
+  "precio_alquiler": {
+    key: "precio_alquiler",
+    path: `feature.properties["precio_alquiler"]`,
+    label: "Precio medio alquiler",
+    legend: {
+      values: [900, 800, 700, 600, 500],
+      gradient: COLORMAP.primary,
+    },
+  },
+  "renta_hogar": {
+    key: "renta_hogar",
+    path: `feature.properties["renta_hogar"]`,
+    label: "Renta media por hogar (€)",
     legend: {
       values: [45000, 40000, 30000, 27000, 0],
       gradient: COLORMAP.primary,
     },
   },
-  "tamaño medio hogar (INE 20)": {
-    key: "tamaño medio hogar (INE 20)",
-    path: `feature.properties["tamaño medio hogar (INE 20)"]`,
-    label: "Tamaño medio del hogar",
-    legend: {
-      values: [3, 2.7, 2.5, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "porc hogares unipersonales (INE 20)": {
-    key: "porc hogares unipersonales (INE 20)",
-    path: `feature.properties["porc hogares unipersonales (INE 20)"]`,
-    label: "Porcentaje de hogares unipersonales",
+  "t22_1_porc": {
+    key: "t22_1_porc",
+    path: `feature.properties["t22_1_porc"]`,
+    label: "Hogares unipersonales (%)",
     legend: {
       values: [28, 20, 17.5, 15, 0],
       gradient: COLORMAP.primary,

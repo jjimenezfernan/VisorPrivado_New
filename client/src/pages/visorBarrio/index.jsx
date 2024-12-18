@@ -14,89 +14,82 @@ import {
 import BarChart from "../../components/BarChartVisorBarrio";
 
 const keysPanel1 = [
-  "BARRIO", 
-  "n viviendas", 
-  "ano constru barrio"
+  "barrio", 
+  "t18_1", 
+  "ano",
 ];
 
 const keysPanel2 = [
-  "porc exptes",
-  "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION",
-  "porc motivo TRAMITACION_BONO_SOCIAL",
-  "porc motivo OPTIMIZACION_FACTURA barrio",
-  "porc Comunicaciones del Ayuntamiento",
-  "porc Otros departamentos (SAV y otros)",
-  "porc SS.SS",
-  "Intervalo de confianza (%)",
+  "ac_porc_expedientes",
+  "ac_motivo_rehab",
+  "ac_motivo_infogeneral",
+  "ac_motivo_suminsitros",
+  "ac_motivo_comener",
+  "ac_origen_ayto",
+  "ac_origen_ssss",
+  "ac_origen_errp",
+  "ac_origen_eventos",
+  "ac_origen_conocido",
 ];
 
 const keysPanel3 = [
-  "pob total (INE 22)",
-  "porc pob menor de 14 años (INE 22)",
-  "porc pob de 65 y más años (INE 22)",
-  "edad media pob (INE 20)",
-  "Índice de dependencia de mayores (%)",
-  "Índice de dependencia total (%)",
+  "t1_1",
+  "t4_1",
+  "t4_3",
+  "t3_1",
+  "t31_2dm",
+  "t31_3dt",
+  "n_alquiler",
+  "precio_alquiler",
 ];
 
 const keysPanel4 = [
-  "renta media hogar",
-  "porc hogares unipersonales (INE 20)",
+  "renta_hogar",
+  "t22_1_porc",
 ];
 
+// Keys que son porcentajes
 const porcBarrio = [
-  "porc exptes",
-  "tamaño medio hogar (INE 20)",
-  "porc pob menor de 14 años (INE 22)",
-  "porc pob de 65 y más años (INE 22)",
-  "porc hogares unipersonales (INE 20)",
-  "Educación primaria e inferior",
-  "Primera etapa de Educación Secundaria y similar",
-  "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior",
-  "Educación Superior",
-  "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION",
-  "porc motivo INFORMACION_GENERAL",
-  "porc motivo TRAMITACION_BONO_SOCIAL",
-  "porc motivo OPTIMIZACION_FACTURA barrio",
-  "porc A través de una persona conocida",
-  "porc Comunicaciones del Ayuntamiento",
-  "porc Otros departamentos (SAV y otros)",
-  "porc SS.SS",
-  "porc Asociaciones y ONG's",
-  "Índice de dependencia infantil (%)",
-  "Índice de dependencia de mayores (%)",
-  "Índice de dependencia total (%)",
-  "Intervalo de confianza (%)",
+  "ac_porc_expedientes",
+  "ac_motivo_rehab",
+  "ac_motivo_infogeneral",
+  "ac_motivo_suminsitros",
+  "ac_motivo_comener",
+  "ac_origen_ayto",
+  "ac_origen_ssss",
+  "ac_origen_errp",
+  "ac_origen_eventos",
+  "ac_origen_conocido",
+  "t4_1",
+  "t4_3",
+  "t31_2dm",
+  "t31_3dt",
+  "t22_1_porc",
 ];
 
 const availableSelections = [
-  "n viviendas",
-  "ano constru barrio",
-  "porc exptes",
-  "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION",
-  "porc motivo INFORMACION_GENERAL",
-  "porc motivo TRAMITACION_BONO_SOCIAL",
-  "porc motivo OPTIMIZACION_FACTURA barrio",
-  "porc A través de una persona conocida",
-  "porc Comunicaciones del Ayuntamiento",
-  "porc Otros departamentos (SAV y otros)",
-  "porc SS.SS",
-  "porc Asociaciones y ONG's",
-  "Intervalo de confianza (%)",
-  "pob total (INE 22)",
-  "porc pob menor de 14 años (INE 22)",
-  "porc pob de 65 y más años (INE 22)",
-  "edad media pob (INE 20)",
-  "Educación primaria e inferior",
-  "Primera etapa de Educación Secundaria y similar",
-  "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior",
-  "Educación Superior",
-  "Índice de dependencia infantil (%)",
-  "Índice de dependencia de mayores (%)",
-  "Índice de dependencia total (%)",
-  "renta media hogar",
-  "tamaño medio hogar (INE 20)",
-  "porc hogares unipersonales (INE 20)",
+  "t18_1", 
+  "ano",
+  "ac_porc_expedientes",
+  "ac_motivo_rehab",
+  "ac_motivo_infogeneral",
+  "ac_motivo_suminsitros",
+  "ac_motivo_comener",
+  "ac_origen_ayto",
+  "ac_origen_ssss",
+  "ac_origen_errp",
+  "ac_origen_eventos",
+  "ac_origen_conocido",
+  "t1_1",
+  "t4_1",
+  "t4_3",
+  "t3_1",
+  "t31_2dm",
+  "t31_3dt",
+  "n_alquiler",
+  "precio_alquiler",
+  "renta_hogar",
+  "t22_1_porc",
 ];
 
 import {DIRECTION} from "../../data/direccion_server";
@@ -162,7 +155,7 @@ function VisorBarrio() {
     let barChart = [];
     for (let i = 0; i < geoBarrio["features"].length; i++) {
       let obj = {};
-      obj["id"] = geoBarrio["features"][i]["properties"]["BARRIO"];
+      obj["id"] = geoBarrio["features"][i]["properties"]["barrio"];
       obj["valor"] = geoBarrio["features"][i]["properties"][select];
       barChart.push(obj);
     }
@@ -295,10 +288,7 @@ function VisorBarrio() {
         >
           {value !== null ? value : "-"}
           {porcBarrio.includes(key) && value !== null ? "%" : ""}
-          {key === "renta media hogar" && value !== null ? "€" : ""}
-          {key === "tamaño medio hogar (INE 20)" && value !== null
-            ? " hab."
-            : ""}
+          {key === "renta_hogar" && value !== null ? "€" : ""}
         </Typography>
       </div>
     ));
@@ -337,8 +327,8 @@ function VisorBarrio() {
         >
           {globales[key]}
           {porcBarrio.includes(key) ? "%" : ""}
-          {key === "renta media hogar" ? "€" : ""}
-          {key === "tamaño medio hogar (INE 20)" ? " hab." : ""}
+          {key === "renta_hogar" ? "€" : ""}
+          {key === "precio_alquiler" ? "€" : ""}
         </Typography>
       </div>
     );
@@ -465,8 +455,8 @@ function VisorBarrio() {
               Globales
             </Typography>
             {globalTextDash()}
-            {globalText("n viviendas")}
-            {globalText("ano constru barrio")}
+            {globalText("t18_1")}
+            {globalText("ano")}
           </Box>
           <Box
             id={"infoPanel2"}
@@ -515,14 +505,16 @@ function VisorBarrio() {
             >
               -
             </Typography>
-            {globalText("porc exptes")}
-            {globalText("porc motivo TRAMITACION_AYUDAS_A_REHABILITACION")}
-            {globalText("porc motivo TRAMITACION_BONO_SOCIAL")}
-            {globalText("porc motivo OPTIMIZACION_FACTURA barrio")}
-            {globalText("porc Comunicaciones del Ayuntamiento")}
-            {globalText("porc Otros departamentos (SAV y otros)")}
-            {globalText("porc SS.SS")}
-            {globalText("Intervalo de confianza (%)")}
+            {globalText("ac_porc_expedientes")}
+            {globalText("ac_motivo_rehab")}
+            {globalText("ac_motivo_infogeneral")}
+            {globalText("ac_motivo_suminsitros")}
+            {globalText("ac_motivo_comener")}
+            {globalText("ac_origen_ayto")}
+            {globalText("ac_origen_ssss")}
+            {globalText("ac_origen_errp")}
+            {globalText("ac_origen_eventos")}
+            {globalText("ac_origen_conocido")}
           </Box>
           <Box
             id={"infoPanel3"}
@@ -571,12 +563,14 @@ function VisorBarrio() {
             >
               -
             </Typography>
-            {globalText("pob total (INE 22)")}
-            {globalText("porc pob menor de 14 años (INE 22)")}
-            {globalText("porc pob de 65 y más años (INE 22)")}
-            {globalText("edad media pob (INE 20)")}
-            {globalText("Índice de dependencia de mayores (%)")}
-            {globalText("Índice de dependencia total (%)")}
+            {globalText("t1_1")}
+            {globalText("t4_1")}
+            {globalText("t4_3")}
+            {globalText("t3_1")}
+            {globalText("t31_2dm")}
+            {globalText("t31_3dt")}
+            {globalText("n_alquiler")}
+            {globalText("precio_alquiler")}
           </Box>
           <Box
             id={"infoPanel4"}
@@ -625,8 +619,8 @@ function VisorBarrio() {
             >
               -
             </Typography>
-            {globalText("renta media hogar")}
-            {globalText("porc hogares unipersonales (INE 20)")}
+            {globalText("renta_hogar")}
+            {globalText("t22_1_porc")}
           </Box>
           <Box
             gridColumn={"span 4"}
@@ -646,12 +640,12 @@ function VisorBarrio() {
               <BarChart
                 data={barrioChart}
                 isAnoConstru={
-                  pathToSelect(selectionValue) === "ano constru barrio"
+                  pathToSelect(selectionValue) === "ano"
                     ? true
                     : false
                 }
                 isEuro={
-                  pathToSelect(selectionValue) === "renta media hogar"
+                  pathToSelect(selectionValue) === "renta_hogar"
                     ? true
                     : false
                 }

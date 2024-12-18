@@ -5,7 +5,7 @@ const MapBarrioContext = createContext();
 
 const MapBarrioProvider = ({ children }) => {
   const [selectionValue, setSelectionValue] = useState(
-    Selections["porc exptes"].path
+    Selections["ac_porc_expedientes"].path
   );
   const [infoValue, setInfoValue] = useState({});
 

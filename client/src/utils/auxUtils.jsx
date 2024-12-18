@@ -87,6 +87,7 @@ export function readableValueEPIU(key, value) {
   return value;
 }
 
+// Keys for the EPIU dataset
 const mapEPIUKeys = new Map();
 mapEPIUKeys.set("reference", "Referencia");
 mapEPIUKeys.set("currentUse", "Uso principal");
@@ -146,6 +147,7 @@ mapEPIUKeys.set(
   "Rehabilitación en edificio"
 );
 
+// Keys for the SSCC dataset
 const mapSSCCKeys = new Map();
 mapSSCCKeys.set("CUSEC", "Nº de SSCC");
 mapSSCCKeys.set("barrio", "Barrio");
@@ -248,88 +250,32 @@ mapSSCCKeys.set(
 );
 mapSSCCKeys.set("Intervalo de confianza (%)", "Intervalo de confianza (%)");
 
+
+// Keys for the Barrio dataset
 const mapBarrioKeys = new Map();
-mapBarrioKeys.set("BARRIO", "Barrio");
-mapBarrioKeys.set("n viviendas", "Número de viviendas");
-mapBarrioKeys.set("ano constru barrio", "Antigüedad media de las viviendas");
-mapBarrioKeys.set("porc exptes", "Expedientes (%)");
-mapBarrioKeys.set(
-  "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION",
-  "Solicitud de Ayudas a la rehabilitación (%)"
-);
-mapBarrioKeys.set(
-  "porc motivo OPTIMIZACION_FACTURA barrio",
-  "Solicitud de Optimización de factura (%)"
-);
-mapBarrioKeys.set(
-  "porc motivo INFORMACION_GENERAL",
-  "Solicitud de Información General (%)"
-);
-mapBarrioKeys.set(
-  "porc motivo TRAMITACION_BONO_SOCIAL",
-  "Solicitud de Tramitación del Bono Social (%)"
-);
-mapBarrioKeys.set(
-  "porc A través de una persona conocida",
-  "Visita a OHS a través de una persona conocida (%)"
-);
-mapBarrioKeys.set(
-  "porc Comunicaciones del Ayuntamiento",
-  "Visita a OHS por Comunicaciones del Ayuntamiento (%)"
-);
-mapBarrioKeys.set(
-  "porc Otros departamentos (SAV y otros)",
-  "Visita a OHS por Otros departamentos (SAV y otros) (%)"
-);
+mapBarrioKeys.set("barrio", "Barrio");
+mapBarrioKeys.set("t18_1", "Número de viviendas");
+mapBarrioKeys.set("ano", "Antigüedad media de las viviendas");
+mapBarrioKeys.set("ac_porc_expedientes", "Expedientes (%)");
+mapBarrioKeys.set("ac_motivo_rehab", "Solicitud de Ayudas a la rehabilitación (%)");
+mapBarrioKeys.set("ac_motivo_infogeneral", "Solicitud de información general (%)");
+mapBarrioKeys.set("ac_motivo_suminsitros", "Solicitud de gestión de suministros (%)");
+mapBarrioKeys.set("ac_motivo_comener", "Solicitud de información sobre comunidad energética (%)");
+mapBarrioKeys.set("ac_origen_ayto", "Visita a OHS por Comunicaciones del Ayuntamiento (%)");
+mapBarrioKeys.set("ac_origen_ssss", "Visita a OHS a través de SS.SS (%)");
 mapBarrioKeys.set("porc SS.SS", "Visita a OHS a través de SS.SS (%)");
-mapBarrioKeys.set(
-  "porc Asociaciones y ONG's",
-  "Visita a OHS por Asociaciones y ONG's (%)"
-);
-mapBarrioKeys.set("Intervalo de confianza (%)", "Intervalo de confianza (%)");
-mapBarrioKeys.set("edad media pob (INE 20)", "Edad media población");
-mapBarrioKeys.set(
-  "porc pob menor de 14 años (INE 22)",
-  "Pob. menor de 14 años (%)"
-);
-mapBarrioKeys.set(
-  "porc pob de 65 y más años (INE 22)",
-  "Pob. mayor de 65 años (%)"
-);
-mapBarrioKeys.set("pob total (INE 22)", "Población total");
-mapBarrioKeys.set(
-  "Educación primaria e inferior",
-  "Pob. con estudios primarios o inferiores (%)"
-);
-mapBarrioKeys.set(
-  "Primera etapa de Educación Secundaria y similar",
-  "Pob. con estudios secundarios (%)"
-);
-mapBarrioKeys.set(
-  "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior",
-  "Pob. con estudios de bachillerato (%)"
-);
-mapBarrioKeys.set("Educación Superior", "Pob. con estudios superiores (%)");
-mapBarrioKeys.set(
-  "Índice de dependencia infantil (%)",
-  "Índice de dependencia infantil (%)"
-);
-mapBarrioKeys.set(
-  "Índice de dependencia de mayores (%)",
-  "Índice de dependencia de mayores (%)"
-);
-mapBarrioKeys.set(
-  "Índice de dependencia total (%)",
-  "Índice de dependencia total (%)"
-);
-mapBarrioKeys.set("renta media hogar", "Renta media por hogar (€)");
-mapBarrioKeys.set(
-  "tamaño medio hogar (INE 20)",
-  "Tamaño medio del hogar (hab.)"
-);
-mapBarrioKeys.set(
-  "porc hogares unipersonales (INE 20)",
-  "Hogares unipersonales (%)"
-);
+mapBarrioKeys.set("ac_origen_errp", "Visita a OHS a través de ERRP y OTC (%)");
+mapBarrioKeys.set("ac_origen_eventos", "Visita a OHS a través de eventos de difusión (%)");
+mapBarrioKeys.set("ac_origen_conocido", "Visita a OHS a través de una persona conocida (%)");
+mapBarrioKeys.set("t1_1", "Población total");
+mapBarrioKeys.set("t4_1", "Pob. menor de 14 años (%)");
+mapBarrioKeys.set("t4_3", "Pob. mayor de 65 años (%)");
+mapBarrioKeys.set("t3_1", "Edad media población");
+mapBarrioKeys.set("t31_2dm", "Índice de dependencia de mayores (%)");
+mapBarrioKeys.set("t31_3dt", "Índice de dependencia total (%)");
+mapBarrioKeys.set("n_alquiler", "Viviendas en alquiler");
+mapBarrioKeys.set("precio_alquiler", "Precio medio alquiler");
+mapBarrioKeys.set("renta_hogar", "Renta media por hogar (€)");
+mapBarrioKeys.set("t22_1_porc", "Hogares unipersonales (%)");
 
 export { mapEPIUKeys, mapSSCCKeys, mapBarrioKeys };

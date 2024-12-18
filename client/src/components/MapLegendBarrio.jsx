@@ -25,29 +25,23 @@ function MapLegendBarrio({ position, selection }) {
   const [legendValues, setLegendValues] = useState([]);
   const [legendGradient, setLegendGradient] = useState([]);
 
+  // Keys that represent percentages
   const percentages = [
-    "porc exptes",
-    "tamaño medio hogar (INE 20)",
-    "porc pob menor de 14 años (INE 22)",
-    "porc pob de 65 y más años (INE 22)",
-    "porc hogares unipersonales (INE 20)",
-    "Educación primaria e inferior",
-    "Primera etapa de Educación Secundaria y similar",
-    "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior",
-    "Educación Superior",
-    "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION",
-    "porc motivo INFORMACION_GENERAL",
-    "porc motivo TRAMITACION_BONO_SOCIAL",
-    "porc motivo OPTIMIZACION_FACTURA barrio",
-    "porc A través de una persona conocida",
-    "porc Comunicaciones del Ayuntamiento",
-    "porc Otros departamentos (SAV y otros)",
-    "porc SS.SS",
-    "porc Asociaciones y ONG's",
-    "Índice de dependencia infantil (%)",
-    "Índice de dependencia de mayores (%)",
-    "Índice de dependencia total (%)",
-    "Intervalo de confianza (%)",
+    "ac_porc_expedientes",
+    "ac_motivo_rehab",
+    "ac_motivo_infogeneral",
+    "ac_motivo_suminsitros",
+    "ac_motivo_comener",
+    "ac_origen_ayto",
+    "ac_origen_ssss",
+    "ac_origen_errp",
+    "ac_origen_eventos",
+    "ac_origen_conocido",
+    "t4_1",
+    "t4_3",
+    "t31_2dm",
+    "t31_3dt",
+    "t22_1_porc",
   ];
 
   useEffect(() => {
@@ -231,7 +225,7 @@ function MapLegendBarrio({ position, selection }) {
   function renderLegend() {
     if (percentages.includes(pathToSelect(selectionValue))) {
       return renderLegendPercent(legendValues, legendGradient, "0% / ND");
-    } else if (pathToSelect(selectionValue) === "ano constru barrio") {
+    } else if (pathToSelect(selectionValue) === "ano") {
       return renderLegendAnyoConstru(legendValues, legendGradient, "ND");
     } else if (pathToSelect(selectionValue) === "tamaño medio hogar (INE 20)") {
       return renderTamanyoMedioHogar(legendValues, legendGradient, "ND");

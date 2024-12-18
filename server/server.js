@@ -289,64 +289,54 @@ app.get("/api/visor-sscc", async (req, res) => {
     });
 });
 
+// Keys que son porcentajes
 const porcBarrio = [
-  "porc exptes",
-  "tamaño medio hogar (INE 20)",
-  "porc pob menor de 14 años (INE 22)",
-  "porc pob de 65 y más años (INE 22)",
-  // "porc hogares unipersonales (INE 20)",
-  "Educación primaria e inferior",
-  "Primera etapa de Educación Secundaria y similar",
-  "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior",
-  "Educación Superior",
-  "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION",
-  "porc motivo INFORMACION_GENERAL",
-  "porc motivo TRAMITACION_BONO_SOCIAL",
-  "porc motivo OPTIMIZACION_FACTURA barrio",
-  "porc A través de una persona conocida",
-  "porc Comunicaciones del Ayuntamiento",
-  "porc Otros departamentos (SAV y otros)",
-  "porc SS.SS",
-  "porc Asociaciones y ONG's",
-  "Índice de dependencia infantil (%)",
-  "Índice de dependencia de mayores (%)",
-  "Índice de dependencia total (%)",
-  // "Intervalo de confianza (%)", //this one is already multiplied by 100
+  "ac_porc_expedientes",
+  "ac_motivo_rehab",
+  "ac_motivo_infogeneral",
+  "ac_motivo_suminsitros",
+  "ac_motivo_comener",
+  "ac_origen_ayto",
+  "ac_origen_ssss",
+  "ac_origen_errp",
+  "ac_origen_eventos",
+  "ac_origen_conocido",
+  "t4_1",
+  "t4_3",
+  "t31_2dm",
+  "t31_3dt",
+  "t22_1_porc",
 ];
-const sumatoriosBarrio = [
-  "n viviendas",
-  "n exptes barrio",
-  "pob total (INE 22)",
-];
+
+// Keys que no se hacen medias en vez de sumatorios
+const sumatoriosBarrio = {
+  "t18_1": 0,
+  "t1_1": 0,
+  "n_alquiler": 0,  
+};
+
+// Keys de las que se han de hacer medias
 const mediasGlobalesKeysBarrio = {
-  "n viviendas": 0,
-  "n exptes barrio": 0,
-  "porc exptes": 0,
-  "ano constru barrio": 0,
-  "pob total (INE 22)": 0,
-  "porc pob menor de 14 años (INE 22)": 0,
-  "porc pob de 65 y más años (INE 22)": 0,
-  "renta media hogar": 0,
-  "edad media pob (INE 20)": 0,
-  "tamaño medio hogar (INE 20)": 0,
-  "porc hogares unipersonales (INE 20)": 0,
-  "Educación primaria e inferior": 0,
-  "Primera etapa de Educación Secundaria y similar": 0,
-  "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior": 0,
-  "Educación Superior": 0,
-  "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION": 0,
-  "porc motivo INFORMACION_GENERAL": 0,
-  "porc motivo TRAMITACION_BONO_SOCIAL": 0,
-  "porc motivo OPTIMIZACION_FACTURA barrio": 0,
-  "porc A través de una persona conocida": 0,
-  "porc Comunicaciones del Ayuntamiento": 0,
-  "porc Otros departamentos (SAV y otros)": 0,
-  "porc SS.SS": 0,
-  "porc Asociaciones y ONG's": 0,
-  "Índice de dependencia infantil (%)": 0,
-  "Índice de dependencia de mayores (%)": 0,
-  "Índice de dependencia total (%)": 0,
-  "Intervalo de confianza (%)": 0,
+  "t3_1": 0,
+  "t4_1": 0,
+  "t4_3": 0,
+  "t31_2dm": 0,
+  "t31_3dt": 0,
+  "renta_hogar": 0,
+  "ano": 0,
+  "precio_alquiler": 0,
+  "ac_n_expedientes": 0,
+  "ac_porc_expedientes": 0,
+  "ac_motivo_rehab": 0,
+  "ac_motivo_infogeneral": 0,
+  "ac_motivo_suminsitros": 0,
+  "ac_motivo_comener": 0,
+  "ac_origen_ayto": 0,
+  "ac_origen_ssss": 0,
+  "ac_origen_conocido": 0,
+  "ac_origen_eventos": 0,
+  "ac_origen_errp": 0,
+  "t22_1_porc": 0,
 };
 
 let isProcessingBarrio = false;
@@ -364,24 +354,27 @@ app.get("/api/visor-barrio", async (req, res) => {
   // Create an array of promises to read both geojson files
   const readGeojsonPromises = [readJsonFile(geoBarrioPath)];
 
-  // Use Promise.all to read both files asynchronously
+  // Parseo de datos del geojson
   Promise.all(readGeojsonPromises)
     .then(([geoBarrio]) => {
       geoBarrio["features"].forEach((feature) => {
         for (const key in feature.properties) {
-          if (
-            key === "Intervalo de confianza (%)" ||
-            key === "renta media hogar" ||
-            key === "porc hogares unipersonales (INE 20)" ||
-            key === "edad media pob (INE 20)"
-          ) {
+          if (key === "ano" || key === "t18_1" || key === "t1_1") {
+            const value = feature.properties[key];
+            let parsed = parseInt(value, 10);
+            if (!isNaN(parsed)) {
+              feature.properties[key] = parsed;
+            }
+          } 
+          else if ( key === "t3_1" || key === "precio_alquiler") {
             const value = feature.properties[key];
             //just parsing, no need to multiply by 100
             let parsed = parseFloat(parseFloat(value).toFixed(2));
             if (!isNaN(parsed)) {
               feature.properties[key] = parsed;
             }
-          } else if (porcBarrio.includes(key)) {
+          }
+          else if (porcBarrio.includes(key)) {
             const value = feature.properties[key];
             //toFixed converts it to string, so we need to convert it back to number
             let parsed = parseFloat((parseFloat(value) * 100).toFixed(2));
@@ -402,10 +395,15 @@ app.get("/api/visor-barrio", async (req, res) => {
             // console.log("value", value);
             if (!isNaN(value) && value !== null && value !== 0) {
               //add to the accumulator
-              globalesBarrio[key] =
-                (globalesBarrio[key] ?? 0) + parseFloat(value);
+              globalesBarrio[key] = (globalesBarrio[key] ?? 0) + parseFloat(value);
               //increment the counter
               mediasGlobalesKeysBarrio[key]++;
+            }
+          }
+          else if (Object.keys(sumatoriosBarrio).includes(key)){
+            const value = feature.properties[key];
+            if (!isNaN(value) && value !== null && value !== 0) {
+              sumatoriosBarrio[key] = (sumatoriosBarrio[key] ?? 0) + value;
             }
           }
         }
@@ -413,15 +411,20 @@ app.get("/api/visor-barrio", async (req, res) => {
 
       //counter of instances is to not count the nulls
       for (const key in globalesBarrio) {
-        if (
-          mediasGlobalesKeysBarrio[key] !== 0 &&
-          !sumatoriosBarrio.includes(key)
-        ) {
-          globalesBarrio[key] = parseFloat(
+        if ( mediasGlobalesKeysBarrio[key] !== 0 && !Object.keys(sumatoriosBarrio).includes(key)) {
+          globalesBarrio[key] = parseFloat( 
             (globalesBarrio[key] / mediasGlobalesKeysBarrio[key]).toFixed(2)
           );
         }
       }
+
+      //sumatorios
+      globalesBarrio.t18_1 = sumatoriosBarrio.t18_1;
+      globalesBarrio.t1_1 = sumatoriosBarrio.t1_1;
+      globalesBarrio.n_alquiler = sumatoriosBarrio.n_alquiler;
+      
+      // parseo de algunas variables
+      globalesBarrio.ano = parseInt(globalesBarrio.ano, 10);
 
       // Send the modified geojson data as the response
       res.json({ geoBarrio, globalesBarrio });
