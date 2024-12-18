@@ -221,6 +221,13 @@ app.get("/api/visor-sscc", async (req, res) => {
               feature.properties[key] = parsed;
             }
           }
+          else if (key === "t30_th") {
+            const value = feature.properties[key];
+            let parsed = (parseFloat(value)).toFixed(2);
+            if (!isNaN(parsed) && parsed !== 0) {
+              feature.properties[key] = parsed;
+            }
+          }
           else if (porcSSCC.includes(key)) {
             const value = feature.properties[key];
             //toFixed converts it to string, so we need to convert it back to number
