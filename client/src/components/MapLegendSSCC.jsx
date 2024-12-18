@@ -27,33 +27,24 @@ function MapLegendSSCC({ position, selection }) {
 
   const percentages = [
     "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION",
-    "porc motivo OPTIMIZACION_FACTURA barrio",
     "porc motivo INFORMACION_GENERAL",
-    "porc motivo TRAMITACION_BONO_SOCIAL",
-    "porc motivo OTROS_MOTIVOS",
+    "porc motivo suministros",
+    "porc motivo comunidad energética",
     "porc A través de una persona conocida",
     "porc Comunicaciones del Ayuntamiento",
-    "porc Otros departamentos (SAV y otros)",
     "porc SS.SS",
-    "porc Directamente",
-    "porc Administrador de fincas",
-    "porc Entidades EPIU",
-    "porc Asociaciones y ONG's",
-    "porc pob menor de 14 años (INE 22)",
-    "porc pob de 65 y más años (INE 22)",
-    "Educación primaria e inferior",
-    "Primera etapa de Educación Secundaria y similar",
-    "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior",
-    "Educación Superior",
-    "porc dependencia - discapacidad SSCC",
-    "Índice de dependencia infantil (%)",
-    "Índice de dependencia de mayores (%)",
-    "Índice de dependencia total (%)",
+    "porc ERRP y OTC",
+    "porc Eventos/Difusión",
+    "t4_1",
+    "t4_3",
+    "t31_1di",
+    "t31_2dm",
+    "t31_3dt",
+    "t32_ei",
     "porc disconfort inv",
     "porc disconfort ver",
-    "porc hogares unipersonales (INE 20)",
     "porc retraso pago facturas",
-    "Intervalo de confianza (%)",
+    "t22_1_porc",
   ];
 
   useEffect(() => {
@@ -237,9 +228,9 @@ function MapLegendSSCC({ position, selection }) {
   function renderLegend() {
     if (percentages.includes(pathToSelect(selectionValue))) {
       return renderLegendPercent(legendValues, legendGradient, "0% / ND");
-    } else if (pathToSelect(selectionValue) === "ano constru SSCC") {
+    } else if (pathToSelect(selectionValue) === "ano") {
       return renderLegendAnyoConstru(legendValues, legendGradient, "ND");
-    } else if (pathToSelect(selectionValue) === "tamaño medio hogar (INE 20)") {
+    } else if (pathToSelect(selectionValue) === "t30_th") {
       return renderTamanyoMedioHogar(legendValues, legendGradient, "ND");
     } else {
       return renderLegendGeneric(legendValues, legendGradient, "0 / ND");

@@ -9,117 +9,105 @@ import { useMapSSCCContext } from "../../components/MapSSCCProvider";
 import { mapSSCCKeys } from "../../utils/auxUtils";
 import { pathToSelect } from "../../constants/MapConstantsSSCC";
 
-const keysPanel1 = ["CUSEC", "barrio", "n viviendas", "ano constru SSCC"];
+const keysPanel1 = [
+  "cusec", 
+  "barrio", 
+  "t18_1", 
+  "ano"
+];
 
 const keysPanel2 = [
   "n exptes SSCC",
   "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION",
   "porc motivo INFORMACION_GENERAL",
-  "porc motivo TRAMITACION_BONO_SOCIAL",
-  "porc motivo OPTIMIZACION_FACTURA barrio",
-  // "porc motivo OTROS_MOTIVOS",
+  "porc motivo suministros",
+  "porc motivo comunidad energética",
   "porc A través de una persona conocida",
   "porc Comunicaciones del Ayuntamiento",
-  "porc Otros departamentos (SAV y otros)",
   "porc SS.SS",
-  // "porc Directamente",
-  // "porc Administrador de fincas",
-  // "porc Entidades EPIU",
-  "porc Asociaciones y ONG's",
-  "Intervalo de confianza (%)",
+  "porc ERRP y OTC",
+  "porc Eventos/Difusión",
 ];
 
 const keysPanel3 = [
-  "pob total (INE 22)",
-  "porc pob menor de 14 años (INE 22)",
-  "porc pob de 65 y más años (INE 22)",
-  "Edad media pob (INE 20)",
-  "Índice de dependencia infantil (%)",
-  "Índice de dependencia de mayores (%)",
-  "Índice de dependencia total (%)",
-  "Educación primaria e inferior",
-  // "Primera etapa de Educación Secundaria y similar",
-  // "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior",
-  // "Educación Superior",
-  // "porc dependencia - discapacidad SSCC",
+  "t1_1",
+  "t4_1",
+  "t4_3",
+  "t3_1",
+  "t31_1di",
+  "t31_2dm",
+  "t31_3dt",
+  "t32_ei",
+  "n_alquiler",
+  "precio_alquiler",
 ];
 
 const keysPanel4 = [
-  "renta media hogar",
+  "renta_hogar",
   "porc disconfort inv",
   "porc disconfort ver",
   "porc retraso pago facturas",
-  "tamaño medio hogar (INE 20)",
-  "porc hogares unipersonales (INE 20)",
+  "t30_th",
+  "t22_1_porc",
 ];
 
 const porcSSCC = [
   "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION",
-  "porc motivo OPTIMIZACION_FACTURA barrio",
   "porc motivo INFORMACION_GENERAL",
-  "porc motivo TRAMITACION_BONO_SOCIAL",
-  "porc motivo OTROS_MOTIVOS",
+  "porc motivo suministros",
+  "porc motivo comunidad energética",
   "porc A través de una persona conocida",
   "porc Comunicaciones del Ayuntamiento",
-  "porc Otros departamentos (SAV y otros)",
   "porc SS.SS",
-  "porc Directamente",
-  "porc Administrador de fincas",
-  "porc Entidades EPIU",
-  "porc Asociaciones y ONG's",
-  "porc pob menor de 14 años (INE 22)",
-  "porc pob de 65 y más años (INE 22)",
-  "Educación primaria e inferior",
-  "Primera etapa de Educación Secundaria y similar",
-  "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior",
-  "Educación Superior",
-  "porc dependencia - discapacidad SSCC",
-  "Índice de dependencia infantil (%)",
-  "Índice de dependencia de mayores (%)",
-  "Índice de dependencia total (%)",
+  "porc ERRP y OTC",
+  "porc Eventos/Difusión",
+  "t4_1",
+  "t4_3",
+  "t31_1di",
+  "t31_2dm",
+  "t31_3dt",
+  "t32_ei",
   "porc disconfort inv",
   "porc disconfort ver",
-  "porc hogares unipersonales (INE 20)",
   "porc retraso pago facturas",
-  "Intervalo de confianza (%)",
+  "t22_1_porc",
 ];
 
 const availableSelections = [
-  "n viviendas",
-  "ano constru SSCC",
+  "t18_1", 
+  "ano",
   "n exptes SSCC",
   "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION",
   "porc motivo INFORMACION_GENERAL",
-  "porc motivo TRAMITACION_BONO_SOCIAL",
-  "porc motivo OPTIMIZACION_FACTURA barrio",
+  "porc motivo suministros",
+  "porc motivo comunidad energética",
   "porc A través de una persona conocida",
   "porc Comunicaciones del Ayuntamiento",
-  "porc Otros departamentos (SAV y otros)",
   "porc SS.SS",
-  "porc Asociaciones y ONG's",
-  "pob total (INE 22)",
-  "porc pob menor de 14 años (INE 22)",
-  "porc pob de 65 y más años (INE 22)",
-  "Edad media pob (INE 20)",
-  "Índice de dependencia infantil (%)",
-  "Índice de dependencia de mayores (%)",
-  "Índice de dependencia total (%)",
-  "Educación primaria e inferior",
-  "renta media hogar",
+  "porc ERRP y OTC",
+  "porc Eventos/Difusión",
+  "t1_1",
+  "t4_1",
+  "t4_3",
+  "t3_1",
+  "t31_1di",
+  "t31_2dm",
+  "t31_3dt",
+  "t32_ei",
+  "n_alquiler",
+  "precio_alquiler",
+  "renta_hogar",
   "porc disconfort inv",
   "porc disconfort ver",
   "porc retraso pago facturas",
-  "tamaño medio hogar (INE 20)",
-  "porc hogares unipersonales (INE 20)",
+  "t30_th",
+  "t22_1_porc",
 ];
 
 import {DIRECTION} from "../../data/direccion_server";
 
 const baseURL = DIRECTION + "/api/visor-sscc";
 
-
-//  "https://observatoriodedatosepiu.khoraurbanthinkers.es/api/visor-sscc";
-// const storageKey = "visorData"; // Key for storing/retrieving data from localStorage
 function Visor() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -138,49 +126,10 @@ function Visor() {
       console.log("Contact with us in https://khoraurbanthinkers.es/en/home-en/")
       console.log("Our X account https://x.com/khoraurban")
       console.log("Our Linkedin account https://www.linkedin.com/company/khora-urban-thinkers/posts/?feedView=all")
-
-      // // Scroll synchronization script
-      // const box2 = document.getElementById("infoPanel2");
-      // const box2Global = document.getElementById("infoPanel2Global");
-      // const box3 = document.getElementById("infoPanel3");
-      // const box3Global = document.getElementById("infoPanel3Global");
-
-      // const syncScroll2 = (event) => {
-      //   const scrollY = event.target.scrollTop;
-      //   box2Global.scrollTop = scrollY;
-      // };
-
-      // const syncScroll3 = (event) => {
-      //   const scrollY = event.target.scrollTop;
-      //   box3Global.scrollTop = scrollY;
-      // };
-
-      // if (box2 && box2Global) {
-      //   box2.addEventListener("scroll", syncScroll2);
-      // }
-
-      // if (box3 && box3Global) {
-      //   box3.addEventListener("scroll", syncScroll3);
-      // }
-
-      // // Clean up the event listener when the component unmounts
-      // return () => {
-      //   if (box2 && box2Global) {
-      //     box2.removeEventListener("scroll", syncScroll2);
-      //   }
-      //   if (box3 && box3Global) {
-      //     box3.removeEventListener("scroll", syncScroll3);
-      //   }
-      // };
     });
   }, []);
 
-  // useEffect(() => {
-  // console.log("infoValue", infoValue);
-  // }, [infoValue]);
-
   const handleSelectionClick = (indicator) => {
-    // console.log("in handleSelectionClick");
     if (availableSelections.includes(indicator)) {
       updateSelection(`feature.properties["${indicator}"]`);
     }
@@ -300,8 +249,8 @@ function Visor() {
         >
           {value !== null ? value : "-"}
           {porcSSCC.includes(key) && value !== null ? "%" : ""}
-          {key === "renta media hogar" && value !== null ? "€" : ""}
-          {key === "tamaño medio hogar (INE 20)" && value !== null
+          {key === "renta_hogar" && value !== null ? "€" : ""}
+          {key === "t30_th" && value !== null
             ? " hab."
             : ""}
         </Typography>
@@ -343,8 +292,8 @@ function Visor() {
         >
           {globales[key]}
           {porcSSCC.includes(key) ? "%" : ""}
-          {key === "renta media hogar" ? "€" : ""}
-          {key === "tamaño medio hogar (INE 20)" ? " hab." : ""}
+          {key === "renta_hogar" ? "€" : ""}
+          {key === "t30_th" ? " hab." : ""}
         </Typography>
       </div>
     );
@@ -473,8 +422,8 @@ function Visor() {
             </Typography>
             {globalTextDash()}
             {globalTextDash()}
-            {globalText("n viviendas")}
-            {globalText("ano constru SSCC")}
+            {globalText("t18_1")}
+            {globalText("ano")}
           </Box>
           <Box
             id={"infoPanel2"}
@@ -526,14 +475,13 @@ function Visor() {
             {globalText("n exptes SSCC")}
             {globalText("porc motivo TRAMITACION_AYUDAS_A_REHABILITACION")}
             {globalText("porc motivo INFORMACION_GENERAL")}
-            {globalText("porc motivo TRAMITACION_BONO_SOCIAL")}
-            {globalText("porc motivo OPTIMIZACION_FACTURA barrio")}
+            {globalText("porc motivo suministros")}
+            {globalText("porc motivo comunidad energética")}
             {globalText("porc A través de una persona conocida")}
             {globalText("porc Comunicaciones del Ayuntamiento")}
-            {globalText("porc Otros departamentos (SAV y otros)")}
             {globalText("porc SS.SS")}
-            {globalText("porc Asociaciones y ONG's")}
-            {globalText("Intervalo de confianza (%)")}
+            {globalText("porc ERRP y OTC")}
+            {globalText("porc Eventos/Difusión")}
           </Box>
           <Box
             id={"infoPanel3"}
@@ -582,14 +530,16 @@ function Visor() {
             >
               -
             </Typography>
-            {globalText("pob total (INE 22)")}
-            {globalText("porc pob menor de 14 años (INE 22)")}
-            {globalText("porc pob de 65 y más años (INE 22)")}
-            {globalText("Edad media pob (INE 20)")}
-            {globalText("Índice de dependencia infantil (%)")}
-            {globalText("Índice de dependencia de mayores (%)")}
-            {globalText("Índice de dependencia total (%)")}
-            {globalText("Educación primaria e inferior")}
+            {globalText("t1_1")}
+            {globalText("t4_1")}
+            {globalText("t4_3")}
+            {globalText("t3_1")}
+            {globalText("t31_1di")}
+            {globalText("t31_2dm")}
+            {globalText("t31_3dt")}
+            {globalText("t32_ei")}
+            {globalText("n_alquiler")}
+            {globalText("precio_alquiler")}
           </Box>
           <Box
             id={"infoPanel4"}
@@ -638,12 +588,12 @@ function Visor() {
             >
               -
             </Typography>
-            {globalText("renta media hogar")}
+            {globalText("renta_hogar")}
             {globalText("porc disconfort inv")}
             {globalText("porc disconfort ver")}
             {globalText("porc retraso pago facturas")}
-            {globalText("tamaño medio hogar (INE 20)")}
-            {globalText("porc hogares unipersonales (INE 20)")}
+            {globalText("t30_th")}
+            {globalText("t22_1_porc")}
           </Box>
         </Box>
       </Box>

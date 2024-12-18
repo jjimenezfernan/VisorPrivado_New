@@ -149,107 +149,37 @@ mapEPIUKeys.set(
 
 // Keys for the SSCC dataset
 const mapSSCCKeys = new Map();
-mapSSCCKeys.set("CUSEC", "Nº de SSCC");
+mapSSCCKeys.set("cusec", "Nº de SSCC");
 mapSSCCKeys.set("barrio", "Barrio");
-mapSSCCKeys.set("n viviendas", "Número de viviendas");
-mapSSCCKeys.set("ano constru SSCC", "Antigüedad media de las viviendas");
+mapSSCCKeys.set("t18_1", "Número de viviendas");
+mapSSCCKeys.set("ano", "Antigüedad media de las viviendas");
 mapSSCCKeys.set("n exptes SSCC", "Nº de expedientes");
-mapSSCCKeys.set(
-  "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION",
-  "Solicitud de Ayudas a la rehabilitación (%)"
-);
-mapSSCCKeys.set(
-  "porc motivo OPTIMIZACION_FACTURA barrio",
-  "Usuarios OHS que solicita Optimización de factura (%)"
-);
-mapSSCCKeys.set(
-  "porc motivo INFORMACION_GENERAL",
-  "Solicitud de Información General (%)"
-);
-mapSSCCKeys.set(
-  "porc motivo TRAMITACION_BONO_SOCIAL",
-  "Solicitud de Tramitación del Bono Social (%)"
-);
-mapSSCCKeys.set(
-  "porc motivo OTROS_MOTIVOS",
-  "Solicitud de Asesoramiento por Otros motivos (%)"
-);
-mapSSCCKeys.set(
-  "porc A través de una persona conocida",
-  "Visita a OHS a través de una persona conocida (%)"
-);
-mapSSCCKeys.set(
-  "porc Comunicaciones del Ayuntamiento",
-  "Visita a OHS por Comunicaciones del Ayuntamiento (%)"
-);
-mapSSCCKeys.set(
-  "porc Otros departamentos (SAV y otros)",
-  "Visita a OHS por Otros departamentos (SAV y otros) (%)"
-);
+mapSSCCKeys.set("porc motivo TRAMITACION_AYUDAS_A_REHABILITACION", "Solicitud de Ayudas a la rehabilitación (%)");
+mapSSCCKeys.set("porc motivo INFORMACION_GENERAL", "Solicitud de Información General (%)");
+mapSSCCKeys.set("porc motivo suministros", "Solicitud de gestión de suministros (%)");
+mapSSCCKeys.set("porc motivo comunidad energética", "Solicitud de información sobre comunidad energética (%)");
+mapSSCCKeys.set("porc A través de una persona conocida", "Visita a OHS a través de una persona conocida (%)");
+mapSSCCKeys.set("porc Comunicaciones del Ayuntamiento", "Visita a OHS por Comunicaciones del Ayuntamiento (%)");
 mapSSCCKeys.set("porc SS.SS", "Visita a OHS a través de SS.SS (%)");
-mapSSCCKeys.set("porc Directamente", "Visita a OHS Directamente (%)");
-mapSSCCKeys.set(
-  "porc Administrador de fincas",
-  "Visita a OHS por Administrador de fincas (%)"
-);
-mapSSCCKeys.set("porc Entidades EPIU", "Visita a OHS por Entidades EPIU (%)");
-mapSSCCKeys.set(
-  "porc Asociaciones y ONG's",
-  "Visita a OHS por Asociaciones y ONG's (%)"
-);
-mapSSCCKeys.set("Edad media pob (INE 20)", "Edad media población");
-mapSSCCKeys.set(
-  "porc pob menor de 14 años (INE 22)",
-  "Pob. menor de 14 años (%)"
-);
-mapSSCCKeys.set(
-  "porc pob de 65 y más años (INE 22)",
-  "Pob. mayor de 65 años (%)"
-);
-mapSSCCKeys.set("pob total (INE 22)", "Población total");
-mapSSCCKeys.set(
-  "Educación primaria e inferior",
-  "Pob. con estudios primarios o inferiores (%)"
-);
-mapSSCCKeys.set(
-  "Primera etapa de Educación Secundaria y similar",
-  "Pob. con estudios secundarios (%)"
-);
-mapSSCCKeys.set(
-  "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior",
-  "Pob. con estudios de bachillerato (%)"
-);
-mapSSCCKeys.set("Educación Superior", "Pob. con estudios superiores (%)");
-mapSSCCKeys.set(
-  "porc dependencia - discapacidad SSCC",
-  "Población con dependencia-discapacidad (%)"
-);
-mapSSCCKeys.set(
-  "Índice de dependencia infantil (%)",
-  "Índice de dependencia infantil (%)"
-);
-mapSSCCKeys.set(
-  "Índice de dependencia de mayores (%)",
-  "Índice de dependencia de mayores (%)"
-);
-mapSSCCKeys.set(
-  "Índice de dependencia total (%)",
-  "Índice de dependencia total (%)"
-);
-mapSSCCKeys.set("porc disconfort inv", "Disconfort invierno (%)");
-mapSSCCKeys.set("porc disconfort ver", "Disconfort verano (%)");
-mapSSCCKeys.set("renta media hogar", "Renta media por hogar (€)");
-mapSSCCKeys.set("tamaño medio hogar (INE 20)", "Tamaño medio del hogar");
-mapSSCCKeys.set(
-  "porc hogares unipersonales (INE 20)",
-  "Hogares unipersonales (%)"
-);
-mapSSCCKeys.set(
-  "porc retraso pago facturas",
-  "Retraso en el pago de facturas (% población)"
-);
-mapSSCCKeys.set("Intervalo de confianza (%)", "Intervalo de confianza (%)");
-
+mapSSCCKeys.set("porc ERRP y OTC","Visita a OHS a través de ERRP y OTC (%)");
+mapSSCCKeys.set("porc Eventos/Difusión","Visita a OHS a través de eventos de difusión (%)");
+mapSSCCKeys.set("Intervalo de confianza (%)","Intervalo de confianza (%)");
+mapSSCCKeys.set("t1_1","Población total");
+mapSSCCKeys.set("t4_1","Pob. menor de 14 años (%)");
+mapSSCCKeys.set("t4_3","Pob. mayor de 65 años (%)");
+mapSSCCKeys.set("t3_1","Edad media población");
+mapSSCCKeys.set("t31_1di","Índice de dependencia infantil (%)");
+mapSSCCKeys.set("t31_2dm","Índice de dependencia de mayores (%)");
+mapSSCCKeys.set("t31_3dt","Índice de dependencia total (%)");
+mapSSCCKeys.set("t32_ei","Pob. con estudios primarios o inferiores (%)");
+mapSSCCKeys.set("n_alquiler","Viviendas en alquiler");
+mapSSCCKeys.set("precio_alquiler","Precio medio alquiler");
+mapSSCCKeys.set("renta_hogar","Renta media por hogar (€)");
+mapSSCCKeys.set("porc disconfort inv","Disconfort invierno (%)");
+mapSSCCKeys.set("porc disconfort ver","Disconfort verano (%)");
+mapSSCCKeys.set("porc retraso pago facturas", "Retraso en el pago de facturas (% población)");
+mapSSCCKeys.set("t30_th","Tamaño medio del hogar");
+mapSSCCKeys.set("t22_1_porc","Hogares unipersonales (%)");
 
 // Keys for the Barrio dataset
 const mapBarrioKeys = new Map();

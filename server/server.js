@@ -137,74 +137,61 @@ function resetCounters(obj) {
 //there are some percentages that are already multiplied by 100
 const porcSSCC = [
   "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION",
-  "porc motivo OPTIMIZACION_FACTURA barrio",
   "porc motivo INFORMACION_GENERAL",
-  "porc motivo TRAMITACION_BONO_SOCIAL",
-  "porc motivo OTROS_MOTIVOS",
+  "porc motivo suministros",
+  "porc motivo comunidad energética",
   "porc A través de una persona conocida",
   "porc Comunicaciones del Ayuntamiento",
-  "porc Otros departamentos (SAV y otros)",
   "porc SS.SS",
-  "porc Directamente",
-  "porc Administrador de fincas",
-  "porc Entidades EPIU",
-  "porc Asociaciones y ONG's",
-  "porc pob menor de 14 años (INE 22)",
-  "porc pob de 65 y más años (INE 22)",
-  "Educación primaria e inferior",
-  "Primera etapa de Educación Secundaria y similar",
-  "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior",
-  "Educación Superior",
-  "porc dependencia - discapacidad SSCC",
-  "Índice de dependencia infantil (%)",
-  "Índice de dependencia de mayores (%)",
-  "Índice de dependencia total (%)",
+  "porc ERRP y OTC",
+  "porc Eventos/Difusión",
+  "t4_1",
+  "t4_3",
+  "t31_1di",
+  "t31_2dm",
+  "t31_3dt",
+  "t32_ei",
   "porc disconfort inv",
   "porc disconfort ver",
-  // "porc hogares unipersonales (INE 20)", //this one is already multiplied by 100
   "porc retraso pago facturas",
+  "t22_1_porc",
 ];
 
 //no se hacen medias en vez de sumatorios
-const sumatoriosSSCC = ["n exptes SSCC", "pob total (INE 22)"];
+const sumatoriosSSCC = {
+  "t18_1": 0,
+  "n exptes SSCC": 0, 
+  "t1_1": 0,
+  "n_alquiler": 0
+};
 
 //"SSCC Getafe_pob total (INE 22)" no queremos media, sino sumatorio
 const mediasGlobalesKeysSSCC = {
-  "n viviendas": 0,
-  "ano constru SSCC": 0,
-  "n exptes SSCC": 0,
+  "ano": 0,
   "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION": 0,
-  "porc motivo OPTIMIZACION_FACTURA barrio": 0,
   "porc motivo INFORMACION_GENERAL": 0,
-  "porc motivo TRAMITACION_BONO_SOCIAL": 0,
-  "porc motivo OTROS_MOTIVOS": 0,
+  "porc motivo suministros": 0,
+  "porc motivo comunidad energética": 0,
   "porc A través de una persona conocida": 0,
   "porc Comunicaciones del Ayuntamiento": 0,
-  "porc Otros departamentos (SAV y otros)": 0,
   "porc SS.SS": 0,
-  "porc Directamente": 0,
-  "porc Administrador de fincas": 0,
-  "porc Entidades EPIU": 0,
-  "porc Asociaciones y ONG's": 0,
-  "Edad media pob (INE 20)": 0,
-  "porc pob menor de 14 años (INE 22)": 0,
-  "porc pob de 65 y más años (INE 22)": 0,
-  "pob total (INE 22)": 0,
-  "Educación primaria e inferior": 0,
-  "Primera etapa de Educación Secundaria y similar": 0,
-  "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior": 0,
-  "Educación Superior": 0,
-  "porc dependencia - discapacidad SSCC": 0,
-  "Índice de dependencia infantil (%)": 0,
-  "Índice de dependencia de mayores (%)": 0,
-  "Índice de dependencia total (%)": 0,
+  "porc ERRP y OTC": 0,
+  "porc Eventos/Difusión": 0,
+  "Intervalo de confianza (%)": 0,
+  "t4_1": 0,
+  "t4_3": 0,
+  "t3_1": 0,
+  "t31_1di": 0,
+  "t31_2dm": 0,
+  "t31_3dt": 0,
+  "t32_ei": 0,
+  "precio_alquiler": 0,
+  "renta_hogar": 0,
   "porc disconfort inv": 0,
   "porc disconfort ver": 0,
-  "renta media hogar": 0,
-  "tamaño medio hogar (INE 20)": 0,
-  "porc hogares unipersonales (INE 20)": 0,
   "porc retraso pago facturas": 0,
-  "Intervalo de confianza (%)": 0,
+  "t30_th": 0,
+  "t22_1_porc": 0,
 };
 
 let isProcessingSSCC = false;
@@ -227,14 +214,14 @@ app.get("/api/visor-sscc", async (req, res) => {
     .then(([geoSSCC]) => {
       geoSSCC["features"].forEach((feature) => {
         for (const key in feature.properties) {
-          if (key === "Intervalo de confianza (%)") {
+          if (key === "ano" || key === "t18_1" || key === "t1_1") {
             const value = feature.properties[key];
-            //just parsing, no need to multiply by 100
-            let parsed = parseFloat(parseFloat(value).toFixed(2));
+            let parsed = parseInt(value, 10);
             if (!isNaN(parsed)) {
               feature.properties[key] = parsed;
             }
-          } else if (porcSSCC.includes(key)) {
+          }
+          else if (porcSSCC.includes(key)) {
             const value = feature.properties[key];
             //toFixed converts it to string, so we need to convert it back to number
             let parsed = parseFloat((parseFloat(value) * 100).toFixed(2));
@@ -251,8 +238,6 @@ app.get("/api/visor-sscc", async (req, res) => {
         for (const key in feature.properties) {
           if (Object.keys(mediasGlobalesKeysSSCC).includes(key)) {
             const value = feature.properties[key];
-            // console.log("key", key);
-            // console.log("value", value);
             if (!isNaN(value) && value !== null && value !== 0) {
               //add to the accumulator
               globalesSSCC[key] = (globalesSSCC[key] ?? 0) + parseFloat(value);
@@ -260,22 +245,32 @@ app.get("/api/visor-sscc", async (req, res) => {
               mediasGlobalesKeysSSCC[key]++;
             }
           }
+          else if (Object.keys(sumatoriosSSCC).includes(key)){
+            const value = feature.properties[key];
+            if (!isNaN(value) && value !== null && value !== 0) {
+              sumatoriosSSCC[key] = (sumatoriosSSCC[key] ?? 0) + value;
+            }
+          }
         }
       });
 
       //counter of instances is to not count the nulls
       for (const key in globalesSSCC) {
-        if (
-          mediasGlobalesKeysSSCC[key] !== 0 &&
-          !sumatoriosSSCC.includes(key)
-        ) {
+        if ( mediasGlobalesKeysSSCC[key] !== 0 && !Object.keys(sumatoriosSSCC).includes(key) ) {
           globalesSSCC[key] = parseFloat(
             (globalesSSCC[key] / mediasGlobalesKeysSSCC[key]).toFixed(2)
           );
         }
       }
 
-      // console.log("globalesSSCC", globalesSSCC);
+      //sumatorios
+      globalesSSCC.t18_1 = sumatoriosSSCC.t18_1;
+      globalesSSCC["n exptes SSCC"] = sumatoriosSSCC["n exptes SSCC"];
+      globalesSSCC.t1_1 = sumatoriosSSCC.t1_1;
+      globalesSSCC.n_alquiler = sumatoriosSSCC.n_alquiler;
+      
+      // parseo de algunas variables
+      globalesSSCC.ano = parseInt(globalesSSCC.ano, 10);
 
       // Send the modified geojson data as the response
       res.json({ geoSSCC, globalesSSCC });
@@ -391,8 +386,6 @@ app.get("/api/visor-barrio", async (req, res) => {
         for (const key in feature.properties) {
           if (Object.keys(mediasGlobalesKeysBarrio).includes(key)) {
             const value = feature.properties[key];
-            // console.log("key", key);
-            // console.log("value", value);
             if (!isNaN(value) && value !== null && value !== 0) {
               //add to the accumulator
               globalesBarrio[key] = (globalesBarrio[key] ?? 0) + parseFloat(value);
