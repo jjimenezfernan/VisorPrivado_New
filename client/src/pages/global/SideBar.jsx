@@ -77,6 +77,14 @@ function SideBar() {
               </MenuItem>
               <SubMenu icon={<HomeRepairServiceRoundedIcon />} label="Servicio">
                 <MenuItem
+                    style={{
+                      color: colors.gray[100],
+                    }}
+                    component={<Link to="/estadisticas_barrios" />}
+                  >
+                    Estadisticas Barrios
+                  </MenuItem>
+                <MenuItem
                   style={{
                     color: colors.gray[100],
                   }}

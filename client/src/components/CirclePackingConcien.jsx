@@ -1,3 +1,7 @@
+/*
+Grafico de circulos de la pagina de concienciacion
+*/
+
 import { useState } from "react";
 import { ResponsiveCirclePacking } from "@nivo/circle-packing";
 import { useTheme, Button, Box } from "@mui/material";
@@ -10,7 +14,6 @@ function CirclePacking({ data }) {
   const [currentData, setCurrentData] = useState(data);
 
   const handleNodeClick = (node) => {
-    console.log(node);
     if (node.height !== 0) {
       const newData = node.data;
       setCurrentData(newData);
@@ -52,7 +55,6 @@ function CirclePacking({ data }) {
         margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
         id="name"
         value="valor"
-        // colors={{ scheme: "blues" }}
         colors={{
           datum: "data.color",
         }}
@@ -60,10 +62,9 @@ function CirclePacking({ data }) {
           from: "color",
           modifiers: [["brighter", 0.4]],
         }}
-        // zoomedId={zoomedId}
         motionConfig="fast"
         onClick={handleNodeClick}
-        padding={4}
+        padding={10}
         enableLabels={true}
         labelsFilter={function (n) {
           return 1 === n.node.depth;
@@ -82,7 +83,6 @@ function CirclePacking({ data }) {
           modifiers: [["darker", 0.5]],
         }}
         tooltip={({ id, color, formattedValue, value }) => {
-          // console.log(node);
           return (
             <div
               style={{
@@ -113,25 +113,6 @@ function CirclePacking({ data }) {
             </div>
           );
         }}
-        // defs={[
-        //   {
-        //     id: "lines",
-        //     type: "patternLines",
-        //     background: "none",
-        //     color: "inherit",
-        //     rotation: -45,
-        //     lineWidth: 5,
-        //     spacing: 8,
-        //   },
-        // ]}
-        // fill={[
-        //   {
-        //     match: {
-        //       depth: 1,
-        //     },
-        //     id: "lines",
-        //   },
-        // ]}
       />
     </>
   );

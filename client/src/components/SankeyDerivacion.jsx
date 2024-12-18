@@ -1,13 +1,15 @@
+/**
+ * Codigo del sankey de la pagina de derivacion
+ * 
+ */
 import { ResponsiveSankey } from "@nivo/sankey";
-// import { mockSankeyData as data } from "../data/mockData";
 
 function SankeyChart({ data }) {
   return (
     <ResponsiveSankey
       data={data}
       margin={{ top: 40, right: 155, bottom: 40, left: 195 }}
-      align={"center"}
-      // colors={{ scheme: "category10" }}
+      align={"justify"}
       colors={(node) => node.nodeColor}
       nodeOpacity={1}
       nodeHoverOthersOpacity={0.35}
@@ -31,28 +33,6 @@ function SankeyChart({ data }) {
         modifiers: [["darker", 1]],
       }}
       sort={"descending"}
-
-      // legends={[
-      //   {
-      //     anchor: "bottom-right",
-      //     direction: "column",
-      //     translateX: 130,
-      //     itemWidth: 100,
-      //     itemHeight: 14,
-      //     itemDirection: "right-to-left",
-      //     itemsSpacing: 2,
-      //     itemTextColor: "#999",
-      //     symbolSize: 14,
-      //     effects: [
-      //       {
-      //         on: "hover",
-      //         style: {
-      //           itemTextColor: "#000",
-      //         },
-      //       },
-      //     ],
-      //   },
-      // ]}
     />
   );
 }

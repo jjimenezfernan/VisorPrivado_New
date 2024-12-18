@@ -13,19 +13,20 @@ import {
 } from "../../constants/MapConstantsBarrio";
 import BarChart from "../../components/BarChartVisorBarrio";
 
-const keysPanel1 = ["BARRIO", "n viviendas", "ano constru barrio"];
+const keysPanel1 = [
+  "BARRIO", 
+  "n viviendas", 
+  "ano constru barrio"
+];
 
 const keysPanel2 = [
   "porc exptes",
   "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION",
-  // "porc motivo INFORMACION_GENERAL",
   "porc motivo TRAMITACION_BONO_SOCIAL",
   "porc motivo OPTIMIZACION_FACTURA barrio",
-  // "porc A través de una persona conocida",
   "porc Comunicaciones del Ayuntamiento",
   "porc Otros departamentos (SAV y otros)",
   "porc SS.SS",
-  // "porc Asociaciones y ONG's",
   "Intervalo de confianza (%)",
 ];
 
@@ -34,18 +35,12 @@ const keysPanel3 = [
   "porc pob menor de 14 años (INE 22)",
   "porc pob de 65 y más años (INE 22)",
   "edad media pob (INE 20)",
-  // "Educación primaria e inferior",
-  // "Primera etapa de Educación Secundaria y similar",
-  // "Segunda etapa de Educación Secundaria y Educación Postsecundaria no Superior",
-  // "Educación Superior",
-  // "Índice de dependencia infantil (%)",
   "Índice de dependencia de mayores (%)",
   "Índice de dependencia total (%)",
 ];
 
 const keysPanel4 = [
   "renta media hogar",
-  // "tamaño medio hogar (INE 20)",
   "porc hogares unipersonales (INE 20)",
 ];
 
@@ -108,8 +103,7 @@ import {DIRECTION} from "../../data/direccion_server";
 
 const baseURL = DIRECTION + "/api/visor-barrio";
 
-//  "https://observatoriodedatosepiu.khoraurbanthinkers.es/api/visor-barrio";
-// const storageKey = "visorData"; // Key for storing/retrieving data from localStorage
+
 function VisorBarrio() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -139,10 +133,6 @@ function VisorBarrio() {
       handleBarrioChart(pathToSelect(selectionValue));
     }
   }, [geoBarrio, selectionValue]);
-
-  // useEffect(() => {
-  // console.log("infoValue", infoValue);
-  // }, [infoValue]);
 
   const chartHeatColor = (select, value) => {
     value = parseFloat(value);
@@ -330,7 +320,6 @@ function VisorBarrio() {
   }
 
   function globalText(key) {
-    // console.log("key", key);
     return (
       <div
         style={{

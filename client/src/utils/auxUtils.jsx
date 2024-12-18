@@ -116,8 +116,6 @@ mapEPIUKeys.set(
   "Building_Getafe_porc no refrigeracion",
   "Sin refrigeración (%)"
 );
-// mapEPIUKeys.set("Building_Getafe_porc renta antigua", "Renta antigua (%)");
-// mapEPIUKeys.set("Building_Getafe_porc cesion", "Cesión (%)");
 mapEPIUKeys.set(
   "Building_Getafe_porc patologias exptes",
   "Expedientes con patologías (%)"

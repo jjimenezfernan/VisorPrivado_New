@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from "react";
+/**
+ * Pagina de concienciacion
+ */
+
+import { useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import SubBar from "../global/SubBar";
 import CirclePacking from "../../components/CirclePackingConcien";
-import PieChart from "../../components/PieChartConcien";
 import axios from "axios";
 import { motion } from "framer-motion";
 import {DIRECTION} from "../../data/direccion_server";
+import { padding } from "@mui/system";
 
 const baseURL = DIRECTION + "/api/concienciacion";
 
@@ -18,7 +22,6 @@ function Concienciacion() {
   const [global1, setGlobal1] = useState(0);
   const [global2, setGlobal2] = useState(0);
   const [global3, setGlobal3] = useState(0);
-  const [pieData, setPieData] = useState([]);
 
   useEffect(() => {
 
@@ -28,7 +31,6 @@ function Concienciacion() {
       setGlobal1(data[1][0][1]);
       setGlobal2(data[1][1][1]);
       setGlobal3(data[1][2][1]);
-      setPieData(data[2]);
       });
   }, []);
 
@@ -43,7 +45,7 @@ function Concienciacion() {
         title={"Concienciación ciudadana en pobreza energética"}
         crumbs={[
           ["Inicio", "/"],
-          ["Servicio", "/ohs"],
+          ["Servicio", "/"],
           ["Concienciación", "/concienciación"],
         ]}
         info={{
@@ -122,8 +124,8 @@ function Concienciacion() {
             justifyContent={"center"}
             pt={"10px"}
           >
-            <Typography variant={"h5"} color={colors.gray[100]}>
-              Número de personas con conciencia sobre EP
+            <Typography variant={"h5"} color={colors.gray[100]} sx={{padding: "7px",}}>
+              Número de personas con conciencia sobre PE
             </Typography>
             {global1 === 0 ? (
               <Typography
@@ -171,37 +173,6 @@ function Concienciacion() {
                 color={colors.greenAccent[500]}
               >
                 {(global2 * 100).toFixed(2)}%
-              </Typography>
-            )}
-          </Box>
-          <Box
-            gridColumn={"span 2"}
-            gridRow={"span 1"}
-            backgroundColor={colors.gray[900]}
-            display={"flex"}
-            flexDirection={"column"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            pt={"10px"}
-          >
-            <Typography variant={"h5"} color={colors.gray[100]}>
-              Población de zona EPIU sensibilizada
-            </Typography>
-            {global3 === 0 ? (
-              <Typography
-                variant={"h4"}
-                fontWeight={500}
-                color={colors.blueAccent[500]}
-              >
-                Cargando...
-              </Typography>
-            ) : (
-              <Typography
-                variant={"h1"}
-                fontWeight={500}
-                color={colors.blueAccent[500]}
-              >
-                {(global3 * 100).toFixed(2)}%
               </Typography>
             )}
           </Box>

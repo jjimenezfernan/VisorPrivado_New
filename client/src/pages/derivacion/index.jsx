@@ -1,3 +1,7 @@
+/**
+ * Pagina de derivacion
+ */
+
 import { useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
@@ -13,9 +17,6 @@ import {DIRECTION} from "../../data/direccion_server";
 
 const baseURL = DIRECTION + "/api/derivacion"
 
-//  "https://observatoriodedatosepiu.khoraurbanthinkers.es/api/derivacion";
-const storageKey = "derivacionData"; // Key for storing/retrieving data from localStorage
-
 function Derivacion() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -26,24 +27,13 @@ function Derivacion() {
   const [barData, setBarData] = useState([]);
 
   useEffect(() => {
-    // const storedData = sessionStorage.getItem(storageKey);
-
-    // if (storedData) {
-    //   const parsedData = JSON.parse(storedData);
-    //   setSankeyData(parsedData[0]);
-    //   setTotalDeriv(parsedData[1][0][1]);
-    //   setPieData(parsedData[2]);
-    //   setBarData(parsedData[3]);
-    // } else {
     axios.get(baseURL).then((res) => {
       const data = res.data;
       setSankeyData(data[0]);
       setTotalDeriv(data[1][0][1]);
       setPieData(data[2]);
       setBarData(data[3]);
-      // sessionStorage.setItem(storageKey, JSON.stringify(data));
     });
-    // }
   }, []);
 
   return (
@@ -57,7 +47,7 @@ function Derivacion() {
         title={"Calidad de las derivaciones"}
         crumbs={[
           ["Inicio", "/"],
-          ["Servicio", "/ohs"],
+          ["Servicio", "/"],
           ["Derivación", "/derivacion"],
         ]}
         info={{
@@ -157,7 +147,7 @@ function Derivacion() {
           </Box>
           <Box
             gridColumn={"span 4"}
-            gridRow={"span 2"}
+            gridRow={"span 3"}
             backgroundColor={colors.gray[900]}
             display={"flex"}
             flexDirection={"column"}
@@ -166,7 +156,7 @@ function Derivacion() {
             pt={"10px"}
           >
             <Typography variant={"h4"} color={colors.gray[100]}>
-              Motivo de derivación
+              Origen de la Derivación
             </Typography>
             {pieData.length === 0 ? (
               <img src={loading} alt="Cargando..." width={"70px"} />
@@ -176,7 +166,7 @@ function Derivacion() {
           </Box>
           <Box
             gridColumn={"span 4"}
-            gridRow={"span 3"}
+            gridRow={"span 2"}
             backgroundColor={colors.gray[900]}
             display={"flex"}
             alignItems={"center"}
@@ -185,7 +175,7 @@ function Derivacion() {
             pt={"10px"}
           >
             <Typography variant={"h4"} color={colors.gray[100]}>
-              Ranking de derivaciones
+              Motivo de la Consulta
             </Typography>
             {barData.length === 0 ? (
               <img src={loading} alt="Cargando..." width={"70px"} />

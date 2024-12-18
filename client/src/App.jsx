@@ -16,6 +16,7 @@ import MapSSCCProvider from "./components/MapSSCCProvider";
 import MapBarrioProvider from "./components/MapBarrioProvider";
 import Overlay from "./pages/global/Overlay";
 import { AnimatePresence } from "framer-motion";
+import BarriosDashboard from "./pages/barrios_dashboard";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -43,6 +44,7 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/derivacion" element={<Derivacion />} />
                 <Route path="/concienciacion" element={<Concienciacion />} />
+                <Route path="/estadisticas_barrios" element={<BarriosDashboard />} />
                 <Route
                   path="/visor-barrio"
                   element={

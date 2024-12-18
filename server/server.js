@@ -909,7 +909,7 @@ app.get("/api/concienciacion", (req, res) => {
   globalData.push(data2[0]);
   globalData.push(data3[0]);
   globalData.push(data3[1]);
-
+  console.log("globalData", globalData);
   // processing pie chart data
   for (let i = 0; i < data4.length; i++) {
     let obj = {};
@@ -921,6 +921,50 @@ app.get("/api/concienciacion", (req, res) => {
   }
 
   const data = [circlesData, globalData, pieChart];
+  res.json(data);
+});
+
+
+const dataPathExcel_barrios_dashboard = "resources/dashboard_por_barrio.xlsx";
+
+// Endpoint para pasar los datos de los barrios a la vista
+app.get("/api/barrios_dashboard", (req, res) => {
+  let globalDataRaw = loadExcelData(dataPathExcel_barrios_dashboard, true, 0);
+
+  // Por si hay elementos vacios
+  const globalDataFilter = globalDataRaw.filter(
+    (item) => Array.isArray(item) && item.length > 0
+  );
+
+  const columnasDatos = globalDataFilter.shift();
+
+  // Para convertir el array de arrays en un array de objetos
+  const globalDataObjects = [];
+  const array_indices_objetos = ["genero", "barrio", "como_nos_has_conocido", "motivo_de_la_consulta", 
+    "atenciones_telefónicas", "atenciones_email", "atenciones_presenciales", "sumatorio_interaciones"];
+  globalDataFilter.forEach((value, index) => {
+    let objeto = {};
+    objeto["id"] = index;
+    for(let i = 0; i < array_indices_objetos.length; i++) {
+      if(!value[i]){
+        objeto[array_indices_objetos[i]] = null;
+      }
+      else{
+        objeto[array_indices_objetos[i]] = value[i];
+      }
+    }
+    globalDataObjects.push(objeto);
+    
+  });
+
+  // Para sacar los diferentes barrios
+  const barrios = [...new Set(globalDataObjects.map(obj => obj.barrio))];
+
+  const data = {
+    barrios,
+    globalDataObjects,
+    columnasDatos
+  };
   res.json(data);
 });
 
