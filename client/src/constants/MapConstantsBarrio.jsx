@@ -17,7 +17,7 @@ export const Selections = {
     path: `feature.properties["ano"]`,
     label: "Año de construcción del barrio",
     legend: {
-      values: [2010, 2000, 1990, 1980, 1970],
+      values: [2010, 2000, 1990, 1980, 0],
       gradient: COLORMAP.primary,
     },
   },
@@ -36,7 +36,7 @@ export const Selections = {
     label: "Solicitud de Ayudas a la rehabilitación (%)",
     legend: {
       values: [40, 30, 20, 10, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "ac_motivo_infogeneral": {
@@ -45,7 +45,7 @@ export const Selections = {
     label: "Solicitud de información general (%)",
     legend: {
       values: [40, 30, 20, 10, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "ac_motivo_suminsitros": {
@@ -54,7 +54,7 @@ export const Selections = {
     label: "Solicitud de gestión de suministros (%)",
     legend: {
       values: [40, 30, 20, 10, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "ac_motivo_comener": {
@@ -63,7 +63,7 @@ export const Selections = {
     label: "Solicitud de información sobre comunidad energética (%)",
     legend: {
       values: [40, 30, 20, 10, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "ac_origen_ayto": {
@@ -81,7 +81,7 @@ export const Selections = {
     label: "Visita a OHS a través de SS.SS (%)",
     legend: {
       values: [40, 30, 20, 10, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "ac_origen_errp": {
@@ -90,7 +90,7 @@ export const Selections = {
     label: "Visita a OHS a través de ERRP y OTC (%)",
     legend: {
       values: [40, 30, 20, 10, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "ac_origen_eventos": {
@@ -99,7 +99,7 @@ export const Selections = {
     label: "Visita a OHS a través de eventos de difusión (%)",
     legend: {
       values: [40, 30, 20, 10, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "ac_origen_conocido": {
@@ -108,7 +108,7 @@ export const Selections = {
     label: "Visita a OHS a través de una persona conocida (%)",
     legend: {
       values: [40, 30, 20, 10, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "t1_1": {
@@ -116,8 +116,8 @@ export const Selections = {
     path: `feature.properties["t1_1"]`,
     label: "Población total",
     legend: {
-      values: [25000, 20000, 15000, 10000, 5000],
-      gradient: COLORMAP.primary.slice(0, 4),
+      values: [25000, 20000, 15000, 10000, 0],
+      gradient: COLORMAP.primary,
     },
   },
   "t4_1": {
@@ -126,7 +126,7 @@ export const Selections = {
     label: "Porcentaje de población menor de 14 años",
     legend: {
       values: [40, 30, 20, 10, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "t4_3": {
@@ -143,8 +143,8 @@ export const Selections = {
     path: `feature.properties["t3_1"]`,
     label: "Edad media de la población",
     legend: {
-      values: [45, 40, 35, 30, 25],
-      gradient: COLORMAP.primary.slice(0, 4),
+      values: [45, 40, 35, 30, 0],
+      gradient: COLORMAP.primary,
     },
   },
   "t31_2dm": {
@@ -153,7 +153,7 @@ export const Selections = {
     label: "Índice de dependencia de mayores",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "t31_3dt": {
@@ -162,7 +162,7 @@ export const Selections = {
     label: "Índice de dependencia total",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "n_alquiler": {
@@ -188,7 +188,7 @@ export const Selections = {
     path: `feature.properties["renta_hogar"]`,
     label: "Renta media por hogar (€)",
     legend: {
-      values: [45000, 40000, 35000, 30000, 20000],
+      values: [45000, 40000, 35000, 30000, 0],
       gradient: COLORMAP.primary,
     },
   },
@@ -197,7 +197,7 @@ export const Selections = {
     path: `feature.properties["t22_1_porc"]`,
     label: "Hogares unipersonales (%)",
     legend: {
-      values: [30, 25, 20, 15, 10],
+      values: [30, 25, 20, 15, 0],
       gradient: COLORMAP.primary,
     },
   },

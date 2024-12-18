@@ -36,7 +36,7 @@ export const Selections = {
     label: "Nº de expedientes",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "porc motivo TRAMITACION_AYUDAS_A_REHABILITACION": {
@@ -45,7 +45,7 @@ export const Selections = {
     label: "Solicitud de Ayudas a la rehabilitación (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "porc motivo INFORMACION_GENERAL": {
@@ -54,7 +54,7 @@ export const Selections = {
     label: "Solicitud de Información General (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "porc motivo suministros": {
@@ -63,7 +63,7 @@ export const Selections = {
     label: "Solicitud de gestión de suministros (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "porc motivo comunidad energética": {
@@ -72,7 +72,7 @@ export const Selections = {
     label: "Solicitud de información sobre comunidad energética (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "porc A través de una persona conocida": {
@@ -81,7 +81,7 @@ export const Selections = {
     label: "Visita a OHS a través de una persona conocida (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "porc Comunicaciones del Ayuntamiento": {
@@ -90,7 +90,7 @@ export const Selections = {
     label: "Visita a OHS por Comunicaciones del Ayuntamiento (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "porc SS.SS": {
@@ -99,7 +99,7 @@ export const Selections = {
     label: "Visita a OHS a través de SS.SS (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "porc ERRP y OTC": {
@@ -108,7 +108,7 @@ export const Selections = {
     label: "Visita a OHS a través de ERRP y OTC (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "porc Eventos/Difusión": {
@@ -117,7 +117,7 @@ export const Selections = {
     label: "Visita a OHS a través de eventos de difusión (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "Intervalo de confianza (%)": {
@@ -126,7 +126,7 @@ export const Selections = {
     label: "Intervalo de confianza (%)",
     legend: {
       values: [20, 15, 10, 5, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "t1_1": {
@@ -135,7 +135,7 @@ export const Selections = {
     label: "Población total",
     legend: {
       values: [2500, 2000, 1500, 1000, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "t4_1": {
@@ -144,7 +144,7 @@ export const Selections = {
     label: "Pob. menor de 14 años (%)",
     legend: {
       values: [40, 30, 20, 10, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "t4_3": {
@@ -153,7 +153,7 @@ export const Selections = {
     label: "Pob. mayor de 65 años (%)",
     legend: {
       values: [40, 30, 20, 10, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "t3_1": {
@@ -171,7 +171,7 @@ export const Selections = {
     label: "Índice de dependencia infantil (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "t31_2dm": {
@@ -180,7 +180,7 @@ export const Selections = {
     label: "Índice de dependencia de mayores (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "t31_3dt": {
@@ -189,7 +189,7 @@ export const Selections = {
     label: "Índice de dependencia total (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "t32_ei": {
@@ -198,7 +198,7 @@ export const Selections = {
     label: "Pob. con estudios primarios o inferiores (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "n_alquiler": {
@@ -207,7 +207,7 @@ export const Selections = {
     label: "Viviendas en alquiler",
     legend: {
       values: [200, 150, 100, 50, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "precio_alquiler": {
@@ -216,7 +216,7 @@ export const Selections = {
     label: "Precio medio alquiler",
     legend: {
       values: [800, 700, 600, 500, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "renta_hogar": {
@@ -225,7 +225,7 @@ export const Selections = {
     label: "Renta media por hogar (€)",
     legend: {
       values: [45000, 40000, 35000, 30000, 25000],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "porc disconfort inv": {
@@ -234,7 +234,7 @@ export const Selections = {
     label: "Disconfort invierno (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "porc disconfort ver": {
@@ -243,7 +243,7 @@ export const Selections = {
     label: "Disconfort verano (%)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "porc retraso pago facturas": {
@@ -252,7 +252,7 @@ export const Selections = {
     label: "Retraso en el pago de facturas (% población)",
     legend: {
       values: [80, 60, 40, 20, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
+      gradient: COLORMAP.primary,
     },
   },
   "t30_th": {
