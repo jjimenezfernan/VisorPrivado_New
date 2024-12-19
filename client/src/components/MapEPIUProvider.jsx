@@ -5,7 +5,7 @@ const MapEPIUContext = createContext();
 
 const MapEPIUProvider = ({ children }) => {
   const [selectionValue, setSelectionValue] = useState(
-    Selections["Building_Getafe_n exptes"].path
+    Selections["n_exptes"].path
   );
   const [infoValue, setInfoValue] = useState({});
 

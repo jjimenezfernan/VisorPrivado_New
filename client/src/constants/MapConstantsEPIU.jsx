@@ -9,52 +9,42 @@ const COLORMAP = {
     "#8C5788",
     "#CA0300",
   ],
+  especif_conj_homo : [
+    "#c693f0", "#FFC0CB", "#B0E0E6", "#5F9EA0",  
+    "#a8dea8", "#FFDAB9", "#D8BFD8", "#D2B48C", 
+    "#FFFACD", "#4682B4", "#008080", "#B0C4DE", 
+    "#9DC183", "#556B2F", "#F5DEB3", "#F08080", 
+    "#A0522D", "#afafe8", "#AEEEEE", "#7D7098", 
+    "#FF9A8A", "#8F9779", "#FFD1DC", "#DC143C" 
+  ],
 };
 
 export const Selections = {
-  numberOfDw: {
-    key: "numberOfDw",
-    path: `feature.properties["numberOfDw"]`,
+  numero_viviendas: {
+    key: "numero_viviendas",
+    path: `feature.properties["numero_viviendas"]`,
     label: "Nº viviendas",
     legend: {
       values: [100, 50, 25, 10, 0],
       gradient: COLORMAP.primary,
     },
   },
-  "Building_Getafe_n exptes": {
-    key: "Building_Getafe_n exptes",
-    path: `feature.properties["Building_Getafe_n exptes"]`,
-    label: "Nº expedientes",
-    legend: {
-      values: [25, 15, 7, 4, 0],
-      gradient: COLORMAP.primary,
-    },
-  },
-  ano_constr: {
-    key: "ano_constr",
-    path: `feature.properties["ano_constr"]`,
+  ano_constru: {
+    key: "ano_constru",
+    path: `feature.properties["ano_constru"]`,
     label: "Año construcción",
     legend: {
-      values: [2010, 1995, 1980, 1955, 0],
+      values: [2000, 1975, 1950, 1925, 0],
       gradient: COLORMAP.primary,
     },
   },
-  "Building_Getafe_cert emision CO2": {
-    key: "Building_Getafe_cert emision CO2",
-    path: `feature.properties["Building_Getafe_cert emision CO2"]`,
-    label: "Certificado emisión CC",
+  "n_exptes": {
+    key: "n_exptes",
+    path: `feature.properties["n_exptes"]`,
+    label: "Nº expedientes",
     legend: {
-      values: ["A", "B", "C", "D", "E", "F", "G"],
-      gradient: COLORMAP.cert,
-    },
-  },
-  "Building_Getafe_cert consumo e primaria": {
-    key: "Building_Getafe_cert consumo e primaria",
-    path: `feature.properties["Building_Getafe_cert consumo e primaria"]`,
-    label: "Certificado consumo energía primaria",
-    legend: {
-      values: ["A", "B", "C", "D", "E", "F", "G"],
-      gradient: COLORMAP.cert,
+      values: [40, 30, 20, 10, 0],
+      gradient: COLORMAP.primary,
     },
   },
   "Building_Getafe_porc viv OHS": {
@@ -62,124 +52,7 @@ export const Selections = {
     path: `feature.properties["Building_Getafe_porc viv OHS"]`,
     label: "Viviendas OHS (%)",
     legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "Building_Getafe_porc retraso pago facturas": {
-    key: "Building_Getafe_porc retraso pago facturas",
-    path: `feature.properties["Building_Getafe_porc retraso pago facturas"]`,
-    label: "Retraso pago facturas (%)",
-    legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "Building_Getafe_disconfort inv": {
-    key: "Building_Getafe_disconfort inv",
-    path: `feature.properties["Building_Getafe_disconfort inv"]`,
-    label: "Disconfort invierno (%)",
-    legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "Building_Getafe_disconfort ver": {
-    key: "Building_Getafe_disconfort ver",
-    path: `feature.properties["Building_Getafe_disconfort ver"]`,
-    label: "Disconfort verano (%)",
-    legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "Building_Getafe_porc alquiler": {
-    key: "Building_Getafe_porc alquiler",
-    path: `feature.properties["Building_Getafe_porc alquiler"]`,
-    label: "Alquiler (%)",
-    legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "Building_Getafe_porc prop sin hipoteca": {
-    key: "Building_Getafe_porc prop sin hipoteca",
-    path: `feature.properties["Building_Getafe_porc prop sin hipoteca"]`,
-    label: "Propiedad sin hipoteca (%)",
-    legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "Building_Getafe_porc prop con hipoteca": {
-    key: "Building_Getafe_porc prop con hipoteca",
-    path: `feature.properties["Building_Getafe_porc prop con hipoteca"]`,
-    label: "Propiedad con hipoteca (%)",
-    legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "Building_Getafe_porc no calefaccion": {
-    key: "Building_Getafe_porc no calefaccion",
-    path: `feature.properties["Building_Getafe_porc no calefaccion"]`,
-    label: "Sin calefacción (%)",
-    legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "Building_Getafe_porc no refrigeracion": {
-    key: "Building_Getafe_porc no refrigeracion",
-    path: `feature.properties["Building_Getafe_porc no refrigeracion"]`,
-    label: "Sin refriferación (%)",
-    legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  // "Building_Getafe_porc renta antigua": {
-  //   key: "Building_Getafe_porc renta antigua",
-  //   path: `feature.properties["Building_Getafe_porc renta antigua"]`,
-  //   label: "Renta antigua (%)",
-  //   legend: {
-  //     values: [75, 50, 25, 0],
-  //     gradient: COLORMAP.primary.slice(0, 4),
-  //   },
-  // },
-  // "Building_Getafe_porc cesion": {
-  //   key: "Building_Getafe_porc cesion",
-  //   path: `feature.properties["Building_Getafe_porc cesion"]`,
-  //   label: "Cesión (%)",
-  //   legend: {
-  //     values: [75, 50, 25, 0],
-  //     gradient: COLORMAP.primary.slice(0, 4),
-  //   },
-  // },
-  "Building_Getafe_porc patologias exptes": {
-    key: "Building_Getafe_porc patologias exptes",
-    path: `feature.properties["Building_Getafe_porc patologias exptes"]`,
-    label: "Expedientes con patologías (%)",
-    legend: {
-      values: [75, 50, 25, 0],
-      gradient: COLORMAP.primary.slice(0, 4),
-    },
-  },
-  "Building_Getafe_prod fotovol": {
-    key: "Building_Getafe_prod fotovol",
-    path: `feature.properties["Building_Getafe_prod fotovol"]`,
-    label: "Producción fotovoltaica (MWh/año)",
-    legend: {
-      values: [150, 100, 50, 25, 0],
-      gradient: COLORMAP.primary,
-    },
-  },
-  "Building_Getafe_irradiacion anual kwh/m2": {
-    key: "Building_Getafe_irradiacion anual kwh/m2",
-    path: `feature.properties["Building_Getafe_irradiacion anual kwh/m2"]`,
-    label: "Irradiación anual (kWh/m2)",
-    legend: {
-      values: [15000, 10000, 5000, 2500, 0],
+      values: [80, 60, 40, 20, 0],
       gradient: COLORMAP.primary,
     },
   },
@@ -210,13 +83,124 @@ export const Selections = {
       color: "#4a86a8",
     },
   },
+  "Building_Getafe_porc retraso pago facturas": {
+    key: "Building_Getafe_porc retraso pago facturas",
+    path: `feature.properties["Building_Getafe_porc retraso pago facturas"]`,
+    label: "Retraso pago facturas (%)",
+    legend: {
+      values: [80, 60, 40, 20, 0],
+      gradient: COLORMAP.primary,
+    },
+  },
+  "Building_Getafe_porc alquiler": {
+    key: "Building_Getafe_porc alquiler",
+    path: `feature.properties["Building_Getafe_porc alquiler"]`,
+    label: "Alquiler (%)",
+    legend: {
+      values: [80, 60, 40, 20, 0],
+      gradient: COLORMAP.primary,
+    },
+  },
+  "Building_Getafe_porc prop sin hipoteca": {
+    key: "Building_Getafe_porc prop sin hipoteca",
+    path: `feature.properties["Building_Getafe_porc prop sin hipoteca"]`,
+    label: "Propiedad sin hipoteca (%)",
+    legend: {
+      values: [80, 60, 40, 20, 0],
+      gradient: COLORMAP.primary,
+    },
+  },
+  "Building_Getafe_porc prop con hipoteca": {
+    key: "Building_Getafe_porc prop con hipoteca",
+    path: `feature.properties["Building_Getafe_porc prop con hipoteca"]`,
+    label: "Propiedad con hipoteca (%)",
+    legend: {
+      values: [80, 60, 40, 20, 0],
+      gradient: COLORMAP.primary,
+    },
+  },
+  "Building_Getafe_disconfort inv": {
+    key: "Building_Getafe_disconfort inv",
+    path: `feature.properties["Building_Getafe_disconfort inv"]`,
+    label: "Disconfort invierno (%)",
+    legend: {
+      values: [80, 60, 40, 20, 0],
+      gradient: COLORMAP.primary,
+    },
+  },
+  "Building_Getafe_disconfort ver": {
+    key: "Building_Getafe_disconfort ver",
+    path: `feature.properties["Building_Getafe_disconfort ver"]`,
+    label: "Disconfort verano (%)",
+    legend: {
+      values: [80, 60, 40, 20, 0],
+      gradient: COLORMAP.primary,
+    },
+  },
+  "Building_Getafe_porc patologias exptes": {
+    key: "Building_Getafe_porc patologias exptes",
+    path: `feature.properties["Building_Getafe_porc patologias exptes"]`,
+    label: "Expedientes con patologías (%)",
+    legend: {
+      values: [80, 60, 40, 20, 0],
+      gradient: COLORMAP.primary,
+    },
+  },
+  "Building_Getafe_porc no calefaccion": {
+    key: "Building_Getafe_porc no calefaccion",
+    path: `feature.properties["Building_Getafe_porc no calefaccion"]`,
+    label: "Sin calefacción (%)",
+    legend: {
+      values: [80, 60, 40, 20, 0],
+      gradient: COLORMAP.primary,
+    },
+  },
+  "cert_emision_co2": {
+    key: "cert_emision_co2",
+    path: `feature.properties["cert_emision_co2"]`,
+    label: "Certificado emisión CC",
+    legend: {
+      values: ["A", "B", "C", "D", "E", "F", "G"],
+      gradient: COLORMAP.cert,
+    },
+  },
+  "cert_consumo_e_primaria": {
+    key: "cert_consumo_e_primaria",
+    path: `feature.properties["cert_consumo_e_primaria"]`,
+    label: "Certificado consumo energía primaria",
+    legend: {
+      values: ["A", "B", "C", "D", "E", "F", "G"],
+      gradient: COLORMAP.cert,
+    },
+  },
+  "prod_fotovol": {
+    key: "prod_fotovol",
+    path: `feature.properties["prod_fotovol"]`,
+    label: "Año construcción",
+    legend: {
+      values: [6000, 4500, 3000, 1500, 0],
+      gradient: COLORMAP.primary,
+    },
+  },
+  "irradiacion_anual_kwh/m2": {
+    key: "irradiacion_anual_kwh/m2",
+    path: `feature.properties["irradiacion_anual_kwh/m2"]`,
+    label: "Año construcción",
+    legend: {
+      values: [20000, 15000, 10000, 5000, 0],
+      gradient: COLORMAP.primary,
+    },
+  },
+  "demanda_calefaccion": {
+    key: "demanda_calefaccion",
+    path: `feature.properties["demanda_calefaccion"]`,
+    label: "Año construcción",
+    legend: {
+      values: [200, 150, 100, 50, 0],
+      gradient: COLORMAP.primary,
+    },
+  },
 };
-
-/*
-  "Building_Getafe_Medidas recibidas: Kit de eficiencia energética Cruz Roja",
-  "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en vivienda",
-  "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en edificio",
-*/
 
 function extractKeyFromPath(input) {
   // Define a regular expression to match the pattern "feature.properties["..."]"

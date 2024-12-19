@@ -445,7 +445,7 @@ function Visor() {
               px={"0.3rem"}
               sx={{ background: colors.blueAccent[400], borderRadius: "5px" }}
             >
-              Datos EPIU: usuarios y servicios OHS
+              OHS: usuarios y servicios
             </Typography>
             {infoValue && Object.keys(infoValue).length > 0
               ? infoText(infoPanel2)

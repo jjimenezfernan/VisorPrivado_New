@@ -441,20 +441,16 @@ app.get("/api/visor-barrio", async (req, res) => {
 const porcEPIU = [
   "Building_Getafe_porc viv OHS",
   "Building_Getafe_porc retraso pago facturas",
-  "Building_Getafe_disconfort inv",
-  "Building_Getafe_disconfort ver",
   "Building_Getafe_porc alquiler",
   "Building_Getafe_porc prop sin hipoteca",
   "Building_Getafe_porc prop con hipoteca",
-  "Building_Getafe_porc no calefaccion",
   "Building_Getafe_porc patologias exptes",
+  "Building_Getafe_porc no calefaccion",
 ];
 
 //value represents the nº of instances
 const mediasGlobalesKeysEPIU = {
-  numberOfDw: 0,
-  ano_constr: 0,
-  "Building_Getafe_n exptes": 0,
+  "ano_constru": 0,
   "Building_Getafe_porc viv OHS": 0,
   "Building_Getafe_porc retraso pago facturas": 0,
   "Building_Getafe_disconfort inv": 0,
@@ -464,12 +460,17 @@ const mediasGlobalesKeysEPIU = {
   "Building_Getafe_porc prop con hipoteca": 0,
   "Building_Getafe_porc no calefaccion": 0,
   "Building_Getafe_porc patologias exptes": 0,
-  "Building_Getafe_prod fotovol": 0,
-  "Building_Getafe_irradiacion anual kwh/m2": 0,
+  "prod_fotovol": 0,
+  "irradiacion_anual_kwh/m2": 0,
+};
+
+const sumatoriosEPIU = {
+  "numero_viviendas": 0,
+  "n_exptes": 0, 
 };
 
 const mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU = {
-  "Building_Getafe_cert emision CO2": {
+  "cert_emision_co2": {
     A: 0,
     B: 0,
     C: 0,
@@ -478,7 +479,7 @@ const mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU = {
     F: 0,
     G: 0,
   },
-  "Building_Getafe_cert consumo e primaria": {
+  "cert_consumo_e_primaria": {
     A: 0,
     B: 0,
     C: 0,
@@ -500,16 +501,8 @@ app.get("/api/visor-epiu", async (req, res) => {
 
   isProcessingEPIU = true;
   resetCounters(mediasGlobalesKeysEPIU);
-  resetCounters(
-    mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU[
-    "Building_Getafe_cert emision CO2"
-    ]
-  );
-  resetCounters(
-    mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU[
-    "Building_Getafe_cert consumo e primaria"
-    ]
-  );
+  resetCounters(mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU["cert_emision_co2"]);
+  resetCounters(mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU["cert_consumo_e_primaria"]);
 
   // Create an array of promises to read both geojson files
   const readGeojsonPromises = [
@@ -557,14 +550,19 @@ app.get("/api/visor-epiu", async (req, res) => {
               mediasGlobalesKeysEPIU[key]++;
             }
           }
+          else if (Object.keys(sumatoriosEPIU).includes(key)){
+            const value = feature.properties[key];
+            if (!isNaN(value) && value !== null && value !== 0) {
+              sumatoriosEPIU[key] = (sumatoriosEPIU[key] ?? 0) + value;
+            }
+          }
         }
       });
 
       //counter of instances is to not count the nulls
       for (const key in globalesEPIU) {
         if (
-          mediasGlobalesKeysEPIU[key] !== 0 &&
-          key !== "Building_Getafe_n exptes"
+          mediasGlobalesKeysEPIU[key] !== 0 && !Object.keys(sumatoriosEPIU).includes(key) 
         ) {
           globalesEPIU[key] = parseFloat(
             (globalesEPIU[key] / mediasGlobalesKeysEPIU[key]).toFixed(2)
@@ -590,15 +588,12 @@ app.get("/api/visor-epiu", async (req, res) => {
       );
 
       //hard coding since averages dont make sense
-      globalesEPIU["Building_Getafe_disconfort inv"] = 33.1;
-      globalesEPIU["Building_Getafe_disconfort ver"] = 36.4;
-      globalesEPIU["Building_Getafe_porc alquiler"] = 22.5;
-      globalesEPIU["Building_Getafe_porc prop sin hipoteca"] = 25.3;
-      globalesEPIU["Building_Getafe_porc prop con hipoteca"] = 10.9;
-      globalesEPIU["Building_Getafe_porc no calefaccion"] = 10.4;
-      globalesEPIU["Building_Getafe_porc patologias exptes"] = 22.5;
-      globalesEPIU["Building_Getafe_porc retraso pago facturas"] = 11.1;
-      // console.log("globalesEPIU", globalesEPIU);
+      //sumatorios
+      globalesEPIU.numero_viviendas = sumatoriosEPIU.numero_viviendas;
+      globalesEPIU.n_exptes = sumatoriosEPIU.n_exptes;
+      
+      // parseo de algunas variables
+      globalesEPIU.ano_constru = parseInt(globalesEPIU.ano_constru, 10);
 
       // Send the modified geojson data as the response
       res.json({ geoEPIU, globalesEPIU, geoEPIULimites });

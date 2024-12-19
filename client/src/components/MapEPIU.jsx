@@ -77,13 +77,13 @@ function heatMapGeneric(select, value) {
 
 function heatMapCertEmision(value) {
   let length =
-    Selections["Building_Getafe_cert emision CO2"].legend.values.length;
+    Selections["cert_emision_co2"].legend.values.length;
   //compare values and get gradient color
   for (let i = 0; i < length; i++) {
     if (
-      value === Selections["Building_Getafe_cert emision CO2"].legend.values[i]
+      value === Selections["cert_emision_co2"].legend.values[i]
     ) {
-      return Selections["Building_Getafe_cert emision CO2"].legend.gradient[i];
+      return Selections["cert_emision_co2"].legend.gradient[i];
     }
   }
   // if value is not valid, return the gray color
@@ -174,19 +174,14 @@ function Map2({ mapRef, geojson, geojsonLimites }) {
     layer.setStyle(styleLayer.default);
   }
 
-  /*
-"Building_Getafe_Medidas recibidas: Kit de eficiencia energética Cruz Roja",
-  "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en vivienda",
-  "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en edificio"
-*/
 
   function mapStyleOptions(select, value) {
     //in general it's numeric so heatmapGeneric is used
     //if it's a categorical value, use heatmapCertEmision
     switch (select) {
-      case Selections["Building_Getafe_cert emision CO2"].path:
+      case Selections["cert_emision_co2"].path:
         return heatMapCertEmision(value);
-      case Selections["Building_Getafe_cert consumo e primaria"].path:
+      case Selections["cert_consumo_e_primaria"].path:
         return heatMapCertEmision(value);
       case Selections[
         "Building_Getafe_Medidas recibidas: Kit de eficiencia energética Cruz Roja"
@@ -214,11 +209,11 @@ function Map2({ mapRef, geojson, geojsonLimites }) {
 
   function mapStyleLimites(feature) {
     return {
-      // color: "#8a4d85",
       color: "#000",
       weight: "2",
       dashArray: "4, 4",
       opacity: "0.5",
+      fillOpacity: 0.0,
     };
   }
 

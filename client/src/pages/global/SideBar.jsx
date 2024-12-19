@@ -122,9 +122,9 @@ function SideBar() {
                   style={{
                     color: colors.gray[100],
                   }}
-                  component={<Link to="/visor-epiu" />}
+                  component={<Link to="/visor-parcelas" />}
                 >
-                  Visor EPIU
+                  Visor Parcelas
                 </MenuItem>
               </SubMenu>
               <MenuItem

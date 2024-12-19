@@ -89,63 +89,33 @@ export function readableValueEPIU(key, value) {
 
 // Keys for the EPIU dataset
 const mapEPIUKeys = new Map();
-mapEPIUKeys.set("reference", "Referencia");
-mapEPIUKeys.set("currentUse", "Uso principal");
-mapEPIUKeys.set("numberOfDw", "Número de viviendas");
-mapEPIUKeys.set("ano_constr", "Año de construcción");
-mapEPIUKeys.set("tipo_viv", "Tipo de vivienda");
-mapEPIUKeys.set("Building_Getafe_Barrio", "Barrio");
-mapEPIUKeys.set("Building_Getafe_n exptes", "Número de expedientes");
+mapEPIUKeys.set("ref_catastral", "Referencia");
+mapEPIUKeys.set("uso_principal", "Uso principal");
+mapEPIUKeys.set("numero_viviendas", "Número de viviendas");
+mapEPIUKeys.set("ano_constru", "Año de construcción");
+mapEPIUKeys.set("CDDISTRITO", "Distrito");
+mapEPIUKeys.set("barrio", "Barrio");
+mapEPIUKeys.set("especif_conj_homo", "Cojuntos homogéneos");
+mapEPIUKeys.set("ERRP", "Ámbito ERRP");
+mapEPIUKeys.set("n_exptes", "Número de expedientes");
 mapEPIUKeys.set("Building_Getafe_porc viv OHS", "Viviendas OHS (%)");
-mapEPIUKeys.set(
-  "Building_Getafe_porc retraso pago facturas",
-  "Retraso pago facturas (%)"
-);
+mapEPIUKeys.set("Building_Getafe_Medidas recibidas: Kit de eficiencia energética Cruz Roja", "Kit de eficiencia energética");
+mapEPIUKeys.set("Building_Getafe_Medidas recibidas: Medidas de rehabilitación en vivienda", "Rehabilitación en vivienda");
+mapEPIUKeys.set("Building_Getafe_Medidas recibidas: Medidas de rehabilitación en edificio", "Rehabilitación en edificio");
+mapEPIUKeys.set("Building_Getafe_porc retraso pago facturas", "Retraso pago facturas (%)");
+mapEPIUKeys.set("Building_Getafe_porc alquiler", "Alquiler (%)");
+mapEPIUKeys.set("Building_Getafe_porc prop sin hipoteca", "Propiedad sin hipoteca (%)");
+mapEPIUKeys.set("Building_Getafe_porc prop con hipoteca", "Propiedad con hipoteca (%)");
 mapEPIUKeys.set("Building_Getafe_disconfort inv", "Disconfort invierno (%)");
 mapEPIUKeys.set("Building_Getafe_disconfort ver", "Disconfort verano (%)");
-mapEPIUKeys.set("Building_Getafe_porc alquiler", "Alquiler (%)");
-mapEPIUKeys.set(
-  "Building_Getafe_porc prop sin hipoteca",
-  "Propiedad sin hipoteca (%)"
-);
-mapEPIUKeys.set(
-  "Building_Getafe_porc prop con hipoteca",
-  "Propiedad con hipoteca (%)"
-);
+mapEPIUKeys.set("Building_Getafe_porc patologias exptes", "Expedientes con patologías (%)" );
 mapEPIUKeys.set("Building_Getafe_porc no calefaccion", "Sin calefacción (%)");
-mapEPIUKeys.set(
-  "Building_Getafe_porc no refrigeracion",
-  "Sin refrigeración (%)"
-);
-mapEPIUKeys.set(
-  "Building_Getafe_porc patologias exptes",
-  "Expedientes con patologías (%)"
-);
-mapEPIUKeys.set("Building_Getafe_cert emision CO2", "Cert. emisión CO2");
-mapEPIUKeys.set(
-  "Building_Getafe_cert consumo e primaria",
-  "Cert. consumo energía primaria"
-);
-mapEPIUKeys.set(
-  "Building_Getafe_prod fotovol",
-  "Producción fotovoltaica (MWh/año)"
-);
-mapEPIUKeys.set(
-  "Building_Getafe_irradiacion anual kwh/m2",
-  "Irradiación anual (kWh/m2)"
-);
-mapEPIUKeys.set(
-  "Building_Getafe_Medidas recibidas: Kit de eficiencia energética Cruz Roja",
-  "Kit de eficiencia energética"
-);
-mapEPIUKeys.set(
-  "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en vivienda",
-  "Rehabilitación en vivienda"
-);
-mapEPIUKeys.set(
-  "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en edificio",
-  "Rehabilitación en edificio"
-);
+mapEPIUKeys.set("cert_emision_co2", "Cert. Emisión CO2");
+mapEPIUKeys.set("cert_consumo_e_primaria", "Cer. Consumo energía primaria");
+mapEPIUKeys.set("prod_fotovol", "Producción fotovoltaica");
+mapEPIUKeys.set("irradiacion_anual_kwh/m2", "Irradiación anual");
+mapEPIUKeys.set("demanda_calefaccion", "Demanda de calefacción actual");
+mapEPIUKeys.set("calificacion_demanda_calefaccion", "Calificación de demanda de calefacción actual");
 
 // Keys for the SSCC dataset
 const mapSSCCKeys = new Map();

@@ -13,16 +13,19 @@ import {
 } from "../../constants/MapConstantsEPIU";
 
 const keysPanel1 = [
-  "reference",
-  "currentUse",
-  "numberOfDw",
-  "ano_constr",
-  "Building_Getafe_Barrio",
+  "ref_catastral",
+  "uso_principal",
+  "numero_viviendas",
+  "ano_constru",
+  "CDDISTRITO",
+  "barrio",
+  "especif_conj_homo",
+  "ERRP",
+  "n_exptes",
+  "Building_Getafe_porc viv OHS",
 ];
 
 const keysPanel2 = [
-  "Building_Getafe_n exptes",
-  "Building_Getafe_porc viv OHS",
   "Building_Getafe_Medidas recibidas: Kit de eficiencia energética Cruz Roja",
   "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en vivienda",
   "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en edificio",
@@ -40,52 +43,47 @@ const keysPanel3 = [
 const keysPanel4 = [
   "Building_Getafe_porc patologias exptes",
   "Building_Getafe_porc no calefaccion",
-  "Building_Getafe_cert emision CO2",
-  "Building_Getafe_cert consumo e primaria",
-  "Building_Getafe_prod fotovol",
-  "Building_Getafe_irradiacion anual kwh/m2",
+  "cert_emision_co2",
+  "cert_consumo_e_primaria",
+  "prod_fotovol",
+  "irradiacion_anual_kwh/m2",
+  "demanda_calefaccion",
+  "calificacion_demanda_calefaccion"
 ];
 
 const porcEPIU = [
   "Building_Getafe_porc viv OHS",
   "Building_Getafe_porc retraso pago facturas",
-  "Building_Getafe_disconfort inv",
-  "Building_Getafe_disconfort ver",
   "Building_Getafe_porc alquiler",
   "Building_Getafe_porc prop sin hipoteca",
   "Building_Getafe_porc prop con hipoteca",
-  "Building_Getafe_porc no calefaccion",
   "Building_Getafe_porc patologias exptes",
+  "Building_Getafe_porc no calefaccion",
+  "Building_Getafe_disconfort inv",
+  "Building_Getafe_disconfort ver",
 ];
 
 const availableSelections = [
-  "numberOfDw",
-  "Building_Getafe_n exptes",
-  "ano_constr",
-  "Building_Getafe_cert emision CO2",
-  "Building_Getafe_cert consumo e primaria",
+  "numero_viviendas",
+  "ano_constru",
+  "n_exptes",
   "Building_Getafe_porc viv OHS",
   "Building_Getafe_porc retraso pago facturas",
-  "Building_Getafe_disconfort inv",
-  "Building_Getafe_disconfort ver",
   "Building_Getafe_porc alquiler",
   "Building_Getafe_porc prop sin hipoteca",
   "Building_Getafe_porc prop con hipoteca",
-  "Building_Getafe_porc no calefaccion",
+  "Building_Getafe_disconfort inv",
+  "Building_Getafe_disconfort ver",
   "Building_Getafe_porc patologias exptes",
-  "Building_Getafe_prod fotovol",
-  "Building_Getafe_irradiacion anual kwh/m2",
-  "Building_Getafe_Medidas recibidas: Kit de eficiencia energética Cruz Roja",
-  "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en vivienda",
-  "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en edificio",
+  "Building_Getafe_porc no calefaccion",
+  "prod_fotovol",
+  "irradiacion_anual_kwh/m2",
+  "demanda_calefaccion",
 ];
 
 import {DIRECTION} from "../../data/direccion_server";
 
 const baseURL = DIRECTION + "/api/visor-epiu";
-
-//  "https://observatoriodedatosepiu.khoraurbanthinkers.es/api/visor-epiu";
-// const storageKey = "visorData"; // Key for storing/retrieving data from localStorage
 
 function VisorEPIU() {
   const theme = useTheme();
@@ -111,14 +109,7 @@ function VisorEPIU() {
     });
   }, []);
 
-  // useEffect(() => {
-  // console.log("infoValue", infoValue);
-  // console.log("globales", globales);
-  // console.log("map", mapEPIUKeys.get("reference"));
-  // }, [infoValue, globales]);
-
   const handleSelectionClick = (indicator) => {
-    // console.log("in handleSelectionClick");
     if (availableSelections.includes(indicator)) {
       updateSelection(`feature.properties["${indicator}"]`);
     }
@@ -290,13 +281,13 @@ function VisorEPIU() {
       transition={{ duration: 1 }}
     >
       <SubBar
-        title={"Visor de Datos Urbanos – Escala Ámbito EPIU "}
+        title={"Visor de Datos Urbanos – Escala Parcelas "}
         crumbs={[
           ["Inicio", "/"],
           ["Visor EPIU", "/visor-epiu"],
         ]}
         info={{
-          title: "Visor de Datos Urbanos – Escala Ámbito EPIU ",
+          title: "Visor de Datos Urbanos – Escala Parcelas ",
           description: (
             <Typography
               variant="h6"
@@ -363,7 +354,7 @@ function VisorEPIU() {
           </Box>
           <Box
             gridColumn={"span 3"}
-            gridRow={"span 2"}
+            gridRow={"span 3"}
             backgroundColor={colors.gray[900]}
             display={"flex"}
             alignItems={"stretch"}
@@ -388,7 +379,7 @@ function VisorEPIU() {
 
           <Box
             gridColumn={"span 1"}
-            gridRow={"span 2"}
+            gridRow={"span 3"}
             backgroundColor={colors.gray[900]}
             display={"flex"}
             alignItems={"stretch"}
@@ -411,13 +402,18 @@ function VisorEPIU() {
             </Typography>
             {globalTextDash()}
             {globalTextDash()}
-            {globalText("numberOfDw")}
-            {globalText("ano_constr")}
+            {globalText("numero_viviendas")}
+            {globalText("ano_constru")}
             {globalTextDash()}
+            {globalTextDash()}
+            {globalTextDash()}
+            {globalTextDash()}
+            {globalText("n_exptes")}
+            {globalText("Building_Getafe_porc viv OHS")}
           </Box>
           <Box
             gridColumn={"span 3"}
-            gridRow={"span 2"}
+            gridRow={"span 1"}
             backgroundColor={colors.gray[900]}
             display={"flex"}
             alignItems={"stretch"}
@@ -433,7 +429,7 @@ function VisorEPIU() {
               px={"0.3rem"}
               sx={{ background: colors.blueAccent[400], borderRadius: "5px" }}
             >
-              Datos EPIU
+              Datos OHS
             </Typography>
             {infoValue && Object.keys(infoValue).length > 0
               ? infoText(infoPanel2)
@@ -441,7 +437,7 @@ function VisorEPIU() {
           </Box>
           <Box
             gridColumn={"span 1"}
-            gridRow={"span 2"}
+            gridRow={"span 1"}
             backgroundColor={colors.gray[900]}
             display={"flex"}
             alignItems={"stretch"}
@@ -458,8 +454,6 @@ function VisorEPIU() {
             >
               -
             </Typography>
-            {globalText("Building_Getafe_n exptes")}
-            {globalText("Building_Getafe_porc viv OHS")}
             {globalTextDash()}
             {globalTextDash()}
             {globalTextDash()}
@@ -559,10 +553,14 @@ function VisorEPIU() {
             </Typography>
             {globalText("Building_Getafe_porc patologias exptes")}
             {globalText("Building_Getafe_porc no calefaccion")}
-            {globalText("Building_Getafe_cert emision CO2")}
-            {globalText("Building_Getafe_cert consumo e primaria")}
-            {globalText("Building_Getafe_prod fotovol")}
-            {globalText("Building_Getafe_irradiacion anual kwh/m2")}
+            {globalText("cert_emision_co2")}
+            {globalText("cert_consumo_e_primaria")}
+            {globalText("prod_fotovol")}
+            {globalText("irradiacion_anual_kwh/m2")}
+            {/* {globalText("demanda_calefaccion")}
+            {globalText("calificacion_demanda_calefaccion")} */}
+            {globalTextDash()}
+            {globalTextDash()}
           </Box>
         </Box>
       </Box>

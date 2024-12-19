@@ -62,7 +62,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/visor-epiu"
+                  path="/visor-parcelas"
                   element={
                     <MapEPIUProvider>
                       <VisorEPIU />

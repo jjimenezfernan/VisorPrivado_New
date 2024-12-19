@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Box, Typography, useTheme } from "@mui/material";
@@ -29,14 +29,11 @@ function MapLegendEPIU({ position, selection }) {
   const percentages = [
     "Building_Getafe_porc viv OHS",
     "Building_Getafe_porc retraso pago facturas",
-    "Building_Getafe_disconfort inv",
-    "Building_Getafe_disconfort ver",
     "Building_Getafe_porc alquiler",
     "Building_Getafe_porc prop sin hipoteca",
     "Building_Getafe_porc prop con hipoteca",
-    "Building_Getafe_porc no calefaccion",
-    "Building_Getafe_porc no refrigeracion",
     "Building_Getafe_porc patologias exptes",
+    "Building_Getafe_porc no calefaccion",
   ];
 
   const siNo = [
@@ -250,19 +247,48 @@ function MapLegendEPIU({ position, selection }) {
     return legendItems;
   }
 
+  function renderEspecifConjHomo(values, gradient, lastItem) {
+    const legendItems = gradient.map((value, index) => (
+      <Box
+        key={index}
+        display="flex"
+        alignItems="center"
+        p={1}
+        sx={{ "&:not(:last-child)": { marginBottom: -2 } }}
+      >
+        <Box width={16} height={16} marginRight={1} backgroundColor={value} />
+        <Typography variant="body1">{values[index]}</Typography>
+      </Box>
+    ));
+
+    // Add the last gray item with a value of 0
+    legendItems.push(
+      <Box key="lastItem" display="flex" alignItems="center" p={1}>
+        <Box width={16} height={16} marginRight={1} backgroundColor="#bababa" />
+        <Typography variant="body1">{lastItem}</Typography>
+      </Box>
+    );
+
+    return legendItems;
+  }
+
   function renderLegend() {
     if (percentages.includes(pathToSelect(selectionValue))) {
       return renderLegendPercent(legendValues, legendGradient, "0% / ND");
-    } else if (pathToSelect(selectionValue) === "ano_constr") {
+    } 
+    else if (pathToSelect(selectionValue) === "ano_constru") {
       return renderLegendAnyoConstru(legendValues, legendGradient, "ND");
-    } else if (
-      pathToSelect(selectionValue) === "Building_Getafe_cert emision CO2" ||
-      pathToSelect(selectionValue) === "Building_Getafe_cert consumo e primaria"
+    }
+    else if (
+      pathToSelect(selectionValue) === "cert_emision_co2" ||
+      pathToSelect(selectionValue) === "cert_consumo_e_primaria"
     ) {
       return renderLegendCert(legendValues, legendGradient, "ND");
-    } else if (siNo.includes(pathToSelect(selectionValue))) {
+    } 
+    else if (siNo.includes(pathToSelect(selectionValue))) {
       return renderLegendSiNo(pathToSelect(selectionValue));
-    } else {
+    }
+    else {
       return renderLegendGeneric(legendValues, legendGradient, "0 / ND");
     }
   }
