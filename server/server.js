@@ -206,6 +206,11 @@ app.get("/api/visor-sscc", async (req, res) => {
   isProcessingSSCC = true;
   resetCounters(mediasGlobalesKeysSSCC);
 
+  // Reniciar todo el dic de los sumatorio
+  for(let clave in sumatoriosSSCC){
+    sumatoriosSSCC[clave] = 0;
+  }
+
   // Create an array of promises to read both geojson files
   const readGeojsonPromises = [readJsonFile(geoSSCCPath)];
 
@@ -352,6 +357,11 @@ app.get("/api/visor-barrio", async (req, res) => {
 
   isProcessingBarrio = true;
   resetCounters(mediasGlobalesKeysBarrio);
+
+  // Reniciar todo el dic de los sumatorio
+  for(let clave in sumatoriosBarrio){
+    sumatoriosBarrio[clave] = 0;
+  }
 
   // Create an array of promises to read both geojson files
   const readGeojsonPromises = [readJsonFile(geoBarrioPath)];
@@ -503,6 +513,11 @@ app.get("/api/visor-epiu", async (req, res) => {
   resetCounters(mediasGlobalesKeysEPIU);
   resetCounters(mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU["cert_emision_co2"]);
   resetCounters(mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU["cert_consumo_e_primaria"]);
+
+    // Reniciar todo el dic de los sumatorio
+    for(let clave in sumatoriosEPIU){
+      sumatoriosEPIU[clave] = 0;
+    }
 
   // Create an array of promises to read both geojson files
   const readGeojsonPromises = [
