@@ -40,6 +40,7 @@ function MapLegendEPIU({ position, selection }) {
     "Building_Getafe_Medidas recibidas: Kit de eficiencia energética Cruz Roja",
     "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en vivienda",
     "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en edificio",
+    "ERRP",
   ];
 
   useEffect(() => {
@@ -272,16 +273,48 @@ function MapLegendEPIU({ position, selection }) {
     return legendItems;
   }
 
+  function renderCdDistrito(values, gradient, lastItem) {
+    const legendItems = gradient.map((value, index) => (
+      <Box
+        key={index}
+        display="flex"
+        alignItems="center"
+        p={1}
+        sx={{ "&:not(:last-child)": { marginBottom: -2 } }}
+      >
+        <Box width={16} height={16} marginRight={1} backgroundColor={value} />
+        <Typography variant="body1">{values[index]}</Typography>
+      </Box>
+    ));
+
+    // Add the last gray item with a value of 0
+    legendItems.push(
+      <Box key="lastItem" display="flex" alignItems="center" p={1}>
+        <Box width={16} height={16} marginRight={1} backgroundColor="#bababa" />
+        <Typography variant="body1">{lastItem}</Typography>
+      </Box>
+    );
+
+    return legendItems;
+  }
+
   function renderLegend() {
     if (percentages.includes(pathToSelect(selectionValue))) {
       return renderLegendPercent(legendValues, legendGradient, "0% / ND");
     } 
+    else if (pathToSelect(selectionValue) === "especif_conj_homo"){
+      return renderEspecifConjHomo(legendValues, legendGradient, "ND");
+    }
     else if (pathToSelect(selectionValue) === "ano_constru") {
       return renderLegendAnyoConstru(legendValues, legendGradient, "ND");
     }
+    else if (pathToSelect(selectionValue) === "CDDISTRITO") {
+      return renderCdDistrito(legendValues, legendGradient, "ND");
+    }
     else if (
       pathToSelect(selectionValue) === "cert_emision_co2" ||
-      pathToSelect(selectionValue) === "cert_consumo_e_primaria"
+      pathToSelect(selectionValue) === "cert_consumo_e_primaria" ||
+      pathToSelect(selectionValue) === "calificacion_demanda_calefaccion"
     ) {
       return renderLegendCert(legendValues, legendGradient, "ND");
     } 

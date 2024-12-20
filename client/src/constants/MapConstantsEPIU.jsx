@@ -17,6 +17,13 @@ const COLORMAP = {
     "#A0522D", "#afafe8", "#AEEEEE", "#7D7098", 
     "#FF9A8A", "#8F9779", "#FFD1DC", "#DC143C" 
   ],
+  cd_distrito: ["#a63564", "#8a4d85", "#48669c", "#4a86a8"],
+  calificacion_demanda_calefaccion: [    
+    "#047331",
+    "#388C04",
+    "#5498A9",
+    "#508CAE",
+  ],
 };
 
 export const Selections = {
@@ -36,6 +43,24 @@ export const Selections = {
     legend: {
       values: [2000, 1975, 1950, 1925, 0],
       gradient: COLORMAP.primary,
+    },
+  },
+  CDDISTRITO: {
+    key: "CDDISTRITO",
+    path: `feature.properties["CDDISTRITO"]`,
+    label: "Distrito",
+    legend: {
+      values: ["01", "02", "03", "04"],
+      gradient: COLORMAP.cd_distrito,
+    },
+  },
+  ERRP: {
+    key: "ERRP",
+    path: `feature.properties["ERRP"]`,
+    label: "ERRP",
+    legend: {
+      value: "Sí",
+      color: "#4a86a8",
     },
   },
   "n_exptes": {
@@ -158,7 +183,7 @@ export const Selections = {
   "cert_emision_co2": {
     key: "cert_emision_co2",
     path: `feature.properties["cert_emision_co2"]`,
-    label: "Certificado emisión CC",
+    label: "Certificado emisión CO2",
     legend: {
       values: ["A", "B", "C", "D", "E", "F", "G"],
       gradient: COLORMAP.cert,
@@ -198,6 +223,32 @@ export const Selections = {
     legend: {
       values: [200, 150, 100, 50, 0],
       gradient: COLORMAP.primary,
+    },
+  },
+  "calificacion_demanda_calefaccion": {
+    key: "calificacion_demanda_calefaccion",
+    path: `feature.properties["calificacion_demanda_calefaccion"]`,
+    label: "Calificación de demanda de calefacción actual",
+    legend: {
+      values: ["C", "D", "E", "F"],
+      gradient: COLORMAP.calificacion_demanda_calefaccion,
+    },
+  },
+  especif_conj_homo: {
+    key: "especif_conj_homo",
+    path: `feature.properties["especif_conj_homo"]`,
+    label: "Especificación Conjunto Homogeneo",
+    legend: {
+      values: ['Sector III - (II)', 'Sector III - (I)', 
+          'Sindicatos', 'Las Margaritas', 'Getafe Norte I', 
+          'Fátima', 'Heras - Escaño', 'Perales - Peridís', 
+          'La Alhóndiga - Hospital', 'Greco', 
+          'El Bercial -  Sector 1', 'Salvador', 
+          'El Bercial -  Sector B', 'El Bercial - Sector C', 
+          'Guardia Civil', 'Brunete', 'Fuerzas Armadas', 'Harinera', 
+          'Serranillos - Benavente', 'Pizarro', 'Colonia Militares', 'Juan de la Cierva - Sector A', 
+          'Juan de la Cierva - Sector B', 'Juan de la Cierva - Sector C'],
+      gradient: COLORMAP.especif_conj_homo,
     },
   },
 };

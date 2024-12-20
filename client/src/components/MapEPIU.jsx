@@ -90,10 +90,41 @@ function heatMapCertEmision(value) {
   return "#bababa";
 }
 
+function heatMapCertcalificacionDemandaCalefaccion(value) {
+  let length = Selections["calificacion_demanda_calefaccion"].legend.values.length;
+  //compare values and get gradient color
+  for (let i = 0; i < length; i++) {
+    if (
+      value === Selections["calificacion_demanda_calefaccion"].legend.values[i]
+    ) {
+      return Selections["calificacion_demanda_calefaccion"].legend.gradient[i];
+    }
+  }
+  // if value is not valid, return the gray color
+  return "#bababa";
+}
+
 function heatMapSiNo(select, value) {
   select = pathToSelect(select);
-  if (value === "Sí") {
+  if (value === "Sí" || value === 1) {
     return Selections[select].legend.color;
+  }
+  // if value is not valid, return the gray color
+  return "#bababa";
+}
+
+function heatMapDistrito(value) {
+  // Siempre sera diferente de ND puesto que todas las viviendas tienen distrito
+  if (value != "ND") {
+    return Selections["CDDISTRITO"].legend.gradient[Selections["CDDISTRITO"].legend.values.indexOf(value)];
+  }
+  // if value is not valid, return the gray color
+  return "#bababa";
+}
+
+function heatMapEspecifConjHomo(value) {
+  if (value) {
+    return Selections["especif_conj_homo"].legend.gradient[Selections["especif_conj_homo"].legend.values.indexOf(value)];
   }
   // if value is not valid, return the gray color
   return "#bababa";
@@ -183,15 +214,16 @@ function Map2({ mapRef, geojson, geojsonLimites }) {
         return heatMapCertEmision(value);
       case Selections["cert_consumo_e_primaria"].path:
         return heatMapCertEmision(value);
-      case Selections[
-        "Building_Getafe_Medidas recibidas: Kit de eficiencia energética Cruz Roja"
-      ].path:
-      case Selections[
-        "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en vivienda"
-      ].path:
-      case Selections[
-        "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en edificio"
-      ].path:
+      case Selections["calificacion_demanda_calefaccion"].path:
+        return heatMapCertcalificacionDemandaCalefaccion(value);
+      case Selections["CDDISTRITO"].path:
+        return heatMapDistrito(value);
+      case Selections["especif_conj_homo"].path:
+        return heatMapEspecifConjHomo(value);
+      case Selections["Building_Getafe_Medidas recibidas: Kit de eficiencia energética Cruz Roja"].path:
+      case Selections["Building_Getafe_Medidas recibidas: Medidas de rehabilitación en vivienda" ].path:
+      case Selections["Building_Getafe_Medidas recibidas: Medidas de rehabilitación en edificio"].path:
+      case Selections["ERRP"].path:
         return heatMapSiNo(select, value);
       default:
         return heatMapGeneric(select, value);

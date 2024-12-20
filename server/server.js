@@ -472,6 +472,7 @@ const mediasGlobalesKeysEPIU = {
   "Building_Getafe_porc patologias exptes": 0,
   "prod_fotovol": 0,
   "irradiacion_anual_kwh/m2": 0,
+  "demanda_calefaccion": 0,
 };
 
 const sumatoriosEPIU = {
@@ -497,6 +498,12 @@ const mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU = {
     E: 0,
     F: 0,
     G: 0,
+  },
+  "calificacion_demanda_calefaccion": {
+    C: 0,
+    D: 0,
+    E: 0,
+    F: 0,
   },
 };
 

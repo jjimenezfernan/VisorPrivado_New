@@ -79,6 +79,15 @@ const availableSelections = [
   "prod_fotovol",
   "irradiacion_anual_kwh/m2",
   "demanda_calefaccion",
+  "Building_Getafe_Medidas recibidas: Kit de eficiencia energética Cruz Roja",
+  "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en vivienda",
+  "Building_Getafe_Medidas recibidas: Medidas de rehabilitación en edificio",
+  "cert_emision_co2",
+  "cert_consumo_e_primaria",
+  "CDDISTRITO",
+  "calificacion_demanda_calefaccion",
+  "ERRP",
+  "especif_conj_homo",
 ];
 
 import {DIRECTION} from "../../data/direccion_server";
@@ -557,10 +566,8 @@ function VisorEPIU() {
             {globalText("cert_consumo_e_primaria")}
             {globalText("prod_fotovol")}
             {globalText("irradiacion_anual_kwh/m2")}
-            {/* {globalText("demanda_calefaccion")}
-            {globalText("calificacion_demanda_calefaccion")} */}
-            {globalTextDash()}
-            {globalTextDash()}
+            {globalText("demanda_calefaccion")}
+            {globalText("calificacion_demanda_calefaccion")}
           </Box>
         </Box>
       </Box>
