@@ -226,7 +226,7 @@ app.get("/api/visor-sscc", async (req, res) => {
               feature.properties[key] = parsed;
             }
           }
-          else if (key === "t30_th") {
+          else if (key === "t30_th" || key === "precio_alquiler") {
             const value = feature.properties[key];
             let parsed = (parseFloat(value)).toFixed(2);
             if (!isNaN(parsed) && parsed !== 0) {
