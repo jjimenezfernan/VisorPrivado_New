@@ -194,7 +194,7 @@ export const Selections = {
   "demanda_calefaccion": {
     key: "demanda_calefaccion",
     path: `feature.properties["demanda_calefaccion"]`,
-    label: "Año construcción",
+    label: "Demanda de Calecfacción Actual",
     legend: {
       values: [200, 150, 100, 50, 0],
       gradient: COLORMAP.primary,
