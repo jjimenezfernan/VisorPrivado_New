@@ -54,7 +54,6 @@ function Dashboard() {
       console.log("Contact with us in https://khoraurbanthinkers.es/en/home-en/")
       console.log("Our X account https://x.com/khoraurban")
       console.log("Our Linkedin account https://www.linkedin.com/company/khora-urban-thinkers/posts/?feedView=all")
-
     });
   }, []);
 
