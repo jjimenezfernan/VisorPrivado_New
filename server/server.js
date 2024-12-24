@@ -27,6 +27,7 @@ const geoBarrioPath = path.join(__dirname, "resources/map/Barrio.geojson");
 const dataPathExcel_dashboard = "resources/data_dashboard.xlsx";
 const dataPathExcel_derivacion = "resources/data_derivacion.xlsx";
 const dataPathExcel_concienciacion = "resources/data_awareness.xlsx";
+const dataPathExcel_barrios_dashboard = "resources/data_dashboard_por_barrio.xlsx";
 
 const colors_2 = [
   "#9a031e",
@@ -944,9 +945,6 @@ app.get("/api/concienciacion", (req, res) => {
   res.json(data);
 });
 
-
-const dataPathExcel_barrios_dashboard = "resources/dashboard_por_barrio.xlsx";
-
 // Endpoint para pasar los datos de los barrios a la vista
 app.get("/api/barrios_dashboard", (req, res) => {
   let globalDataRaw = loadExcelData(dataPathExcel_barrios_dashboard, true, 0);
@@ -977,13 +975,98 @@ app.get("/api/barrios_dashboard", (req, res) => {
     
   });
 
-  // Para sacar los diferentes barrios
-  const barrios = [...new Set(globalDataObjects.map(obj => obj.barrio))];
+  // Para sacar todas las columnas para los graficos
+  const como_nos_has_conocido = [new Set(globalDataObjects.map(obj => obj.como_nos_has_conocido))];
+  const motivo_de_la_consulta = [new Set(globalDataObjects.map(obj => obj.motivo_de_la_consulta))];
+
+  // Para sacar los datos de los diferentes barrios
+  const barrios = ["Todos los Barrios", ...new Set(globalDataObjects.map(obj => obj.barrio))];
+
+  // Para parsear los datos de los barrios
+  const globalDataParsed = [];
+  let allBarrios = {
+      barrio: "Todos los Barrios",
+      sumatorio_interaciones: 0,
+      num_total_usuarios: 0,
+      num_total_usuarios_femeninos: 0,
+      num_total_usuarios_masculinos: 0,
+      grafico_tipo_atencion: [
+        { id: "Atención telefónica", valor: 0, valorColor: colors[0] },
+        { id: "Atención email", valor: 0, valorColor: colors[1] },
+        { id: "Atención presencial", valor: 0, valorColor: colors[2] },
+      ],
+      grafico_como_nos_has_conocido: [
+      ],
+      grafico_motivo_de_la_consulta: [
+      ],
+  };
+
+  // Para parsear los datos de los barrios
+  let barrioData, sumatorio_interaciones, num_total_usuarios, num_total_usuarios_femeninos, 
+    num_total_usuarios_masculinos, atencion_telefonica, atencion_email, atencion_presencial;
+  barrios.forEach(barrio => {
+    // Para que no se repita el barrio "Todos los Barrios"
+    if (barrio === "Todos los Barrios") {
+      return;
+    }
+    barrioData = globalDataObjects.filter(obj => obj.barrio === barrio);
+    sumatorio_interaciones = 0;
+    num_total_usuarios = 0;
+    num_total_usuarios_femeninos = 0;
+    num_total_usuarios_masculinos = 0;
+    atencion_telefonica = 0;
+    atencion_email = 0;
+    atencion_presencial = 0;
+    barrioData.forEach(obj => {
+      sumatorio_interaciones += obj.sumatorio_interaciones;
+      num_total_usuarios += 1;
+      if(obj.genero === "Femenino"){
+        num_total_usuarios_femeninos += 1;
+      }
+      if (obj.genero === "Masculino") {
+        num_total_usuarios_masculinos += 1;
+      }
+      if (obj.atenciones_telefónicas) {
+        atencion_telefonica += obj.atenciones_telefónicas;
+      }
+      if (obj.atenciones_email) {
+        atencion_email += obj.atenciones_email;
+      }
+      if (obj.atenciones_presenciales) {
+        atencion_presencial += obj.atenciones_presenciales;
+      }
+    });
+
+    // Sumarle a la seleccion de todos los barrios los datos de cada barrio
+    allBarrios.sumatorio_interaciones += sumatorio_interaciones;
+    allBarrios.num_total_usuarios += num_total_usuarios;
+    allBarrios.num_total_usuarios_femeninos += num_total_usuarios_femeninos;
+    allBarrios.num_total_usuarios_masculinos += num_total_usuarios_masculinos;
+    allBarrios.grafico_tipo_atencion[0].valor += atencion_telefonica;
+    allBarrios.grafico_tipo_atencion[1].valor += atencion_email;
+    allBarrios.grafico_tipo_atencion[2].valor += atencion_presencial;
+
+    globalDataParsed.push({
+      barrio,
+      sumatorio_interaciones,
+      num_total_usuarios,
+      num_total_usuarios_femeninos,
+      num_total_usuarios_masculinos,
+      grafico_tipo_atencion: [
+        { id: "Atención telefónica", valor: atencion_telefonica, valorColor: colors[0] },
+        { id: "Atención email", valor: atencion_email, valorColor: colors[1] },
+        { id: "Atención presencial", valor: atencion_presencial, valorColor: colors[2] },
+      ]
+    });
+  });
+
+  // Añadir los datos de todos los barrios
+  globalDataParsed.push(allBarrios);
 
   const data = {
     barrios,
-    globalDataObjects,
-    columnasDatos
+    columnasDatos,
+    globalDataParsed,
   };
   res.json(data);
 });
@@ -1001,6 +1084,9 @@ app.get("/api/descargas/:filename", (req, res) => {
       break;
     case "derivacion":
       fileNameExcel = "data_derivacion.xlsx";
+      break;
+    case "dashboard_por_barrio":
+      fileNameExcel = "dashboard_por_barrio.xlsx";
       break;
     default:
       fileNameExcel = "data_dashboard.xlsx";

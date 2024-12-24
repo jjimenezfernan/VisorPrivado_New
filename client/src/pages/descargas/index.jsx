@@ -87,6 +87,14 @@ function Descargas() {
                 Concienciación
               </Button>
               <Button
+                onClick={() => handleDownload("dashboard_por_barrio")}
+                variant="contained"
+                color="success"
+                endIcon={<DownloadIcon />}
+              >
+                Estadisticas Barrios
+              </Button>
+              <Button
                 onClick={() => handleDownload("geojson")}
                 variant="contained"
                 color="success"

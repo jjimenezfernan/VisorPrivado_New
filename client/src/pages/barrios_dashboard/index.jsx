@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import SubBar from "../global/SubBar";
+import BarChartBarrios1 from "../../components/BarChartBarrios1";
 import BarChartDash2 from "../../components/BarChartDash2";
 import BarChartDash3 from "../../components/BarChartDash3";
 import BarChartDash4 from "../../components/BarChartDash4";
@@ -38,7 +39,7 @@ function BarriosDashboard() {
     // Peticion para obtener los datos 
     axios.get(baseURL).then((res) => {
       const data = res.data;
-      setGlobalData(data.globalDataObjects);
+      setGlobalData(data.globalDataParsed);
       setbarrios(data.barrios);
       console.log("Created by Khora Urban Thinkers");
       console.log("Contact with us in https://khoraurbanthinkers.es/en/home-en/")
@@ -48,21 +49,21 @@ function BarriosDashboard() {
     });
   }, []);
 
-    // useEffect se ejecuta cuando dataBarrioSelected cambia
-    useEffect(() => {
-      console.log("Barrio seleccionado (después del cambio):", dataBarrioSelected);
-      // Aquí puedes ejecutar cualquier lógica adicional
-    }, [dataBarrioSelected]);
+  // useEffect se ejecuta cuando dataBarrioSelected cambia
+  useEffect(() => {
+    console.log("Barrio seleccionado (después del cambio):", dataBarrioSelected);
+    // Aquí puedes ejecutar cualquier lógica adicional
+  }, [dataBarrioSelected]);
+
+  // useEffect se ejecuta solo 1 vez al principio del programa y sirve para inicializar el valor de dataBarrioSelected
+  useEffect(() => {
+    setDataBarrioSelected(globalData.filter( (item) => item.barrio === "Todos los Barrios"));
+  }, [globalData]);
 
   function updateDataBarriosSelected(barrioSelected){
     console.log("Barrio seleccionado: ", barrioSelected);
     // Filtramos los datos para mostrar solo los del barrio seleccionado
-    if (barrioSelected === "Todos") {
-      setDataBarrioSelected(globalData);
-    }
-    else{
-      setDataBarrioSelected(globalData.filter( (item) => item.barrio === barrioSelected));  
-    }
+    setDataBarrioSelected(globalData.filter( (item) => item.barrio === barrioSelected));
   }
   return (
     <motion.div
@@ -102,9 +103,6 @@ function BarriosDashboard() {
           >
             {barrios.length > 0 ? (
               <>
-                  <ButtonBarriosDashboard onClickFunction={updateDataBarriosSelected}>
-                    {"Todos"}
-                  </ButtonBarriosDashboard>
                 {barrios.map((elemento, index) => (
                   <ButtonBarriosDashboard key={index} onClickFunction={updateDataBarriosSelected}>
                     {elemento}
@@ -118,322 +116,186 @@ function BarriosDashboard() {
                 </Typography>
               </>
             )}
-          
           </Box>
-        {//   <Box
-        //     gridColumn={"span 5"}
-        //     gridRow={"span 1"}
-        //     backgroundColor={colors.gray[900]}
-        //     display={"grid"}
-        //     gridTemplateColumns={"repeat(2,1fr)"}
-        //     gridTemplateRows={"repeat(3, 1fr)"}
-        //     // justifyContent={"space-evenly"}
-        //     padding={"10px 5px 10px 20px"}
-        //     // flexDirection={"column"}
-        //   >
-        //     {globalData.length > 0 ? (
-        //       <>
-        //         <Typography
-        //           variant={"h3"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 2"}
-        //           gridRow={"span 1"}
-        //         >
-        //           <strong>INFORAMACIÓN OPERATIVA</strong>
-        //         </Typography>
-        //         <Typography
-        //           variant={"h5"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 1"}
-        //           gridRow={"span 1"}
-        //           // textAlign={"center"}
-        //         >
-        //           <FamilyRestroomIcon fontSize={"large"} sx={{ mr: "15px" }} />
-        //           Usuarios de la OHS: <strong>{globalData[0][1]}</strong>
-        //         </Typography>
-        //         <Typography
-        //           variant={"h5"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 1"}
-        //           gridRow={"span 1"}
-        //           // textAlign={"start"}
-        //         >
-        //           <AdfScannerIcon fontSize={"large"} sx={{ mr: "15px" }} />
-        //           {globalData[1][0]}: <strong>{globalData[1][1]}</strong>
-        //         </Typography>
-        //         <Typography
-        //           variant={"h5"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 1"}
-        //           gridRow={"span 1"}
-        //           // textAlign={"start"}
-        //         >
-        //           <CallIcon fontSize={"large"} sx={{ mr: "15px" }} />
-        //           {globalData[2][0]}: <strong>{globalData[2][1]}</strong>
-        //         </Typography>
-        //         <Typography
-        //           variant={"h5"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 1"}
-        //           gridRow={"span 1"}
-  
-        //         >
-        //           <AlternateEmailIcon fontSize={"large"} sx={{ mr: "15px" }} />
-        //           {globalData[3][0]}: <strong>{globalData[3][1]}</strong>
-        //         </Typography>
-        //       </>
-        //     ) : (
-        //       <Typography variant={"h5"} color={colors.gray[100]}>
-        //         Loading...
-        //       </Typography>
-        //     )}
-        //   </Box>
-        //   <Box
-        //     gridColumn={"span 3"}
-        //     gridRow={"span 3"}
-        //     backgroundColor={colors.gray[900]}
-        //     display={"flex"}
-        //     alignItems={"center"}
-        //     justifyContent={"center"}
-        //     padding={"10px 5px 10px 5px"}
-        //     flexDirection={"column"}
-        //   >
-        //     <Typography variant={"h5"} color={colors.gray[100]}>
-        //       Origen de usuarios
-        //     </Typography>
-        //     <BarChartDash3 data={barData3} />
-        //   </Box>
-        //   <Box
-        //     gridColumn={"span 4"}
-        //     gridRow={"span 3"}
-        //     backgroundColor={colors.gray[900]}
-        //     display={"flex"}
-        //     alignItems={"center"}
-        //     justifyContent={"center"}
-        //     padding={"10px 5px 10px 5px"}
-        //     flexDirection={"column"}
-        //   >
-        //     <Typography variant={"h5"} color={colors.gray[100]}>
-        //       Reparto por barrios
-        //     </Typography>
-        //     <BarChartDash4 data={barData4} />
-        //   </Box>
-        //   <Box
-        //     gridColumn={"span 5"}
-        //     gridRow={"span 2"}
-        //     backgroundColor={colors.gray[900]}
-        //     display={"grid"}
-        //     gridTemplateColumns={"repeat(2,1fr)"}
-        //     gridTemplateRows={"repeat(4, 1fr)"}
-        //     padding={"10px 5px 10px 20px"}
-        //   >
-        //     {infoSocialEco.length > 0 ? (
-        //       <>
-        //         <Typography
-        //           variant={"h3"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 2"}
-        //           gridRow={"span 1"}
-        //         >
-        //           <strong>INFORAMACIÓN SOCIOECONÓMICA</strong>
-        //         </Typography>
-        //         {/* Mujeres y Hombres*/}
-        //         <Typography
-        //           variant={"h5"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 1"}
-        //           gridRow={"span 1"}
-        //           display={"grid"}
-        //           gridTemplateColumns={"repeat(2,50px)"}
-        //           gridTemplateRows={"repeat(2, 1fr)"}
-        //         >
-        //           <Box
-        //             gridColumn={"span 1"} 
-        //             gridRow={"span 2"}  
-        //             display="flex"
-        //             alignItems="center"
-        //             justifyContent="center"             
-        //           >
-        //             <WcIcon 
-        //               fontSize={"large"}
-        //               sx={{ mr: "15px" }}
-        //             />
-        //           </Box>
-        //           <Typography
-        //             gridColumn={"4/2"} 
-        //             gridRow={"0.5"}
-        //             variant={"h5"}
-        //           > 
-        //             {infoSocialEco[0][0]}: <strong>{infoSocialEco[0][1].toFixed(2)}</strong> 
-        //           </Typography>
-        //           <Typography
-        //             gridColumn={"4/2"} 
-        //             gridRow={"0.5"}  
-        //             variant={"h5"}
-        //           > 
-        //             {infoSocialEco[1][0]}: <strong>{infoSocialEco[1][1].toFixed(2)}</strong> 
-        //           </Typography>
-        //         </Typography>
-        //         {/* Usuarios Propietarios */}
-        //         <Typography
-        //           variant={"h5"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 1"}
-        //           gridRow={"span 1"}
-        //         >
-        //           <HouseIcon fontSize={"large"} sx={{ mr: "15px" }} />
-        //           {infoSocialEco[6][0]}: <strong>{infoSocialEco[6][1].toFixed(2)}</strong>
-        //         </Typography>
-        //         {/* Edad Media de los usuarios */}
-        //         <Typography
-        //           variant={"h5"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 1"}
-        //           gridRow={"span 1"}
-        //           display={"grid"}
-        //           gridTemplateColumns={"repeat(2,150px)"}
-        //           gridTemplateRows={"repeat(2, 1fr)"}
-        //         >
-        //           <Box
-        //             gridColumn={"span 2"} 
-        //             gridRow={"span 2"}  
+          <Box
+            gridColumn={"span 3"}
+            gridRow={"span 3"}
+            backgroundColor={colors.gray[900]}
+            display={"grid"}
+            gridTemplateColumns={"repeat(1,1fr)"}
+            gridTemplateRows={"repeat(4, 1fr)"}
+            padding={"10px 5px 10px 20px"}
+          >
+            {/* Datos relevantes (barrio selecionada, total de sumatorío de interacciones, genero de las personas) */}
+            <Typography
+              variant={"h3"} 
+              color={colors.gray[100]}
+              gridRow={"span 1"}
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"center"}
+            >
+              <strong>DATOS RELEVANTES</strong>
+            </Typography>
+            <Typography
+              variant={"h5"}
+              color={colors.gray[100]}
+              gridRow={"span 1"}
+            >
+              <FamilyRestroomIcon fontSize={"large"} sx={{ mr: "15px" }} />
+              Barrio Seleccionado:<strong>{dataBarrioSelected.length > 0 ? (
+                dataBarrioSelected[0].barrio
+              ) :(
+                "Loading..."
+              )
+              }</strong>
+            </Typography>
+            <Typography
+              variant={"h5"}
+              color={colors.gray[100]}
+              gridRow={"span 1"}
+            >
+              <CallIcon fontSize={"large"} sx={{ mr: "15px" }} />
+              Total de Interacciones: <strong>{dataBarrioSelected.length > 0 ? (
+                dataBarrioSelected[0].sumatorio_interaciones
+              ) :(
+                "Loading..."
+              )
+              }</strong>
+            </Typography>
+            <Typography
+                  variant={"h5"}
+                  color={colors.gray[100]}
+                  gridRow={"span 1"}
+                  display={"grid"}
+                  gridTemplateColumns={"repeat(2,1fr)"}
+                  gridTemplateRows={"repeat(4, 1fr)"}
+                >
+                  <Box
+                    gridColumn={"span 2"} 
+                    gridRow={"span 1"}  
+                    display="flex"
+                  >
+                    <WcIcon 
+                      fontSize={"large"}
+                      sx={{ mr: "15px" }}
+                    />
+                    <Typography
+                      variant={"h5"}
+                    > 
+                      Número de usuarios totales: <strong>{dataBarrioSelected.length > 0 ? (
+                        dataBarrioSelected[0].num_total_usuarios
+                      ) :(
+                        "Loading..."
+                      )
+                      }</strong>
+                    </Typography>
+                  </Box>
+                  <Typography
+                    gridColumn={"1"} 
+                    gridRow={"2"}
+                    variant={"h5"}
+                    sx={{ ml: "75px" }}
+                  > 
+                    Mujeres: <strong>{dataBarrioSelected.length > 0 ? (
+                        dataBarrioSelected[0].num_total_usuarios_femeninos
+                      ) :(
+                        "Loading..."
+                      )
+                      }</strong>
+                  </Typography>
+                  <Typography
+                    gridColumn={"1"} 
+                    gridRow={"3"} 
+                    variant={"h5"}
+                    sx={{ ml: "75px" }}
+                  > 
+                    Hombres: <strong>{dataBarrioSelected.length > 0 ? (
+                        dataBarrioSelected[0].num_total_usuarios_masculinos
+                      ) :(
+                        "Loading..."
+                      )
+                      }</strong>
+                  </Typography>
+                </Typography>
+          </Box>
+          {/* Gráfico de tipo de atención */}
+          <Box
+            gridColumn={"span 3"}
+            gridRow={"span 3"}
+            backgroundColor={colors.gray[900]}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            padding={"10px 5px 10px 5px"}
+            flexDirection={"column"}
+          >
+            {dataBarrioSelected.length > 0 ? (
+              <>
+                <Typography variant={"h3"} color={colors.gray[100]}>
+                  <strong>Tipo de Atención</strong>
+                </Typography>
+                <BarChartBarrios1 data={dataBarrioSelected[0].grafico_tipo_atencion}/>
+              </>
 
-        //           >
-        //             <Diversity3Icon 
-        //               fontSize={"large"} 
-        //               sx={{ mr: "15px" }} 
-        //             />
-        //             {infoSocialEco[2][0]}: <strong>{infoSocialEco[2][1]}</strong>
-        //           </Box>
-        //           <Box 
-        //             component="ul" 
-        //             sx={{ marginLeft: 5, }}
-        //           >
-        //             <li >
-        //               <Box sx={{ whiteSpace: "nowrap" }}>
-        //                 {infoSocialEco[3][0]}: <strong>{infoSocialEco[3][1]}</strong>
-        //               </Box>
-        //             </li>
-        //             <li >
-        //               <Box sx={{ whiteSpace: "nowrap" }}>
-        //                 {infoSocialEco[4][0]}: <strong>{infoSocialEco[4][1]}</strong>
-        //               </Box>
-        //             </li>
-        //           </Box>
-        //         </Typography>
-        //         {/* Usuarios Empleados */}
-        //         <Typography
-        //           variant={"h5"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 1"}
-        //           gridRow={"span 1"}
-        //         >
-        //           <HailIcon fontSize={"large"} sx={{ mr: "15px" }} />
-        //           {infoSocialEco[7][0]}: <strong>{infoSocialEco[7][1]}</strong>
-        //         </Typography>
-        //         {/* Bono Social */}
-        //         <Typography
-        //           variant={"h5"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 1"}
-        //           gridRow={"span 1"}
-        //         >
-        //           <Diversity1Icon fontSize={"large"} sx={{ mr: "15px" }} />
-        //           {infoSocialEco[5][0]}: <strong>{infoSocialEco[5][1].toFixed(2)}</strong>
-        //         </Typography>
-        //         {/* Disponibilidad de Ascensor */}
-        //         <Typography
-        //           variant={"h5"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 1"}
-        //           gridRow={"span 1"}
-        //         >
-        //           <ElevatorIcon fontSize={"large"} sx={{ mr: "15px" }} />
-        //           {infoSocialEco[8][0]}: <strong>{infoSocialEco[8][1]}</strong>
-        //         </Typography>
-        //       </>
-        //     ) : (
-        //       <Typography variant={"h5"} color={colors.gray[100]}>
-        //         Loading...
-        //       </Typography>
-        //     )}
-        //   </Box>          
-        //   <Box
-        //     gridColumn={"span 5"}
-        //     gridRow={"span 1"}
-        //     backgroundColor={colors.gray[900]}
-        //     display={"grid"}
-        //     gridTemplateColumns={"repeat(2,1fr)"}
-        //     gridTemplateRows={"repeat(2, 1fr)"}
-        //     padding={"10px 5px 10px 20px"}
-        //   >
-        //     {infoEvol.length > 0 ? (
-        //       <>
-        //         <Typography
-        //           variant={"h3"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 2"}
-        //           gridRow={"span 1"}
-        //         >
-        //           <strong>INFORAMACIÓN DE EVOLUCIÓN</strong>
-        //         </Typography>
-        //         <Typography
-        //           variant={"h5"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 1"}
-        //           gridRow={"span 1"}
-        //         >
-        //           <GroupAddIcon fontSize={"large"} sx={{ mr: "15px" }} />
-        //           {infoEvol[0][0]}: <strong>{infoEvol[0][1].toFixed(2)}</strong>
-        //         </Typography>
-        //         <Typography
-        //           variant={"h5"}
-        //           color={colors.gray[100]}
-        //           gridColumn={"span 1"}
-        //           gridRow={"span 1"}
-        //         >
-        //           <ApartmentIcon fontSize={"large"} sx={{ mr: "15px" }} />
-        //           {infoEvol[1][0]}: <strong>{infoEvol[1][1]}</strong>
-        //         </Typography>
-        //       </>
-        //     ) : (
-        //       <Typography variant={"h5"} color={colors.gray[100]}>
-        //         Loading...
-        //       </Typography>
-        //     )}
-        //   </Box>
-        //   <Box
-        //     gridColumn={"span 7"}
-        //     gridRow={"span 3"}
-        //     backgroundColor={colors.gray[900]}
-        //     display={"flex"}
-        //     alignItems={"center"}
-        //     justifyContent={"center"}
-        //     padding={"10px 5px 10px 5px"}
-        //     flexDirection={"column"}
-        //   >
-        //     <Typography variant={"h6"} color={colors.gray[100]}>
-        //       Evolución del Número de Usuarios por mes y las Derivaciones de
-        //       Servicios Sociales
-        //     </Typography>
-        //     <LineChart data={lineData1} markers={lineMarkers1} />
-        //   </Box>
-        //   <Box
-        //     gridColumn={"span 5"}
-        //     gridRow={"span 2"}
-        //     backgroundColor={colors.gray[900]}
-        //     display={"flex"}
-        //     alignItems={"center"}
-        //     justifyContent={"center"}
-        //     padding={"10px 5px 10px 5px"}
-        //     flexDirection={"column"}
-        //   >
-        //     <Typography variant={"h5"} color={colors.gray[100]}>
-        //       Motivo de la visita
-        //     </Typography>
-        //     <BarChartDash2 data={barData2} />
-        //   </Box>
-}
+            ) : (
+              <Typography variant={"h5"} color={colors.gray[100]}>
+                Loading...
+              </Typography>
+            )}
+          </Box>
+          <Box
+            gridColumn={"span 5"}
+            gridRow={"span 3"}
+            backgroundColor={colors.gray[900]}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            flexDirection={"column"}
+          >
+            <Typography variant={"h3"} color={colors.gray[100]}>
+              Cuandos se pulse todos gráfico de motivo de a consulta por barrios
+            </Typography>
+          </Box>
+          <Box
+            gridColumn={"span 3"}
+            gridRow={"span 3"}
+            backgroundColor={colors.gray[900]}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            flexDirection={"column"}
+          >
+            <Typography variant={"h3"} color={colors.gray[100]}>
+              Gráfico de como nos han conocido
+            </Typography>
+          </Box>
+          <Box
+            gridColumn={"span 3"}
+            gridRow={"span 3"}
+            backgroundColor={colors.gray[900]}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            flexDirection={"column"}
+          >
+            <Typography variant={"h3"} color={colors.gray[100]}>
+            Gráfico motivo de la consulta
+            </Typography>
+          </Box>
+          <Box
+            gridColumn={"span 5"}
+            gridRow={"span 3"}
+            backgroundColor={colors.gray[900]}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            flexDirection={"column"}
+          >
+            <Typography variant={"h3"} color={colors.gray[100]}>
+              Cuando se pulse todos gráfico de usuarios por barrios
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </motion.div>
