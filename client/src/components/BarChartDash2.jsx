@@ -49,7 +49,7 @@ function BarChartDash2({ data }) {
       }}
       keys={["valor"]}
       indexBy="id"
-      margin={{ top: 20, right: 0, bottom: 30, left: 190 }}
+      margin={{ top: 20, right: 9, bottom: 30, left: 190 }}
       padding={0.4}
       valueScale={{ type: "linear" }}
       valueFormat=" >-"
