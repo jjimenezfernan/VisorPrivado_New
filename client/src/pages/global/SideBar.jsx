@@ -51,7 +51,7 @@ function SideBar() {
                 alignItems="center"
               >
                 <Typography variant="h3" color={colors.gray[200]}>
-                  EPIU Getafe
+                  EMSV Getafe
                 </Typography>
                 <IconButton>
                   <MenuOutlinedIcon />
