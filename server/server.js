@@ -954,7 +954,8 @@ app.get("/api/barrios_dashboard", (req, res) => {
     (item) => Array.isArray(item) && item.length > 0
   );
 
-  const columnasDatos = globalDataFilter.shift();
+  // Para eliminar la fila con el nombre de las columnas de los datos
+  globalDataFilter.shift();
 
   // Para convertir el array de arrays en un array de objetos
   const globalDataObjects = [];
@@ -974,98 +975,107 @@ app.get("/api/barrios_dashboard", (req, res) => {
     globalDataObjects.push(objeto);
     
   });
-
-  // Para sacar todas las columnas para los graficos
-  const como_nos_has_conocido = [new Set(globalDataObjects.map(obj => obj.como_nos_has_conocido))];
-  const motivo_de_la_consulta = [new Set(globalDataObjects.map(obj => obj.motivo_de_la_consulta))];
-
+  
+  // Al sacar los indices de los graficos y de los barrios de esta manera, si el dia de mañana se añade
+  // a la columna un nuevo tipo de valor, no habría que cambiar nada en el código
   // Para sacar los datos de los diferentes barrios
   const barrios = ["Todos los Barrios", ...new Set(globalDataObjects.map(obj => obj.barrio))];
+  // Para el gráfico de como nos han conocido
+  const como_nos_has_conocido = [...new Set(globalDataObjects.map(obj => obj.como_nos_has_conocido))];
+  // Para el gráfico de motivo de la consulta 
+  const motivo_de_la_consulta = [...new Set(globalDataObjects.map(obj => obj.motivo_de_la_consulta))];
 
-  // Para parsear los datos de los barrios
+  // Datos clasificados por barrio y parseados
   const globalDataParsed = [];
-  let allBarrios = {
-      barrio: "Todos los Barrios",
-      sumatorio_interaciones: 0,
-      num_total_usuarios: 0,
-      num_total_usuarios_femeninos: 0,
-      num_total_usuarios_masculinos: 0,
-      grafico_tipo_atencion: [
-        { id: "Atención telefónica", valor: 0, valorColor: colors[0] },
-        { id: "Atención email", valor: 0, valorColor: colors[1] },
-        { id: "Atención presencial", valor: 0, valorColor: colors[2] },
-      ],
-      grafico_como_nos_has_conocido: [
-      ],
-      grafico_motivo_de_la_consulta: [
-      ],
-  };
 
-  // Para parsear los datos de los barrios
-  let barrioData, sumatorio_interaciones, num_total_usuarios, num_total_usuarios_femeninos, 
-    num_total_usuarios_masculinos, atencion_telefonica, atencion_email, atencion_presencial;
+  // Incializamos el array de objetos con los datos de los barrios
   barrios.forEach(barrio => {
-    // Para que no se repita el barrio "Todos los Barrios"
     if (barrio === "Todos los Barrios") {
-      return;
+      globalDataParsed.push({
+        barrio: barrio,
+        sumatorio_interaciones: 0,
+        num_total_usuarios: 0,
+        num_total_usuarios_femeninos: 0,
+        num_total_usuarios_masculinos: 0,
+        grafico_tipo_atencion: [
+          { id: "Atención telefónica", valor: 0, valorColor: colors[0] },
+          { id: "Atención email", valor: 0, valorColor: colors[1] },
+          { id: "Atención presencial", valor: 0, valorColor: colors[2] },
+        ],
+        grafico_como_nos_has_conocido: 
+          como_nos_has_conocido.map((item, index) => ({id: item, valor: 0, valorColor: colors[index]})),
+        grafico_motivo_de_la_consulta:
+          motivo_de_la_consulta.map((item, index) => ({id: item, valor: 0, valorColor: colors[index]})),
+        gráfico_usuarios_por_barrio:
+          // Quitamos el primer elemento que es "Todos los Barrios"
+          barrios.slice(1).map((item, index) => ({id: item, valor: 0, valorColor: colors[index]})),
+      });
     }
-    barrioData = globalDataObjects.filter(obj => obj.barrio === barrio);
-    sumatorio_interaciones = 0;
-    num_total_usuarios = 0;
-    num_total_usuarios_femeninos = 0;
-    num_total_usuarios_masculinos = 0;
-    atencion_telefonica = 0;
-    atencion_email = 0;
-    atencion_presencial = 0;
-    barrioData.forEach(obj => {
-      sumatorio_interaciones += obj.sumatorio_interaciones;
-      num_total_usuarios += 1;
-      if(obj.genero === "Femenino"){
-        num_total_usuarios_femeninos += 1;
-      }
-      if (obj.genero === "Masculino") {
-        num_total_usuarios_masculinos += 1;
-      }
-      if (obj.atenciones_telefónicas) {
-        atencion_telefonica += obj.atenciones_telefónicas;
-      }
-      if (obj.atenciones_email) {
-        atencion_email += obj.atenciones_email;
-      }
-      if (obj.atenciones_presenciales) {
-        atencion_presencial += obj.atenciones_presenciales;
-      }
-    });
-
-    // Sumarle a la seleccion de todos los barrios los datos de cada barrio
-    allBarrios.sumatorio_interaciones += sumatorio_interaciones;
-    allBarrios.num_total_usuarios += num_total_usuarios;
-    allBarrios.num_total_usuarios_femeninos += num_total_usuarios_femeninos;
-    allBarrios.num_total_usuarios_masculinos += num_total_usuarios_masculinos;
-    allBarrios.grafico_tipo_atencion[0].valor += atencion_telefonica;
-    allBarrios.grafico_tipo_atencion[1].valor += atencion_email;
-    allBarrios.grafico_tipo_atencion[2].valor += atencion_presencial;
-
-    globalDataParsed.push({
-      barrio,
-      sumatorio_interaciones,
-      num_total_usuarios,
-      num_total_usuarios_femeninos,
-      num_total_usuarios_masculinos,
-      grafico_tipo_atencion: [
-        { id: "Atención telefónica", valor: atencion_telefonica, valorColor: colors[0] },
-        { id: "Atención email", valor: atencion_email, valorColor: colors[1] },
-        { id: "Atención presencial", valor: atencion_presencial, valorColor: colors[2] },
-      ]
-    });
+    else{
+      globalDataParsed.push({
+        barrio: barrio,
+        sumatorio_interaciones: 0,
+        num_total_usuarios: 0,
+        num_total_usuarios_femeninos: 0,
+        num_total_usuarios_masculinos: 0,
+        grafico_tipo_atencion: [
+          { id: "Atención telefónica", valor: 0, valorColor: colors[0] },
+          { id: "Atención email", valor: 0, valorColor: colors[1] },
+          { id: "Atención presencial", valor: 0, valorColor: colors[2] },
+        ],
+        grafico_como_nos_has_conocido: 
+          como_nos_has_conocido.map((item, index) => ({id: item, valor: 0, valorColor: colors[index]})),
+        grafico_motivo_de_la_consulta:
+          motivo_de_la_consulta.map((item, index) => ({id: item, valor: 0, valorColor: colors[index]})),
+      });
+    }
   });
 
-  // Añadir los datos de todos los barrios
-  globalDataParsed.push(allBarrios);
+  // Para cada objeto obtenido del excel, sumamos los datos
+  globalDataObjects.forEach(obj => {
+    const index = barrios.indexOf(obj.barrio);
+    globalDataParsed[index].sumatorio_interaciones += obj.sumatorio_interaciones;
+    globalDataParsed[index].num_total_usuarios += 1;
+
+    // Para los datos globales del gráfico de usuarios por barrio
+    globalDataParsed[0].gráfico_usuarios_por_barrio[index - 1].valor += 1;
+
+    // Para objeto de todos los barrios en conjunto
+    globalDataParsed[0].sumatorio_interaciones += obj.sumatorio_interaciones;
+    globalDataParsed[0].num_total_usuarios += 1;
+
+    if(obj.genero === "Femenino"){
+      globalDataParsed[index].num_total_usuarios_femeninos += 1;
+      globalDataParsed[0].num_total_usuarios_femeninos += 1;
+    }
+    if (obj.genero === "Masculino") {
+      globalDataParsed[index].num_total_usuarios_masculinos += 1;
+      globalDataParsed[0].num_total_usuarios_masculinos += 1;
+    }
+    if (obj.atenciones_telefónicas) {
+      globalDataParsed[index].grafico_tipo_atencion[0].valor += obj.atenciones_telefónicas;
+      globalDataParsed[0].grafico_tipo_atencion[0].valor += obj.atenciones_telefónicas;
+    }
+    if (obj.atenciones_email) {
+      globalDataParsed[index].grafico_tipo_atencion[1].valor += obj.atenciones_email;
+      globalDataParsed[0].grafico_tipo_atencion[1].valor += obj.atenciones_email
+    }
+    if (obj.atenciones_presenciales) {
+      globalDataParsed[index].grafico_tipo_atencion[2].valor += obj.atenciones_presenciales;
+      globalDataParsed[0].grafico_tipo_atencion[2].valor += obj.atenciones_presenciales;
+    }
+    if (obj.como_nos_has_conocido) {
+      globalDataParsed[index].grafico_como_nos_has_conocido[como_nos_has_conocido.indexOf(obj.como_nos_has_conocido)].valor += 1;
+      globalDataParsed[0].grafico_como_nos_has_conocido[como_nos_has_conocido.indexOf(obj.como_nos_has_conocido)].valor += 1;
+    }
+    if (obj.motivo_de_la_consulta) {
+      globalDataParsed[index].grafico_motivo_de_la_consulta[motivo_de_la_consulta.indexOf(obj.motivo_de_la_consulta)].valor += 1;
+      globalDataParsed[0].grafico_motivo_de_la_consulta[motivo_de_la_consulta.indexOf(obj.motivo_de_la_consulta)].valor += 1;
+    }
+  });
 
   const data = {
     barrios,
-    columnasDatos,
     globalDataParsed,
   };
   res.json(data);

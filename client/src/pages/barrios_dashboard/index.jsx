@@ -3,24 +3,14 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import SubBar from "../global/SubBar";
 import BarChartBarrios1 from "../../components/BarChartBarrios1";
-import BarChartDash2 from "../../components/BarChartDash2";
-import BarChartDash3 from "../../components/BarChartDash3";
-import BarChartDash4 from "../../components/BarChartDash4";
-import LineChart from "../../components/LineChartDash";
+import BarChartBarrios2 from "../../components/BarChartBarrios2";
+import BarChartBarrios3 from "../../components/BarChartBarrios3";
+import BarChartBarriosGlobal from "../../components/BarChartBarriosGlobal";
 import axios from "axios";
 import { motion } from "framer-motion";
 import FamilyRestroomIcon from "@mui/icons-material/FamilyRestroom";
-import AdfScannerIcon from "@mui/icons-material/AdfScanner";
 import CallIcon from "@mui/icons-material/Call";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import WcIcon from '@mui/icons-material/Wc';
-import Diversity3Icon from '@mui/icons-material/Diversity3';
-import HouseIcon from '@mui/icons-material/House';
-import HailIcon from '@mui/icons-material/Hail';
-import Diversity1Icon from '@mui/icons-material/Diversity1';
-import ElevatorIcon from '@mui/icons-material/Elevator';
-import ApartmentIcon from '@mui/icons-material/Apartment';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import {DIRECTION} from "../../data/direccion_server";
 import ButtonBarriosDashboard from "../../components/ButtonBarriosDashboard";
 
@@ -32,6 +22,7 @@ function BarriosDashboard() {
 
   const [globalData, setGlobalData] = useState([]);
   const [barrios, setbarrios] = useState([]);
+  const [barrioSelected, setBarrioSelected] = useState("");
   const [dataBarrioSelected, setDataBarrioSelected] = useState([]);
 
   useEffect(() => {
@@ -49,21 +40,17 @@ function BarriosDashboard() {
     });
   }, []);
 
-  // useEffect se ejecuta cuando dataBarrioSelected cambia
-  useEffect(() => {
-    console.log("Barrio seleccionado (después del cambio):", dataBarrioSelected);
-    // Aquí puedes ejecutar cualquier lógica adicional
-  }, [dataBarrioSelected]);
-
-  // useEffect se ejecuta solo 1 vez al principio del programa y sirve para inicializar el valor de dataBarrioSelected
+  // useEffect se ejecuta solo 1 vez al principio del programa, sirve para inicializar el valor de dataBarrioSelected y barrioSelected
   useEffect(() => {
     setDataBarrioSelected(globalData.filter( (item) => item.barrio === "Todos los Barrios"));
+    setBarrioSelected("Todos los Barrios");
   }, [globalData]);
 
   function updateDataBarriosSelected(barrioSelected){
     console.log("Barrio seleccionado: ", barrioSelected);
     // Filtramos los datos para mostrar solo los del barrio seleccionado
     setDataBarrioSelected(globalData.filter( (item) => item.barrio === barrioSelected));
+    setBarrioSelected(barrioSelected);
   }
   return (
     <motion.div
@@ -144,7 +131,7 @@ function BarriosDashboard() {
             >
               <FamilyRestroomIcon fontSize={"large"} sx={{ mr: "15px" }} />
               Barrio Seleccionado:<strong>{dataBarrioSelected.length > 0 ? (
-                dataBarrioSelected[0].barrio
+                barrioSelected
               ) :(
                 "Loading..."
               )
@@ -244,6 +231,66 @@ function BarriosDashboard() {
               </Typography>
             )}
           </Box>
+          {/* Gráfico de usuarios por barrios o sankey*/}
+          <Box
+            gridColumn={"span 5"}
+            gridRow={"span 3"}
+            //backgroundColor={colors.gray[900]}
+            backgroundColor={barrioSelected === "Todos los Barrios" ? (colors.gray[900]) : (colors.gray[800])}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            padding={"10px 5px 10px 5px"}
+            flexDirection={"column"}
+          >
+            {dataBarrioSelected.length > 0 ? (
+              barrioSelected === "Todos los Barrios" ? (
+                <>
+                  <Typography variant={"h3"} color={colors.gray[100]}>
+                    <strong>Usuarios Por Barrios</strong>
+                  </Typography>
+                  <BarChartBarriosGlobal data={dataBarrioSelected[0].gráfico_usuarios_por_barrio}/>
+                </>
+              ) : (
+                <>
+                  <Typography variant={"h3"} color={colors.gray[100]}>
+                    <strong></strong>
+                  </Typography>
+                </>
+              )
+
+            ) : (
+              <Typography variant={"h5"} color={colors.gray[100]}>
+                Loading...
+              </Typography>
+            )}
+          </Box>
+          {/* Gráfico de como nos han conocido */}
+          <Box
+            gridColumn={"span 6"}
+            gridRow={"span 3"}
+            backgroundColor={colors.gray[900]}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            padding={"10px 5px 10px 5px"}
+            flexDirection={"column"}
+          >
+            {dataBarrioSelected.length > 0 ? (
+              <>
+                <Typography variant={"h3"} color={colors.gray[100]}>
+                  <strong>Como nos han conocido</strong>
+                </Typography>
+                <BarChartBarrios2 data={dataBarrioSelected[0].grafico_como_nos_has_conocido}/>
+              </>
+
+            ) : (
+              <Typography variant={"h5"} color={colors.gray[100]}>
+                Loading...
+              </Typography>
+            )}
+          </Box>
+          {/* Gráfico de motivo de la consulta */}
           <Box
             gridColumn={"span 5"}
             gridRow={"span 3"}
@@ -251,50 +298,22 @@ function BarriosDashboard() {
             display={"flex"}
             alignItems={"center"}
             justifyContent={"center"}
+            padding={"10px 5px 10px 5px"}
             flexDirection={"column"}
           >
-            <Typography variant={"h3"} color={colors.gray[100]}>
-              Cuandos se pulse todos gráfico de motivo de a consulta por barrios
-            </Typography>
-          </Box>
-          <Box
-            gridColumn={"span 3"}
-            gridRow={"span 3"}
-            backgroundColor={colors.gray[900]}
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            flexDirection={"column"}
-          >
-            <Typography variant={"h3"} color={colors.gray[100]}>
-              Gráfico de como nos han conocido
-            </Typography>
-          </Box>
-          <Box
-            gridColumn={"span 3"}
-            gridRow={"span 3"}
-            backgroundColor={colors.gray[900]}
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            flexDirection={"column"}
-          >
-            <Typography variant={"h3"} color={colors.gray[100]}>
-            Gráfico motivo de la consulta
-            </Typography>
-          </Box>
-          <Box
-            gridColumn={"span 5"}
-            gridRow={"span 3"}
-            backgroundColor={colors.gray[900]}
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            flexDirection={"column"}
-          >
-            <Typography variant={"h3"} color={colors.gray[100]}>
-              Cuando se pulse todos gráfico de usuarios por barrios
-            </Typography>
+            {dataBarrioSelected.length > 0 ? (
+              <>
+                <Typography variant={"h3"} color={colors.gray[100]}>
+                  <strong>Motivo de la consulta</strong>
+                </Typography>
+                <BarChartBarrios3 data={dataBarrioSelected[0].grafico_motivo_de_la_consulta}/>
+              </>
+
+            ) : (
+              <Typography variant={"h5"} color={colors.gray[100]}>
+                Loading...
+              </Typography>
+            )}
           </Box>
         </Box>
       </Box>

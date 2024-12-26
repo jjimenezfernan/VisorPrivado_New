@@ -1,5 +1,5 @@
 /**
- * Grafico de barras horizontales para la estadistica de atenciones por barrio
+ * Grafico de barras horizontales para la estadistica de como nos han conocido
  */
 
 import { ResponsiveBar } from "@nivo/bar";
@@ -7,7 +7,7 @@ import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import { getLastPartOfString } from "../utils/auxUtils";
 
-function BarChartBarrios1({ data }) {
+function BarChartBarrios2({ data }) {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const getLabelTextColor = (value) => {
@@ -53,11 +53,11 @@ function BarChartBarrios1({ data }) {
       }}
       keys={["valor"]}
       indexBy="id"
-      margin={{ top: 20, right: 5, bottom: 30, left: 50 }}
+      margin={{ top: 20, right: 10, bottom: 40, left: 120 }}
       padding={0.4}
       valueScale={{ type: "linear" }}
       valueFormat=" >-"
-      //layout="horizontal"
+      layout="horizontal"
       indexScale={{ type: "band", round: true }}
       colors={({ id, data }) => String(data[`${id}Color`])}
       borderColor={{
@@ -70,7 +70,7 @@ function BarChartBarrios1({ data }) {
         tickSize: 0,
         tickPadding: 5,
         tickRotation: 0,
-        legend: "Tipo de antención",
+        legend: "Nº de Usuarios",
         legendPosition: "middle",
         legendOffset: 25,
       }}
@@ -78,7 +78,7 @@ function BarChartBarrios1({ data }) {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: "Nº de atenciones",
+        legend: "",
         legendPosition: "middle",
         legendOffset: -43,
       }}
@@ -120,4 +120,4 @@ function BarChartBarrios1({ data }) {
   );
 }
 
-export default BarChartBarrios1;
+export default BarChartBarrios2;
