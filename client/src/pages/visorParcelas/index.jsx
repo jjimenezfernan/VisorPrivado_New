@@ -4,13 +4,13 @@ import { tokens } from "../../theme";
 import axios from "axios";
 import { motion } from "framer-motion";
 import SubBar from "../global/SubBar";
-import Map from "../../components/MapEPIU";
-import { useMapEPIUContext } from "../../components/MapEPIUProvider";
-import { mapEPIUKeys, readableValueEPIU } from "../../utils/auxUtils";
+import Map from "../../components/MapParcelas";
+import { useMapParcelasContext } from "../../components/MapParcelasProvider";
+import { mapParcelasKeys, readableValueParcelas } from "../../utils/auxUtils";
 import {
   Selections as Selections,
   pathToSelect,
-} from "../../constants/MapConstantsEPIU";
+} from "../../constants/MapConstantsParcelas";
 
 const keysPanel1 = [
   "ref_catastral",
@@ -51,7 +51,7 @@ const keysPanel4 = [
   "calificacion_demanda_calefaccion"
 ];
 
-const porcEPIU = [
+const porcParcelas = [
   "Building_Getafe_porc viv OHS",
   "Building_Getafe_porc retraso pago facturas",
   "Building_Getafe_porc alquiler",
@@ -92,25 +92,25 @@ const availableSelections = [
 
 import {DIRECTION} from "../../data/direccion_server";
 
-const baseURL = DIRECTION + "/api/visor-epiu";
+const baseURL = DIRECTION + "/api/visor-parcelas";
 
-function VisorEPIU() {
+function VisorParcelas() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [geoEPIU, setEPIU] = useState({});
-  const [geoEPIULimites, setEPIULimites] = useState({});
+  const [geoParcelas, setParcelas] = useState({});
+  const [geoParcelasLimites, setParcelasLimites] = useState({});
   const [globales, setGlobales] = useState({});
   const mapRef = useRef();
-  const { infoValue, selectionValue, updateSelection } = useMapEPIUContext();
+  const { infoValue, selectionValue, updateSelection } = useMapParcelasContext();
 
   useLayoutEffect(() => {
     axios.get(baseURL).then((res) => {
-      const data1 = res.data.geoEPIU;
-      const data2 = res.data.globalesEPIU;
-      const data3 = res.data.geoEPIULimites;
-      setEPIU(data1);
+      const data1 = res.data.geoParcelas;
+      const data2 = res.data.globalesParcelas;
+      const data3 = res.data.geoParcelasLimites;
+      setParcelas(data1);
       setGlobales(data2);
-      setEPIULimites(data3);
+      setParcelasLimites(data3);
       console.log("Created by Khora Urban Thinkers");
       console.log("Contact with us in https://khoraurbanthinkers.es/en/home-en/")
       console.log("Our X account https://x.com/khoraurban")
@@ -185,7 +185,7 @@ function VisorEPIU() {
               color={colors.gray[100]}
               style={{ flex: 1, textAlign: "left" }}
             >
-              {mapEPIUKeys.get(key)}:
+              {mapParcelasKeys.get(key)}:
             </Typography>
           </Link>
           <Typography
@@ -227,7 +227,7 @@ function VisorEPIU() {
             color={colors.gray[100]}
             style={{ flex: 3, textAlign: "left" }}
           >
-            {mapEPIUKeys.get(key)}:
+            {mapParcelasKeys.get(key)}:
           </Typography>
         </Link>
         <Typography
@@ -236,8 +236,8 @@ function VisorEPIU() {
           fontWeight={700}
           style={{ flex: 2, textAlign: "right" }}
         >
-          {value !== null ? readableValueEPIU(key, value) : "-"}
-          {porcEPIU.includes(key) && value !== null ? "%" : ""}
+          {value !== null ? readableValueParcelas(key, value) : "-"}
+          {porcParcelas.includes(key) && value !== null ? "%" : ""}
         </Typography>
       </div>
     ));
@@ -276,7 +276,7 @@ function VisorEPIU() {
           style={{ flex: 1, textAlign: "center" }}
         >
           {globales[key]}
-          {porcEPIU.includes(key) ? "%" : ""}
+          {porcParcelas.includes(key) ? "%" : ""}
         </Typography>
       </div>
     );
@@ -293,7 +293,7 @@ function VisorEPIU() {
         title={"Visor de Datos Urbanos – Escala Parcelas "}
         crumbs={[
           ["Inicio", "/"],
-          ["Visor EPIU", "/visor-epiu"],
+          ["Visor Parcelas", "/visor-parcelas"],
         ]}
         info={{
           title: "Visor de Datos Urbanos – Escala Parcelas ",
@@ -304,29 +304,6 @@ function VisorEPIU() {
               sx={{ color: colors.gray[400] }}
             >
               <p>
-                <strong>El visor de datos urbanos del proyecto EPIU</strong>{" "}
-                nace con el objetivo de contextualizar espacialmente los datos
-                sobre vulnerabilidad energ&eacute;tica del municipio de Getafe.{" "}
-              </p>
-              <p>
-                Los resultados de los indicadores se han obtenido con los datos
-                propios generados a trav&eacute;s del proyecto EPIU &ndash;
-                Oficina de Hogares Saludables-, y mediante las fuentes oficiales
-                m&aacute;s actualizadas -Catastro e INE 2020 y 2022-.&nbsp;
-              </p>
-              <p>
-                La escala catastral tiene la funci&oacute;n de aportar un{" "}
-                <strong>enfoque operativo</strong>, para representar
-                cartogr&aacute;ficamente las caracter&iacute;sticas
-                socioecon&oacute;micas y habitacionales de las personas usuarias
-                de la Oficina de Hogares Saludables, y la distribuci&oacute;n de
-                las personas beneficiarias de servicios y rehabilitaciones a
-                trav&eacute;s del proyecto EPIU.{" "}
-              </p>
-              <p>
-                Actualmente cuenta con un{" "}
-                <strong>Intervalo de Confianza</strong> de 5,9 % con 921
-                expedientes registrados.&nbsp;
               </p>
             </Typography>
           ),
@@ -349,11 +326,11 @@ function VisorEPIU() {
             justifyContent={"space-evenly"}
             flexDirection={"column"}
           >
-            {Object.keys(geoEPIU).length > 0 ? ( // Check if geojson is not empty
+            {Object.keys(geoParcelas).length > 0 ? ( // Check if geojson is not empty
               <Map
                 mapRef={mapRef}
-                geojson={geoEPIU}
-                geojsonLimites={geoEPIULimites}
+                geojson={geoParcelas}
+                geojsonLimites={geoParcelasLimites}
               />
             ) : (
               <Typography variant="h5" color={colors.gray[100]}>
@@ -575,4 +552,4 @@ function VisorEPIU() {
   );
 }
 
-export default VisorEPIU;
+export default VisorParcelas;

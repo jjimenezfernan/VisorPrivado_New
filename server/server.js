@@ -16,13 +16,10 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
-const geoSSCCPath = path.join(__dirname, "resources/map/SSCC.geojson");
-const geoEPIUPath = path.join(__dirname, "resources/map/BuildingEPIU.geojson");
-const geoEPIULimitesPath = path.join(
-  __dirname,
-  "resources/map/LimitesEPIU.geojson"
-);
-const geoBarrioPath = path.join(__dirname, "resources/map/Barrio.geojson");
+const geoSSCCPath = path.join(__dirname, "resources/map/sscc.geojson");
+const geoParcelasPath = path.join(__dirname, "resources/map/building_parcelas.geojson");
+const geoParcelasLimitesPath = path.join(__dirname,"resources/map/limites_parcelas.geojson");
+const geoBarrioPath = path.join(__dirname, "resources/map/barrio.geojson");
 
 const dataPathExcel_dashboard = "resources/data_dashboard.xlsx";
 const dataPathExcel_derivacion = "resources/data_derivacion.xlsx";
@@ -449,7 +446,7 @@ app.get("/api/visor-barrio", async (req, res) => {
     });
 });
 
-const porcEPIU = [
+const porcParcelas = [
   "Building_Getafe_porc viv OHS",
   "Building_Getafe_porc retraso pago facturas",
   "Building_Getafe_porc alquiler",
@@ -460,7 +457,7 @@ const porcEPIU = [
 ];
 
 //value represents the nº of instances
-const mediasGlobalesKeysEPIU = {
+const mediasGlobalesKeysParcelas = {
   "ano_constru": 0,
   "Building_Getafe_porc viv OHS": 0,
   "Building_Getafe_porc retraso pago facturas": 0,
@@ -476,12 +473,12 @@ const mediasGlobalesKeysEPIU = {
   "demanda_calefaccion": 0,
 };
 
-const sumatoriosEPIU = {
+const sumatoriosParcelas = {
   "numero_viviendas": 0,
   "n_exptes": 0, 
 };
 
-const mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU = {
+const mediasGlobalesKmediasCertificadosKeysParcelas = {
   "cert_emision_co2": {
     A: 0,
     B: 0,
@@ -508,37 +505,37 @@ const mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU = {
   },
 };
 
-let isProcessingEPIU = false;
+let isProcessingParcelas = false;
 
-app.get("/api/visor-epiu", async (req, res) => {
+app.get("/api/visor-parcelas", async (req, res) => {
   //avoid multiple requests at the same time
-  if (isProcessingEPIU) {
+  if (isProcessingParcelas) {
     res.status(429).send("Request in progress. Try again later.");
     return;
   }
 
-  isProcessingEPIU = true;
-  resetCounters(mediasGlobalesKeysEPIU);
-  resetCounters(mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU["cert_emision_co2"]);
-  resetCounters(mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU["cert_consumo_e_primaria"]);
+  isProcessingParcelas = true;
+  resetCounters(mediasGlobalesKeysParcelas);
+  resetCounters(mediasGlobalesKmediasCertificadosKeysParcelas["cert_emision_co2"]);
+  resetCounters(mediasGlobalesKmediasCertificadosKeysParcelas["cert_consumo_e_primaria"]);
 
     // Reniciar todo el dic de los sumatorio
-    for(let clave in sumatoriosEPIU){
-      sumatoriosEPIU[clave] = 0;
+    for(let clave in sumatoriosParcelas){
+      sumatoriosParcelas[clave] = 0;
     }
 
   // Create an array of promises to read both geojson files
   const readGeojsonPromises = [
-    readJsonFile(geoEPIUPath),
-    readJsonFile(geoEPIULimitesPath),
+    readJsonFile(geoParcelasPath),
+    readJsonFile(geoParcelasLimitesPath),
   ];
 
   // Use Promise.all to read both files asynchronously
   Promise.all(readGeojsonPromises)
-    .then(([geoEPIU, geoEPIULimites]) => {
-      geoEPIU["features"].forEach((feature) => {
+    .then(([geoParcelas, geoParcelasLimites]) => {
+      geoParcelas["features"].forEach((feature) => {
         for (const key in feature.properties) {
-          if (porcEPIU.includes(key)) {
+          if (porcParcelas.includes(key)) {
             const value = feature.properties[key];
             //toFixed converts it to string, so we need to convert it back to number
             let parsed = parseFloat(value) * 100;
@@ -550,50 +547,50 @@ app.get("/api/visor-epiu", async (req, res) => {
           }
           // if key is a certificado key
           else if (
-            mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU.hasOwnProperty(key)
+            mediasGlobalesKmediasCertificadosKeysParcelas.hasOwnProperty(key)
           ) {
             const value = feature.properties[key];
             if (typeof value === "string") {              
-              mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU[key][value]++;
+              mediasGlobalesKmediasCertificadosKeysParcelas[key][value]++;
             }
           }
         }
       });
 
       //sum all the values of the keys
-      const globalesEPIU = {};
-      geoEPIU["features"].forEach((feature) => {
+      const globalesParcelas = {};
+      geoParcelas["features"].forEach((feature) => {
         for (const key in feature.properties) {
-          if (Object.keys(mediasGlobalesKeysEPIU).includes(key)) {
+          if (Object.keys(mediasGlobalesKeysParcelas).includes(key)) {
             const value = feature.properties[key];
             if (!isNaN(value) && value !== null && value !== 0) {
               //add to the accumulator
-              globalesEPIU[key] = (globalesEPIU[key] ?? 0) + parseFloat(value);
+              globalesParcelas[key] = (globalesParcelas[key] ?? 0) + parseFloat(value);
               //increment the counter
-              mediasGlobalesKeysEPIU[key]++;
+              mediasGlobalesKeysParcelas[key]++;
             }
           }
-          else if (Object.keys(sumatoriosEPIU).includes(key)){
+          else if (Object.keys(sumatoriosParcelas).includes(key)){
             const value = feature.properties[key];
             if (!isNaN(value) && value !== null && value !== 0) {
-              sumatoriosEPIU[key] = (sumatoriosEPIU[key] ?? 0) + value;
+              sumatoriosParcelas[key] = (sumatoriosParcelas[key] ?? 0) + value;
             }
           }
         }
       });
 
       //counter of instances is to not count the nulls
-      for (const key in globalesEPIU) {
+      for (const key in globalesParcelas) {
         if (
-          mediasGlobalesKeysEPIU[key] !== 0 && !Object.keys(sumatoriosEPIU).includes(key) 
+          mediasGlobalesKeysParcelas[key] !== 0 && !Object.keys(sumatoriosParcelas).includes(key) 
         ) {
-          globalesEPIU[key] = parseFloat(
-            (globalesEPIU[key] / mediasGlobalesKeysEPIU[key]).toFixed(2)
+          globalesParcelas[key] = parseFloat(
+            (globalesParcelas[key] / mediasGlobalesKeysParcelas[key]).toFixed(2)
           );
         }
       }
 
-      Object.entries(mediasGlobalesKmediasCertificadosKeysEPIUeysEPIU).forEach(
+      Object.entries(mediasGlobalesKmediasCertificadosKeysParcelas).forEach(
         ([certKey, value]) => {
           // console.log(value);
           let maxKey = null;
@@ -606,27 +603,27 @@ app.get("/api/visor-epiu", async (req, res) => {
               maxKey = key;
             }
           }
-          globalesEPIU[certKey] = maxKey;
+          globalesParcelas[certKey] = maxKey;
         }
       );
 
       //hard coding since averages dont make sense
       //sumatorios
-      globalesEPIU.numero_viviendas = sumatoriosEPIU.numero_viviendas;
-      globalesEPIU.n_exptes = sumatoriosEPIU.n_exptes;
+      globalesParcelas.numero_viviendas = sumatoriosParcelas.numero_viviendas;
+      globalesParcelas.n_exptes = sumatoriosParcelas.n_exptes;
       
       // parseo de algunas variables
-      globalesEPIU.ano_constru = parseInt(globalesEPIU.ano_constru, 10);
+      globalesParcelas.ano_constru = parseInt(globalesParcelas.ano_constru, 10);
 
       // Send the modified geojson data as the response
-      res.json({ geoEPIU, globalesEPIU, geoEPIULimites });
+      res.json({ geoParcelas, globalesParcelas, geoParcelasLimites });
     })
     .catch((err) => {
       console.error(err);
       res.status(500).send("Error reading file");
     })
     .finally(() => {
-      isProcessingEPIU = false;
+      isProcessingParcelas = false;
     });
 });
 

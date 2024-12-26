@@ -6,12 +6,12 @@ import Dashboard from "./pages/dashboard";
 import Derivacion from "./pages/derivacion";
 import Concienciacion from "./pages/concienciacion";
 import Visor from "./pages/visorSSCC";
-import VisorEPIU from "./pages/visorEPIU";
+import VisorParcelas from "./pages/VisorParcelas";
 import VisorBarrio from "./pages/visorBarrio";
 import Descargas from "./pages/descargas";
 import BottomBar from "./pages/global/BottomBar";
 import SideBar from "./pages/global/SideBar";
-import MapEPIUProvider from "./components/MapEPIUProvider";
+import MapParcelasProvider from "./components/MapParcelasProvider";
 import MapSSCCProvider from "./components/MapSSCCProvider";
 import MapBarrioProvider from "./components/MapBarrioProvider";
 import Overlay from "./pages/global/Overlay";
@@ -64,9 +64,9 @@ function App() {
                 <Route
                   path="/visor-parcelas"
                   element={
-                    <MapEPIUProvider>
-                      <VisorEPIU />
-                    </MapEPIUProvider>
+                    <MapParcelasProvider>
+                      <VisorParcelas />
+                    </MapParcelasProvider>
                   }
                 />
                 <Route path="/descargas" element={<Descargas />} />

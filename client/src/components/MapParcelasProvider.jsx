@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState } from "react";
-import { Selections as Selections } from "../constants/MapConstantsEPIU";
+import { createContext, useContext, useState } from "react";
+import { Selections as Selections } from "../constants/MapConstantsParcelas";
 
-const MapEPIUContext = createContext();
+const MapParcelasContext = createContext();
 
-const MapEPIUProvider = ({ children }) => {
+const MapParcelasProvider = ({ children }) => {
   const [selectionValue, setSelectionValue] = useState(
     Selections["n_exptes"].path
   );
@@ -18,14 +18,14 @@ const MapEPIUProvider = ({ children }) => {
   };
 
   return (
-    <MapEPIUContext.Provider
+    <MapParcelasContext.Provider
       value={{ selectionValue, updateSelection, infoValue, updateInfo }}
     >
       {children}
-    </MapEPIUContext.Provider>
+    </MapParcelasContext.Provider>
   );
 };
 
-export const useMapEPIUContext = () => useContext(MapEPIUContext);
+export const useMapParcelasContext = () => useContext(MapParcelasContext);
 
-export default MapEPIUProvider;
+export default MapParcelasProvider;

@@ -4,11 +4,11 @@ import L from "leaflet";
 import { Box, Typography, useTheme } from "@mui/material";
 import { alpha } from "@mui/system";
 import { tokens } from "../theme";
-import { useMapEPIUContext } from "./MapEPIUProvider";
+import { useMapParcelasContext } from "./MapParcelasProvider";
 import {
   Selections as Selections,
   pathToSelect,
-} from "../constants/MapConstantsEPIU";
+} from "../constants/MapConstantsParcelas";
 
 // Classes used by Leaflet to position controls
 const POSITION_CLASSES = {
@@ -17,12 +17,12 @@ const POSITION_CLASSES = {
   topleft: "leaflet-top leaflet-left",
   topright: "leaflet-top leaflet-right",
 };
-function MapLegendEPIU({ position, selection }) {
+function MapLegendParcelas({ position, selection }) {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   //   const map = useMap();
   const divRef = useRef(null); //to ref the div element containing the control
-  const { selectionValue } = useMapEPIUContext();
+  const { selectionValue } = useMapParcelasContext();
   const [legendValues, setLegendValues] = useState([]);
   const [legendGradient, setLegendGradient] = useState([]);
 
@@ -355,4 +355,4 @@ function MapLegendEPIU({ position, selection }) {
   );
 }
 
-export default MapLegendEPIU;
+export default MapLegendParcelas;

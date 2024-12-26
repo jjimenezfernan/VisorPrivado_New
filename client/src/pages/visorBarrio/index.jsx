@@ -348,7 +348,7 @@ function VisorBarrio() {
           ["Visor Barrio", "/visor-barrio"],
         ]}
         info={{
-          title: "Visor de Datos Urbanos - Escala Barrio",
+          title: "",
           description: (
             <Typography
               variant="h6"
@@ -356,27 +356,6 @@ function VisorBarrio() {
               sx={{ color: colors.gray[400] }}
             >
               <p>
-                <strong>El visor de datos urbanos del proyecto EPIU</strong>{" "}
-                nace con el objetivo de contextualizar espacialmente los datos
-                sobre vulnerabilidad energ&eacute;tica del municipio de Getafe.
-              </p>
-              <p>
-                Los resultados de los indicadores se han obtenido con los datos
-                propios generados a trav&eacute;s del proyecto EPIU &ndash;
-                Oficina de Hogares Saludables-, y mediante las fuentes oficiales
-                m&aacute;s actualizadas -Catastro e INE 2020 y 2022-.&nbsp;
-              </p>
-              <p>
-                La escala barrio tiene la funci&oacute;n de aportar un{" "}
-                <strong>enfoque estrat&eacute;gico</strong>, para beneficiar la
-                toma de decisiones en las pol&iacute;ticas sociales del
-                municipio en general, y en materia de vulnerabilidad
-                energ&eacute;tica a escala barrio.&nbsp;
-              </p>
-              <p>
-                Actualmente cuenta con un{" "}
-                <strong>Intervalo de Confianza</strong> de 5,9 % con 921
-                expedientes registrados.&nbsp;
               </p>
             </Typography>
           ),

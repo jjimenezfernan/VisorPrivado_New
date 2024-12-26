@@ -4,7 +4,7 @@ import L from "leaflet";
 import { Box, Typography, useTheme } from "@mui/material";
 import { alpha } from "@mui/system";
 import { tokens } from "../theme";
-import { useMapEPIUContext } from "./MapEPIUProvider";
+import { useMapParcelasContext } from "./MapParcelasProvider";
 import { styled } from "@mui/material/styles";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import MuiAccordion from "@mui/material/Accordion";
@@ -28,7 +28,7 @@ function MapInfo2({ position, info }) {
   const colors = tokens(theme.palette.mode);
   //   const map = useMap();
   const divRef = useRef(null); //to ref the div element containing the control
-  const { selection, updateSelection } = useMapEPIUContext();
+  const { selection, updateSelection } = useMapParcelasContext();
 
   useEffect(() => {
     //disable clicking and scrolling of the map on the control
@@ -208,7 +208,7 @@ function MapInfo2({ position, info }) {
               aria-controls="panel2d-content"
               id="panel2d-header"
             >
-              <Typography>Datos EPIU</Typography>
+              <Typography>Datos Parcelas</Typography>
             </AccordionSummary>
             <AccordionDetails>
               {infoPanel2.map(([key, value]) => (

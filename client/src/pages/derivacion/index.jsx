@@ -52,7 +52,7 @@ function Derivacion() {
         ]}
         info={{
           title:
-            "Calidad de la integración de las áreas del ayuntamiento en el proyecto EPIU",
+            "",
           description: (
             <Typography
               variant="h6"
@@ -60,31 +60,6 @@ function Derivacion() {
               sx={{ color: colors.gray[400] }}
             >
               <p>
-                <strong>Indicador 4 - </strong>
-                <strong>
-                  Calidad de la integraci&oacute;n de las &aacute;reas del
-                  ayuntamiento en el proyecto EPIU
-                </strong>
-                &nbsp;
-              </p>
-              <p>
-                El objetivo de este indicador es conocer el grado de
-                conocimiento y difusi&oacute;n del proyecto EPIU por parte de
-                las &aacute;reas del ayuntamiento y otros agentes locales. Se
-                contabiliza el n&uacute;mero de personas que acuden a la Oficina
-                de Hogares Saludables por la forma en la que han conocido el
-                servicio y por el motivo de su visita.&nbsp;&nbsp;
-              </p>
-              <p>
-                Este dato se obtiene mediante las preguntas:
-                "&iquest;C&oacute;mo ha conocido el servicio?" y
-                "&iquest;Cu&aacute;l es el motivo de su visita?", durante la
-                apertura de expediente de usuario de la OHS.&nbsp;
-              </p>
-              <p>Target value: 8/10&nbsp;</p>
-              <p>
-                Resultado: 30,1% (porcentaje de usuarios OHS que vienen
-                derivados de otras &aacute;reas)&nbsp;
               </p>
             </Typography>
           ),

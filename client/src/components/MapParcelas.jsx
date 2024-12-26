@@ -7,16 +7,16 @@ import {
   useMapEvent,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import MapLegendEPIU from "./MapLegendEPIU";
-import { useMapEPIUContext } from "./MapEPIUProvider";
+import MapLegendParcelas from "./MapLegendParcelas";
+import { useMapParcelasContext } from "./MapParcelasProvider";
 import {
   Selections as Selections,
   pathToSelect,
-} from "../constants/MapConstantsEPIU";
+} from "../constants/MapConstantsParcelas";
 import { splitString } from "../utils/auxUtils";
 
 /*
-MAPA DE ZONAS EPIU
+MAPA DE ZONAS PARCELAS
 */
 
 const COLORS_MAP = {
@@ -130,12 +130,11 @@ function heatMapEspecifConjHomo(value) {
   return "#bababa";
 }
 
-const VIEW_EPIU = [40.3122, -3.73];
+const viewParcelas = [40.3122, -3.73];
 
 function Map2({ mapRef, geojson, geojsonLimites }) {
   const [info, setInfo] = useState({});
-  // const epiuRef = useRef();
-  const { selectionValue, updateInfo } = useMapEPIUContext();
+  const { selectionValue, updateInfo } = useMapParcelasContext();
   const [tooltipValue, setTooltipValue] = useState("");
 
   useEffect(() => {
@@ -271,7 +270,7 @@ function Map2({ mapRef, geojson, geojsonLimites }) {
 
   return (
     <MapContainer
-      center={VIEW_EPIU}
+      center={viewParcelas}
       zoom={15}
       ref={mapRef}
       style={{ height: "100%", width: "100%" }}
@@ -289,7 +288,7 @@ function Map2({ mapRef, geojson, geojsonLimites }) {
         mapStyle={mapStyle1}
       />
       <GeoJSON data={geojsonLimites.features} style={mapStyleLimites} />
-      <MapLegendEPIU position={"bottomleft"} selection={selectionValue} />
+      <MapLegendParcelas position={"bottomleft"} selection={selectionValue} />
     </MapContainer>
   );
 }
