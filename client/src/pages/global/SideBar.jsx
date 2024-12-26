@@ -14,6 +14,7 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import HomeRepairServiceRoundedIcon from "@mui/icons-material/HomeRepairServiceRounded";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import MapIcon from "@mui/icons-material/Map";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 function SideBar() {
   const theme = useTheme();
@@ -127,6 +128,15 @@ function SideBar() {
                   Visor Parcelas
                 </MenuItem>
               </SubMenu>
+              <MenuItem
+                style={{
+                  color: colors.gray[100],
+                }}
+                icon={<CloudUploadIcon />}
+                component={<Link to="/actualizar-archivos" />}
+              >
+                Actualizar Archivos
+              </MenuItem>
               <MenuItem
                 style={{
                   color: colors.gray[100],

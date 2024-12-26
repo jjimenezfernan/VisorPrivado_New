@@ -1081,25 +1081,37 @@ app.get("/api/barrios_dashboard", (req, res) => {
 app.get("/api/descargas/:filename", (req, res) => {
   const { filename } = req.params;
   console.log("filename", filename);
-  let fileNameExcel = "";
+  let fileName = "";
   switch (filename) {
     case "dashboard":
-      fileNameExcel = "data_dashboard.xlsx";
+      fileName = "data_dashboard.xlsx";
       break;
     case "awareness":
-      fileNameExcel = "data_awareness.xlsx";
+      fileName = "data_awareness.xlsx";
       break;
     case "derivacion":
-      fileNameExcel = "data_derivacion.xlsx";
+      fileName = "data_derivacion.xlsx";
       break;
     case "dashboard_por_barrio":
-      fileNameExcel = "dashboard_por_barrio.xlsx";
+      fileName = "dashboard_por_barrio.xlsx";
+      break;
+    case "barrio_geojson":
+      fileName = "map/barrio.geojson";
+      break;
+    case "building_parcelas_geojson":
+      fileName = "map/building_parcelas.geojson";
+      break;
+    case "limites_parcelas_geojson":
+      fileName = "map/limites_parcelas.geojson";
+      break;
+    case "sscc_geojson":
+      fileName = "map/sscc.geojson";
       break;
     default:
-      fileNameExcel = "data_dashboard.xlsx";
+      fileName = "data_dashboard.xlsx";
   }
-  const filePath = path.join(__dirname, "resources", fileNameExcel);
-  res.download(filePath, fileNameExcel, (err) => {
+  const filePath = path.join(__dirname, "resources", fileName);
+  res.download(filePath, fileName, (err) => {
     if (err) {
       // Handle any error that occurred during the file download
       console.error(err);

@@ -52,59 +52,91 @@ function Descargas() {
           ),
         }}
       />
-      <Box m="10px">
+      <Box 
+        m="10px"
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        flexDirection={"column"}
+        backgroundColor={'#00000'}
+        height={'88vh'}
+      >
         <Box
-          display={"grid"}
-          gridTemplateColumns={"repeat(12,1fr)"}
-          //60 topbar + 40 subbar + 20 gaps + 10 extra
-          gridAutoRows={`calc((100vh - 60px - 40px - 20px - 10px) / 6.5)`}
+          backgroundColor={"#00000"}
+          display={"flex"}
+          alignItems={"center"}
+          justifyContent={"center"}
+          flexDirection={"column"}
           gap={"10px"}
         >
-          <Box
-            gridColumn={"span 12"}
-            gridRow={"span 6"}
-            backgroundColor={colors.gray[900]}
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            flexDirection={"column"}
-          >
-            <Stack direction="row" spacing={2}>
-              <Button
-                onClick={() => handleDownload("derivacion")}
-                variant="contained"
-                color="success"
-                endIcon={<DownloadIcon />}
-              >
-                Derivación
-              </Button>
-              <Button
-                onClick={() => handleDownload("awareness")}
-                variant="contained"
-                color="success"
-                endIcon={<DownloadIcon />}
-              >
-                Concienciación
-              </Button>
-              <Button
-                onClick={() => handleDownload("dashboard_por_barrio")}
-                variant="contained"
-                color="success"
-                endIcon={<DownloadIcon />}
-              >
-                Estadisticas Barrios
-              </Button>
-              <Button
-                onClick={() => handleDownload("geojson")}
-                variant="contained"
-                color="success"
-                endIcon={<DownloadIcon />}
-                disabled={true}
-              >
-                Visor cartográfico
-              </Button>
-            </Stack>
-          </Box>
+          <Stack direction="row" spacing={2} >
+            <Button
+              onClick={() => handleDownload("dashboard")}
+              variant="contained"
+              color="success"
+              endIcon={<DownloadIcon />}
+            >
+              Estadisticas Inicio
+            </Button>
+            <Button
+              onClick={() => handleDownload("derivacion")}
+              variant="contained"
+              color="success"
+              endIcon={<DownloadIcon />}
+            >
+              Derivación
+            </Button>
+            <Button
+              onClick={() => handleDownload("awareness")}
+              variant="contained"
+              color="success"
+              endIcon={<DownloadIcon />}
+            >
+              Concienciación
+            </Button>
+            <Button
+              onClick={() => handleDownload("dashboard_por_barrio")}
+              variant="contained"
+              color="success"
+              endIcon={<DownloadIcon />}
+            >
+              Estadisticas Barrios
+            </Button>
+          </Stack>
+          <Stack direction="row" spacing={2} >
+            <Button
+              onClick={() => handleDownload("barrio_geojson")}
+              variant="contained"
+              color="success"
+              endIcon={<DownloadIcon />}
+            >
+              Visor cartográfico Barrios
+            </Button>
+            <Button
+              onClick={() => handleDownload("sscc_geojson")}
+              variant="contained"
+              color="success"
+              endIcon={<DownloadIcon />}
+            >
+              Visor cartográfico Secciones Censales
+            </Button>
+            <Button
+              onClick={() => handleDownload("building_parcelas_geojson")}
+              variant="contained"
+              color="success"
+              endIcon={<DownloadIcon />}
+            >
+              Visor cartográfico Parcelas
+            </Button>
+            <Button
+              onClick={() => handleDownload("limites_parcelas_geojson")}
+              variant="contained"
+              color="success"
+              endIcon={<DownloadIcon />}
+            >
+              Visor cartográfico Parcelas-Limites
+            </Button>
+          </Stack>
         </Box>
       </Box>
     </motion.div>

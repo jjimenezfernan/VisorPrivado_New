@@ -17,6 +17,7 @@ import MapBarrioProvider from "./components/MapBarrioProvider";
 import Overlay from "./pages/global/Overlay";
 import { AnimatePresence } from "framer-motion";
 import BarriosDashboard from "./pages/barrios_dashboard";
+import ActualizarArchivos from "./pages/actualizar_archivos";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -70,6 +71,7 @@ function App() {
                   }
                 />
                 <Route path="/descargas" element={<Descargas />} />
+                <Route path="/actualizar-archivos" element={<ActualizarArchivos />} />
               </Routes>
             </main>
           </div>
