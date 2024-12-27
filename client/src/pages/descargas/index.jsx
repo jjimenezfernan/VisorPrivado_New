@@ -76,7 +76,7 @@ function Descargas() {
               color="success"
               endIcon={<DownloadIcon />}
             >
-              Estadisticas Inicio
+              Estadisticas Inicio (Excel)
             </Button>
             <Button
               onClick={() => handleDownload("derivacion")}
@@ -84,7 +84,7 @@ function Descargas() {
               color="success"
               endIcon={<DownloadIcon />}
             >
-              Derivación
+              Derivación (Excel)
             </Button>
             <Button
               onClick={() => handleDownload("awareness")}
@@ -92,7 +92,7 @@ function Descargas() {
               color="success"
               endIcon={<DownloadIcon />}
             >
-              Concienciación
+              Concienciación (Excel)
             </Button>
             <Button
               onClick={() => handleDownload("dashboard_por_barrio")}
@@ -100,7 +100,7 @@ function Descargas() {
               color="success"
               endIcon={<DownloadIcon />}
             >
-              Estadisticas Barrios
+              Estadisticas Barrios (Excel)
             </Button>
           </Stack>
           <Stack direction="row" spacing={2} >
@@ -110,7 +110,7 @@ function Descargas() {
               color="success"
               endIcon={<DownloadIcon />}
             >
-              Visor cartográfico Barrios
+              Visor cartográfico Barrios (Geojson)
             </Button>
             <Button
               onClick={() => handleDownload("sscc_geojson")}
@@ -118,7 +118,7 @@ function Descargas() {
               color="success"
               endIcon={<DownloadIcon />}
             >
-              Visor cartográfico Secciones Censales
+              Visor cartográfico Secciones Censales (Geojson)
             </Button>
             <Button
               onClick={() => handleDownload("building_parcelas_geojson")}
@@ -126,7 +126,7 @@ function Descargas() {
               color="success"
               endIcon={<DownloadIcon />}
             >
-              Visor cartográfico Parcelas
+              Visor cartográfico Parcelas (Geojson)
             </Button>
             <Button
               onClick={() => handleDownload("limites_parcelas_geojson")}
@@ -134,7 +134,7 @@ function Descargas() {
               color="success"
               endIcon={<DownloadIcon />}
             >
-              Visor cartográfico Parcelas-Limites
+              Visor cartográfico Parcelas-Limites (Geojson)
             </Button>
           </Stack>
         </Box>
