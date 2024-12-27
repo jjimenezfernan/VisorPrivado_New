@@ -1,16 +1,16 @@
+
+
 import { ResponsivePie } from "@nivo/pie";
 import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import { splitString } from "../utils/auxUtils";
-// import { mockPieData as data } from "../data/mockData";
 
-function PieChart({ data }) {
+function PieChartBarrios({ data }) {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
     <ResponsivePie
       data={data}
-      // valueFormat=">-.3s"
+      valueFormat=" >-~%"
       theme={{
         tooltip: {
           container: {
@@ -29,27 +29,21 @@ function PieChart({ data }) {
             },
           },
           ticks: {
-            // line: {
-            //   stroke: colors.gray[100],
-            //   strokeWidth: 1,
-            // },
+            line: {
+              stroke: colors.gray[100],
+              strokeWidth: 1,
+            },
             text: {
               fontSize: 4,
               fill: colors.gray[100],
             },
           },
-          //   legends: {
-          //     text: {
-          //       fill: colors.gray[100],
-          //     },
-          //   },
         },
       }}
-      // colors={{ scheme: "set1" }}
       colors={{
         datum: "data.color",
       }}
-      margin={{ top: 30, right: 0, bottom: 80, left: 0 }}
+      margin={{ top: 10, right: -180, bottom: 15, left: 0 }}
       innerRadius={0.5}
       padAngle={1}
       activeOuterRadiusOffset={8}
@@ -69,8 +63,8 @@ function PieChart({ data }) {
           anchor: "bottom-left",
           direction: "column",
           justify: false,
-          translateX: 20,
-          translateY: 60,
+          translateX: 15,
+          translateY: 5,
           itemsSpacing: 15,
           itemWidth: 100,
           itemHeight: 10,
@@ -93,4 +87,4 @@ function PieChart({ data }) {
   );
 }
 
-export default PieChart;
+export default PieChartBarrios;

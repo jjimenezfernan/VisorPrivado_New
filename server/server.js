@@ -58,9 +58,9 @@ const colors = [
   "#F5B0BB",
   "#F57387",
   "#4B4342",
-  "#4B4249",
+  "#d9b858",
   "#be22e3",
-  "#49424B",
+  "#900C3F",
 ];
 
 /*
@@ -986,14 +986,16 @@ app.get("/api/barrios_dashboard", (req, res) => {
   const globalDataParsed = [];
 
   // Incializamos el array de objetos con los datos de los barrios
+  // Señalar que para las graficas de barras, como se implemento en su momento, los atributos tienen que ser valor y valorColor, 
+  // en cambio para el gráfico de genero, los atributos tienen que ser value y color
   barrios.forEach(barrio => {
     if (barrio === "Todos los Barrios") {
       globalDataParsed.push({
         barrio: barrio,
         sumatorio_interaciones: 0,
         num_total_usuarios: 0,
-        num_total_usuarios_femeninos: 0,
-        num_total_usuarios_masculinos: 0,
+        procentaje_total_usuarios_femeninos: 0,
+        procentaje_total_usuarios_masculinos: 0,
         grafico_tipo_atencion: [
           { id: "Atención telefónica", valor: 0, valorColor: colors[0] },
           { id: "Atención email", valor: 0, valorColor: colors[1] },
@@ -1013,8 +1015,6 @@ app.get("/api/barrios_dashboard", (req, res) => {
         barrio: barrio,
         sumatorio_interaciones: 0,
         num_total_usuarios: 0,
-        num_total_usuarios_femeninos: 0,
-        num_total_usuarios_masculinos: 0,
         grafico_tipo_atencion: [
           { id: "Atención telefónica", valor: 0, valorColor: colors[0] },
           { id: "Atención email", valor: 0, valorColor: colors[1] },
@@ -1024,6 +1024,14 @@ app.get("/api/barrios_dashboard", (req, res) => {
           como_nos_has_conocido.map((item, index) => ({id: item, valor: 0, valorColor: colors[index]})),
         grafico_motivo_de_la_consulta:
           motivo_de_la_consulta.map((item, index) => ({id: item, valor: 0, valorColor: colors[index]})),
+        grafico_genero_usuarios: [
+          { id: "Usuarios Femeninos", label:"Usuarios Femeninos", value: 0, color: colors[0] },
+          { id: "Usuarios Musculinos", label:"Usuarios Masculinos", value: 0, color: colors[1] },
+        ]
+        // grafico_sankey: {
+        //   nodes: [],
+        //   links: [],
+        // },
       });
     }
   });
@@ -1042,12 +1050,14 @@ app.get("/api/barrios_dashboard", (req, res) => {
     globalDataParsed[0].num_total_usuarios += 1;
 
     if(obj.genero === "Femenino"){
-      globalDataParsed[index].num_total_usuarios_femeninos += 1;
-      globalDataParsed[0].num_total_usuarios_femeninos += 1;
+      globalDataParsed[index].grafico_genero_usuarios[0].value += 1;
+      // Sumamos para para tener el total de usuarios femeninos y tras el loop calculamos el porcentaje
+      globalDataParsed[0].procentaje_total_usuarios_femeninos += 1;
     }
     if (obj.genero === "Masculino") {
-      globalDataParsed[index].num_total_usuarios_masculinos += 1;
-      globalDataParsed[0].num_total_usuarios_masculinos += 1;
+      globalDataParsed[index].grafico_genero_usuarios[1].value += 1;
+      // Sumamos para para tener el total de usuarios masculinos y tras el loop calculamos el porcentaje
+      globalDataParsed[0].procentaje_total_usuarios_masculinos += 1;
     }
     if (obj.atenciones_telefónicas) {
       globalDataParsed[index].grafico_tipo_atencion[0].valor += obj.atenciones_telefónicas;
@@ -1062,14 +1072,68 @@ app.get("/api/barrios_dashboard", (req, res) => {
       globalDataParsed[0].grafico_tipo_atencion[2].valor += obj.atenciones_presenciales;
     }
     if (obj.como_nos_has_conocido) {
+      // Para el grafico sankey
+      // if (!globalDataParsed[index].grafico_sankey.nodes.includes(obj.como_nos_has_conocido)) {
+      //   const node_sankey = globalDataParsed[index].grafico_sankey.nodes.find(node => node.id === obj.como_nos_has_conocido);
+      //   if (!node_sankey) {
+      //     const nodeColor = colors[globalDataParsed[index].grafico_sankey.nodes.length];
+      //     globalDataParsed[index].grafico_sankey.nodes.push({
+      //       id: obj.como_nos_has_conocido,
+      //       color: nodeColor,
+      //     });
+      //   }
+      // }
+
       globalDataParsed[index].grafico_como_nos_has_conocido[como_nos_has_conocido.indexOf(obj.como_nos_has_conocido)].valor += 1;
       globalDataParsed[0].grafico_como_nos_has_conocido[como_nos_has_conocido.indexOf(obj.como_nos_has_conocido)].valor += 1;
     }
     if (obj.motivo_de_la_consulta) {
+      // Para el grafico sankey
+      // if (!globalDataParsed[index].grafico_sankey.nodes.includes(obj.motivo_de_la_consulta)) {
+      //   const node_sankey = globalDataParsed[index].grafico_sankey.nodes.find(node => node.id === obj.motivo_de_la_consulta);
+      //   if (!node_sankey) {
+      //     const nodeColor = colors[globalDataParsed[index].grafico_sankey.nodes.length];
+      //     globalDataParsed[index].grafico_sankey.nodes.push({
+      //       id: obj.motivo_de_la_consulta,
+      //       nodeColor: nodeColor,
+      //     });
+      //   }
+
+        globalDataParsed[index].grafico_motivo_de_la_consulta[motivo_de_la_consulta.indexOf(obj.motivo_de_la_consulta)].valor += 1;
+        globalDataParsed[0].grafico_motivo_de_la_consulta[motivo_de_la_consulta.indexOf(obj.motivo_de_la_consulta)].valor += 1;
+      }
+      // Para el grafico sankey
+      // if (obj.motivo_de_la_consulta && obj.como_nos_has_conocido) {
+      //   const objeto_sankey = globalDataParsed[index].grafico_sankey.links.find(
+      //     link_sankey => link_sankey.source === obj.como_nos_has_conocido && link_sankey.target === obj.motivo_de_la_consulta
+      //   );
+      //   if (objeto_sankey) {
+      //     objeto_sankey.value += 1;
+      //   }
+      //   else {
+      //     globalDataParsed[index].grafico_sankey.links.push({
+      //       source: obj.como_nos_has_conocido,
+      //       target: obj.motivo_de_la_consulta,
+      //       value: 1,
+      //     });
+      //   }
+      // }
+
       globalDataParsed[index].grafico_motivo_de_la_consulta[motivo_de_la_consulta.indexOf(obj.motivo_de_la_consulta)].valor += 1;
       globalDataParsed[0].grafico_motivo_de_la_consulta[motivo_de_la_consulta.indexOf(obj.motivo_de_la_consulta)].valor += 1;
-    }
-  });
+    });
+
+    // Para el gráfico de genero, se calcula el porcentaje de usuarios
+    globalDataParsed.forEach(obj => {
+      if (obj.barrio === "Todos los Barrios") {
+        obj.procentaje_total_usuarios_femeninos = ((obj.procentaje_total_usuarios_femeninos / obj.num_total_usuarios) * 100).toFixed(2);
+        obj.procentaje_total_usuarios_masculinos = ((obj.procentaje_total_usuarios_masculinos / obj.num_total_usuarios) * 100).toFixed(2);
+      }
+      else{
+        obj.grafico_genero_usuarios[0].value = ( obj.grafico_genero_usuarios[0].value / obj.num_total_usuarios).toFixed(4);
+        obj.grafico_genero_usuarios[1].value = (obj.grafico_genero_usuarios[1].value / obj.num_total_usuarios).toFixed(4);
+      }
+    });
 
   const data = {
     barrios,

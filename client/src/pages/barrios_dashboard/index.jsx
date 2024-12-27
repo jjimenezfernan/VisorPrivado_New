@@ -13,6 +13,7 @@ import CallIcon from "@mui/icons-material/Call";
 import WcIcon from '@mui/icons-material/Wc';
 import {DIRECTION} from "../../data/direccion_server";
 import ButtonBarriosDashboard from "../../components/ButtonBarriosDashboard";
+import PieChartBarrios from "../../components/PieChartBarrios";
 
 const baseURL = DIRECTION + "/api/barrios_dashboard";
 
@@ -75,7 +76,6 @@ function BarriosDashboard() {
         <Box
           display={"grid"}
           gridTemplateColumns={"repeat(12,1fr)"}
-          //60 topbar + 40 subbar + 20 gaps + 10 extra
           gridAutoRows={`calc((100vh - 60px - 40px - 20px - 10px) / 6.5)`}
           gap={"10px"}
         >
@@ -113,7 +113,7 @@ function BarriosDashboard() {
             gridTemplateRows={"repeat(4, 1fr)"}
             padding={"10px 5px 10px 20px"}
           >
-            {/* Datos relevantes (barrio selecionada, total de sumatorío de interacciones, genero de las personas) */}
+            {/* Datos relevantes */}
             <Typography
               variant={"h3"} 
               color={colors.gray[100]}
@@ -178,32 +178,40 @@ function BarriosDashboard() {
                       }</strong>
                     </Typography>
                   </Box>
-                  <Typography
-                    gridColumn={"1"} 
-                    gridRow={"2"}
-                    variant={"h5"}
-                    sx={{ ml: "75px" }}
-                  > 
-                    Mujeres: <strong>{dataBarrioSelected.length > 0 ? (
-                        dataBarrioSelected[0].num_total_usuarios_femeninos
-                      ) :(
-                        "Loading..."
-                      )
-                      }</strong>
-                  </Typography>
-                  <Typography
-                    gridColumn={"1"} 
-                    gridRow={"3"} 
-                    variant={"h5"}
-                    sx={{ ml: "75px" }}
-                  > 
-                    Hombres: <strong>{dataBarrioSelected.length > 0 ? (
-                        dataBarrioSelected[0].num_total_usuarios_masculinos
-                      ) :(
-                        "Loading..."
-                      )
-                      }</strong>
-                  </Typography>
+                  {
+                    barrioSelected === "Todos los Barrios" ? (
+                      <>
+                        <Typography
+                          gridColumn={"1"} 
+                          gridRow={"2"}
+                          variant={"h5"}
+                          sx={{ ml: "70px" }}
+                        > 
+                          Mujeres: <strong>{dataBarrioSelected.length > 0 ? (
+                              dataBarrioSelected[0].procentaje_total_usuarios_femeninos + "%"
+                            ) :(
+                              "Loading..."
+                            )
+                            }</strong>
+                        </Typography>
+                        <Typography
+                          gridColumn={"1"} 
+                          gridRow={"3"} 
+                          variant={"h5"}
+                          sx={{ ml: "70px" }}
+                        > 
+                          Hombres: <strong>{dataBarrioSelected.length > 0 ? (
+                              dataBarrioSelected[0].procentaje_total_usuarios_masculinos + "%"
+                            ) :(
+                              "Loading..."
+                            )
+                            }</strong>
+                        </Typography>
+                      </>
+                    ) : (
+                      ""
+                    )
+                  }
                 </Typography>
           </Box>
           {/* Gráfico de tipo de atención */}
@@ -231,12 +239,11 @@ function BarriosDashboard() {
               </Typography>
             )}
           </Box>
-          {/* Gráfico de usuarios por barrios o sankey*/}
+          {/* Gráfico de usuarios por barrios o genero de usuarios*/}
           <Box
             gridColumn={"span 5"}
             gridRow={"span 3"}
-            //backgroundColor={colors.gray[900]}
-            backgroundColor={barrioSelected === "Todos los Barrios" ? (colors.gray[900]) : (colors.gray[800])}
+            backgroundColor={colors.gray[900]}
             display={"flex"}
             alignItems={"center"}
             justifyContent={"center"}
@@ -254,11 +261,11 @@ function BarriosDashboard() {
               ) : (
                 <>
                   <Typography variant={"h3"} color={colors.gray[100]}>
-                    <strong></strong>
+                    <strong>Género Usuarios</strong>
                   </Typography>
+                  <PieChartBarrios data={dataBarrioSelected[0].grafico_genero_usuarios}/>
                 </>
               )
-
             ) : (
               <Typography variant={"h5"} color={colors.gray[100]}>
                 Loading...
