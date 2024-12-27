@@ -1,4 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+/**
+ * Pagina de descargas de ficheros utilizados en la aplicación
+ */
+
 import { Box, Typography, useTheme, Button, Stack } from "@mui/material";
 import axios from "axios";
 import { tokens } from "../../theme";
