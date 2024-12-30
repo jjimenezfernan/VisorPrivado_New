@@ -24,12 +24,16 @@ Destacar que aunque le server se ejecute de forma local o el producción este si
 #### Ejecución de forma Local
 
 En el directorio *server* deberemos ejecutar el siguiente comando: **`npm run dev`**.
+
 En el directorio *client* deberemos ejecutar el siguiente comando: **`npm run dev`**.
 
 #### Deploy en Producción
 
 En el directorio *server* deberemos ejecutar el siguiente comando: **`node server.js`**.
+
 En el directorio *client* deberemos ejecutar el siguiente comando: **`npm run build`**, este nos creara una carpeta **dist** que contendra la páigna web creada, esto solo habrá que moverlo a dirrectorio donde el servidor web guarde las páginas webs para servirlas a los clientes.
+
+Señalar, que si se ha creado una nueva pestaña en la página, esta habrá que añadirla en el bloque *location* de la configuración de nginx para que pueda servirla.
 
 ### Créditos 
 Cordinador del proyecto por Asier Aguilaz [linkedin](https://www.linkedin.com/in/asier-eguilaz/)
