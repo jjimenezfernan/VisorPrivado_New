@@ -6,6 +6,7 @@ const express = require("express");
 const cors = require("cors");
 var XLSX = require("xlsx");
 const bodyParser = require("body-parser");
+const multer = require('multer');
 const fs = require("fs");
 const path = require("path");
 const PORT = require("./ip_constants.js");
@@ -1142,6 +1143,82 @@ app.get("/api/barrios_dashboard", (req, res) => {
   res.json(data);
 });
 
+// Lista de nombres permitidos y extensiones válidas
+const allowedExcelNames = ['data_awareness', 'data_dashboard_por_barrio', 'data_dashboard', 'data_derivacion'];
+const allowedGeoJSONNames = ['barrio', 'building_parcelas', 'limites_parcelas', 'sscc'];
+const allowedExcelExtensions = ['.xlsx'];
+const allowedGeoJSONExtensions = ['.geojson'];
+
+// Configuración de Multer para subir archivos
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const fileNameWithoutExtension = path.parse(file.originalname).name; // Nombre del archivo sin extensión
+    const fileExtension = path.extname(file.originalname); // Extensión del archivo
+
+    if (allowedExcelNames.includes(fileNameWithoutExtension) && allowedExcelExtensions.includes(fileExtension)) {
+      return cb(null, 'resources/'); // Guardar en la carpeta resources para los excel
+    } 
+    else if (allowedGeoJSONNames.includes(fileNameWithoutExtension) && allowedGeoJSONExtensions.includes(fileExtension)) {
+      return cb(null, 'resources/map/'); // Guardar en la carpeta map para los geojson
+    }
+    else if (!allowedExcelNames.includes(fileNameWithoutExtension) && !allowedGeoJSONNames.includes(fileNameWithoutExtension)) {
+      return cb(new Error(JSON.stringify({ type: 1001, message: 'El nombre del archivo no es válido.' })));
+    }
+    else if (!allowedExcelExtensions.includes(fileExtension) && !allowedGeoJSONExtensions.includes(fileExtension)) {
+      return cb(new Error(JSON.stringify({ type: 1002, message: 'La extensión del archivo no es válida.' })));
+    }
+    else{
+      return cb(new Error('ERROR INESPERADO'));
+    }
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname); // Nombre único del archivo
+  },
+});
+
+// Configuración de Multer
+const upload = multer({ 
+  storage,
+  limits: {
+    fileSize: 100 * 1024 * 1024, // Tamaño máximo de archivo: 100MB
+  },
+});
+
+// Para poder subir archivos
+app.post('/api/upload', upload.single('file'), (req, res) => {
+  console.log('Archivo subido:', req.file);
+  try {
+    res.status(200).json({
+      message: 'Archivo subido con éxito',
+      fileName: req.file.originalname,
+    });
+  } catch (error) {
+    console.error('Error al subir el archivo:', error);
+    res.status(500).send('Error al subir el archivo');
+  }
+});
+
+// middleware para manejar errores de Multer
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    res.status(400).json({ message: 'Error de subida: ' + err.message });
+  } 
+  else if (err) {
+    try {
+      // Intentar analizar el mensaje de error como JSON
+      const errorDetails = JSON.parse(err.message);
+      res.status(400).json(errorDetails);
+    } 
+    catch {
+      // Si no es JSON, enviar un mensaje genérico
+      res.status(400).json({ type: 'general', message: err.message });
+    }
+  } else {
+    next();
+  }
+});
+
+// Endpoint para descargar los archivos
 app.get("/api/descargas/:filename", (req, res) => {
   const { filename } = req.params;
   console.log("filename", filename);

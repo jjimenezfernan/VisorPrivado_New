@@ -79,7 +79,7 @@ function Descargas() {
               color="success"
               endIcon={<DownloadIcon />}
             >
-              Estadisticas Inicio (Excel)
+              Estadísticas Inicio (Excel)
             </Button>
             <Button
               onClick={() => handleDownload("derivacion")}
