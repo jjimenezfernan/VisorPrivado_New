@@ -105,7 +105,9 @@ function ActualizarArchivos() {
               En este archivo, se pueden modificar datos en todas las pestañas del Excel y
               únicamente se pueden añadir datos en la pestaña de "gráfico de evolución".</li>
               <li><strong>data_dashboard_por_barrio.xlsx:</strong> Archivo utilizado por la pantalla "Servicios Estadísticas Barrios". 
-              En este archivo, se pueden modificar y añadir datos libremente.</li>
+              En este archivo, se pueden modificar y añadir datos libremente en la página Expedientes_barrios, en la página 
+              Datos_población_total_barrios solo se podrá modificar el datos de población total y en la página variables_de_ayuda_estadistica 
+              solo se podrá cambiar el valor de la variable Número médio de Habitantes por Hogar.</li>
               <li><strong>data_derivacion.xlsx:</strong> Archivo utilizado para la pantalla "Servicios Derivación". 
               Se pueden modificar datos, pero solo es posible añadir datos en la pestaña "sankey" del Excel.</li>
               <li><strong>data_awareness.xlsx:</strong> Archivo utilizado para la pantalla "Servicios Concienciación". 

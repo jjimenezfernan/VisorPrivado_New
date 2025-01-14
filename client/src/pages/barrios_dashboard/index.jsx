@@ -110,7 +110,7 @@ function BarriosDashboard() {
             backgroundColor={colors.gray[900]}
             display={"grid"}
             gridTemplateColumns={"repeat(1,1fr)"}
-            gridTemplateRows={"repeat(4, 1fr)"}
+            gridTemplateRows={`repeat(${barrioSelected === "Todos los Barrios" ? 4 : 6}, 1fr)`}
             padding={"10px 5px 10px 20px"}
           >
             {/* Datos relevantes */}
@@ -130,12 +130,15 @@ function BarriosDashboard() {
               gridRow={"span 1"}
             >
               <FamilyRestroomIcon fontSize={"large"} sx={{ mr: "15px" }} />
-              Barrio Seleccionado:<strong>{dataBarrioSelected.length > 0 ? (
-                barrioSelected
-              ) :(
-                "Loading..."
-              )
-              }</strong>
+                Barrio Seleccionado:
+                <strong>
+                  {dataBarrioSelected.length > 0 ? (
+                      barrioSelected
+                    ) :(
+                      "Loading..."
+                    )
+                  }
+                </strong>
             </Typography>
             <Typography
               variant={"h5"}
@@ -143,76 +146,119 @@ function BarriosDashboard() {
               gridRow={"span 1"}
             >
               <CallIcon fontSize={"large"} sx={{ mr: "15px" }} />
-              Total de Interacciones: <strong>{dataBarrioSelected.length > 0 ? (
-                dataBarrioSelected[0].sumatorio_interaciones
-              ) :(
-                "Loading..."
-              )
-              }</strong>
+              Total de Interacciones: 
+              <strong>
+                {dataBarrioSelected.length > 0 ? (
+                    dataBarrioSelected[0].sumatorio_interaciones
+                  ) :(
+                    "Loading..."
+                  )
+                }
+              </strong>
             </Typography>
+            
             <Typography
-                  variant={"h5"}
-                  color={colors.gray[100]}
-                  gridRow={"span 1"}
-                  display={"grid"}
-                  gridTemplateColumns={"repeat(2,1fr)"}
-                  gridTemplateRows={"repeat(4, 1fr)"}
-                >
-                  <Box
-                    gridColumn={"span 2"} 
-                    gridRow={"span 1"}  
-                    display="flex"
-                  >
-                    <WcIcon 
-                      fontSize={"large"}
-                      sx={{ mr: "15px" }}
-                    />
-                    <Typography
-                      variant={"h5"}
-                    > 
-                      Número de usuarios totales: <strong>{dataBarrioSelected.length > 0 ? (
-                        dataBarrioSelected[0].num_total_usuarios
-                      ) :(
-                        "Loading..."
-                      )
-                      }</strong>
-                    </Typography>
-                  </Box>
-                  {
-                    barrioSelected === "Todos los Barrios" ? (
-                      <>
-                        <Typography
-                          gridColumn={"1"} 
-                          gridRow={"2"}
-                          variant={"h5"}
-                          sx={{ ml: "70px" }}
-                        > 
-                          Mujeres: <strong>{dataBarrioSelected.length > 0 ? (
+              variant={"h5"}
+              color={colors.gray[100]}
+              gridRow={"span 1"}
+            >
+              <WcIcon fontSize={"large"} sx={{ mr: "15px" }} />
+                Número de usuarios totales: 
+                <strong>
+                  {dataBarrioSelected.length > 0 ? (
+                      dataBarrioSelected[0].num_total_usuarios
+                    ) :(
+                      "Loading..."
+                    )
+                  }
+                </strong>
+              {
+                  barrioSelected === "Todos los Barrios" ? (
+                    <>
+                      <Typography
+                        gridColumn={"1"} 
+                        gridRow={"2"}
+                        variant={"h5"}
+                        sx={{ 
+                          ml: "70px",
+                        }}
+                      > 
+                        Mujeres: 
+                        <strong>
+                          {dataBarrioSelected.length > 0 ? (
                               dataBarrioSelected[0].procentaje_total_usuarios_femeninos + "%"
                             ) :(
                               "Loading..."
                             )
-                            }</strong>
-                        </Typography>
-                        <Typography
-                          gridColumn={"1"} 
-                          gridRow={"3"} 
-                          variant={"h5"}
-                          sx={{ ml: "70px" }}
-                        > 
-                          Hombres: <strong>{dataBarrioSelected.length > 0 ? (
+                          }
+                        </strong>
+                      </Typography>
+                      <Typography
+                        gridColumn={"1"} 
+                        gridRow={"3"} 
+                        variant={"h5"}
+                        sx={{ 
+                          ml: "70px",
+                        }}
+                      > 
+                        Hombres: 
+                        <strong>
+                          {dataBarrioSelected.length > 0 ? (
                               dataBarrioSelected[0].procentaje_total_usuarios_masculinos + "%"
                             ) :(
                               "Loading..."
                             )
-                            }</strong>
-                        </Typography>
-                      </>
-                    ) : (
-                      ""
-                    )
-                  }
-                </Typography>
+                          }
+                        </strong>
+                      </Typography>
+                    </>
+                  ) : (
+                    ""
+                  )
+                }
+              </Typography>
+
+              {
+                barrioSelected != "Todos los Barrios" ? (
+                  <>
+                    <Typography
+                      variant={"h5"}
+                      color={colors.gray[100]}
+                      gridRow={"span 1"}
+                    >
+                      <CallIcon fontSize={"large"} sx={{ mr: "15px" }} />
+                      Expedientes sobre Total: 
+                      <strong>
+                        {dataBarrioSelected.length > 0 ? (
+                            dataBarrioSelected[0].procentaje_expedientes_sobre_total + "%"
+                          ) :(
+                            "Loading..."
+                          )
+                        }
+                      </strong>
+                    </Typography>
+                    <Typography
+                      variant={"h5"}
+                      color={colors.gray[100]}
+                      gridRow={"span 1"}
+                    >
+                      <CallIcon fontSize={"large"} sx={{ mr: "15px" }} />
+                      Personas Sensibilizadas en el Barrio: 
+                      <strong>
+                        {dataBarrioSelected.length > 0 ? (
+                            dataBarrioSelected[0].procentaje_personas_sensibilizadas_barrio + "%"
+                          ) :(
+                            "Loading..."
+                          )
+                        }
+                      </strong>
+                    </Typography>
+                  </>
+
+                ) : (
+                  ""
+                )
+              }  
           </Box>
           {/* Gráfico de tipo de atención */}
           <Box

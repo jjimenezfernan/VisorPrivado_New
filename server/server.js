@@ -964,12 +964,34 @@ app.get("/api/concienciacion", (req, res) => {
 // Endpoint para pasar los datos de los barrios a la vista
 app.get("/api/barrios_dashboard", (req, res) => {
   let globalDataRaw = loadExcelData(dataPathExcel_barrios_dashboard, true, 0);
+  let poblacionTotalBarrios = loadExcelData(dataPathExcel_barrios_dashboard, true, 1);
+  let numMedioHabitantesHogar = loadExcelData(dataPathExcel_barrios_dashboard, true, 2);
+
+  // Parseo de los datos poblacionTotalBarrios
+  // Por si hay elementos vacios
+  const poblacionTotalBarriosFilter = poblacionTotalBarrios.filter(
+    (item) => Array.isArray(item) && item.length > 0
+  );
+
+  // Para eliminar la fila con el nombre de las columnas de los datos
+  poblacionTotalBarriosFilter.shift();
+
+  // El objeto quedará "acronimo_barrio": poblacion_total_barrio
+  const poblacionTotalBarriosParsed = {};
+  poblacionTotalBarriosFilter.forEach((value, index) => {
+      poblacionTotalBarriosParsed[value[0]] = value[2];
+  });
+
+  // Parseo de datos de numMedioHabitantesHogar
+  // Solo escogemos el valor necesario
+  const numMedioHabitantesHogarParsed = numMedioHabitantesHogar[0][1];
 
   // Por si hay elementos vacios
   const globalDataFilter = globalDataRaw.filter(
     (item) => Array.isArray(item) && item.length > 0
   );
 
+  // Parseo de datos de globalData
   // Para eliminar la fila con el nombre de las columnas de los datos
   globalDataFilter.shift();
 
@@ -1008,7 +1030,7 @@ app.get("/api/barrios_dashboard", (req, res) => {
   // Señalar que para las graficas de barras, como se implemento en su momento, los atributos tienen que ser valor y valorColor, 
   // en cambio para el gráfico de genero, los atributos tienen que ser value y color
   barrios.forEach(barrio => {
-    if (barrio === "Todos los Barrios") {
+    if (barrio === "Todos los Barrios") { // es el elemento 0 del objeto barrios
       globalDataParsed.push({
         barrio: barrio,
         sumatorio_interaciones: 0,
@@ -1034,6 +1056,8 @@ app.get("/api/barrios_dashboard", (req, res) => {
         barrio: barrio,
         sumatorio_interaciones: 0,
         num_total_usuarios: 0,
+        procentaje_expedientes_sobre_total: 0,
+        procentaje_personas_sensibilizadas_barrio: 0,
         grafico_tipo_atencion: [
           { id: "Atención telefónica", valor: 0, valorColor: colors[0] },
           { id: "Atención email", valor: 0, valorColor: colors[1] },
@@ -1047,10 +1071,6 @@ app.get("/api/barrios_dashboard", (req, res) => {
           { id: "Usuarios Femeninos", label:"Usuarios Femeninos", value: 0, color: colors[0] },
           { id: "Usuarios Musculinos", label:"Usuarios Masculinos", value: 0, color: colors[1] },
         ]
-        // grafico_sankey: {
-        //   nodes: [],
-        //   links: [],
-        // },
       });
     }
   });
@@ -1091,66 +1111,35 @@ app.get("/api/barrios_dashboard", (req, res) => {
       globalDataParsed[0].grafico_tipo_atencion[2].valor += obj.atenciones_presenciales;
     }
     if (obj.como_nos_has_conocido) {
-      // Para el grafico sankey
-      // if (!globalDataParsed[index].grafico_sankey.nodes.includes(obj.como_nos_has_conocido)) {
-      //   const node_sankey = globalDataParsed[index].grafico_sankey.nodes.find(node => node.id === obj.como_nos_has_conocido);
-      //   if (!node_sankey) {
-      //     const nodeColor = colors[globalDataParsed[index].grafico_sankey.nodes.length];
-      //     globalDataParsed[index].grafico_sankey.nodes.push({
-      //       id: obj.como_nos_has_conocido,
-      //       color: nodeColor,
-      //     });
-      //   }
-      // }
 
       globalDataParsed[index].grafico_como_nos_has_conocido[como_nos_has_conocido.indexOf(obj.como_nos_has_conocido)].valor += 1;
       globalDataParsed[0].grafico_como_nos_has_conocido[como_nos_has_conocido.indexOf(obj.como_nos_has_conocido)].valor += 1;
     }
     if (obj.motivo_de_la_consulta) {
-      // Para el grafico sankey
-      // if (!globalDataParsed[index].grafico_sankey.nodes.includes(obj.motivo_de_la_consulta)) {
-      //   const node_sankey = globalDataParsed[index].grafico_sankey.nodes.find(node => node.id === obj.motivo_de_la_consulta);
-      //   if (!node_sankey) {
-      //     const nodeColor = colors[globalDataParsed[index].grafico_sankey.nodes.length];
-      //     globalDataParsed[index].grafico_sankey.nodes.push({
-      //       id: obj.motivo_de_la_consulta,
-      //       nodeColor: nodeColor,
-      //     });
-      //   }
-
         globalDataParsed[index].grafico_motivo_de_la_consulta[motivo_de_la_consulta.indexOf(obj.motivo_de_la_consulta)].valor += 1;
         globalDataParsed[0].grafico_motivo_de_la_consulta[motivo_de_la_consulta.indexOf(obj.motivo_de_la_consulta)].valor += 1;
       }
-      // Para el grafico sankey
-      // if (obj.motivo_de_la_consulta && obj.como_nos_has_conocido) {
-      //   const objeto_sankey = globalDataParsed[index].grafico_sankey.links.find(
-      //     link_sankey => link_sankey.source === obj.como_nos_has_conocido && link_sankey.target === obj.motivo_de_la_consulta
-      //   );
-      //   if (objeto_sankey) {
-      //     objeto_sankey.value += 1;
-      //   }
-      //   else {
-      //     globalDataParsed[index].grafico_sankey.links.push({
-      //       source: obj.como_nos_has_conocido,
-      //       target: obj.motivo_de_la_consulta,
-      //       value: 1,
-      //     });
-      //   }
-      // }
 
       globalDataParsed[index].grafico_motivo_de_la_consulta[motivo_de_la_consulta.indexOf(obj.motivo_de_la_consulta)].valor += 1;
       globalDataParsed[0].grafico_motivo_de_la_consulta[motivo_de_la_consulta.indexOf(obj.motivo_de_la_consulta)].valor += 1;
     });
 
     // Para el gráfico de genero, se calcula el porcentaje de usuarios
+    let usuarios_totales = 0;
     globalDataParsed.forEach(obj => {
-      if (obj.barrio === "Todos los Barrios") {
+      if (obj.barrio === "Todos los Barrios") { // es el elemento 0 del objeto barrios
+        usuarios_totales = obj.num_total_usuarios;
         obj.procentaje_total_usuarios_femeninos = ((obj.procentaje_total_usuarios_femeninos / obj.num_total_usuarios) * 100).toFixed(2);
         obj.procentaje_total_usuarios_masculinos = ((obj.procentaje_total_usuarios_masculinos / obj.num_total_usuarios) * 100).toFixed(2);
       }
       else{
         obj.grafico_genero_usuarios[0].value = ( obj.grafico_genero_usuarios[0].value / obj.num_total_usuarios).toFixed(4);
         obj.grafico_genero_usuarios[1].value = (obj.grafico_genero_usuarios[1].value / obj.num_total_usuarios).toFixed(4);
+
+        // n expedientes barrio / n expedientes totales -- los numeros de expedientes son iguales a los de usuarios
+        obj.procentaje_expedientes_sobre_total = ((obj.num_total_usuarios / usuarios_totales) * 100).toFixed(2);
+        // (n expedientes barrio * personas por hogar (2,54)) / n población total barrio -- los numeros de expedientes son iguales a los de usuarios
+        obj.procentaje_personas_sensibilizadas_barrio = (((obj.num_total_usuarios * numMedioHabitantesHogarParsed) /poblacionTotalBarriosParsed[obj.barrio] ) *100).toFixed(2);
       }
     });
 
