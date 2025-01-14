@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import SubBar from "../global/SubBar";
+import SubUpBar from "../global/SubUpBar";
 import BarChartBarrios1 from "../../components/BarChartBarrios1";
 import BarChartBarrios2 from "../../components/BarChartBarrios2";
 import BarChartBarrios3 from "../../components/BarChartBarrios3";
@@ -60,7 +60,7 @@ function BarriosDashboard() {
       exit={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <SubBar
+      <SubUpBar
         title={"Principales estadísticas del servicio por barrios"}
         crumbs={[
           ["Inicio", "/"],

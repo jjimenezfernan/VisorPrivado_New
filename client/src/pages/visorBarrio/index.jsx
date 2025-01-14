@@ -3,7 +3,7 @@ import { Box, Typography, useTheme, Link } from "@mui/material";
 import { tokens } from "../../theme";
 import axios from "axios";
 import { motion } from "framer-motion";
-import SubBar from "../global/SubBar";
+import SubUpBar from "../global/SubUpBar";
 import Map from "../../components/MapBarrio";
 import { useMapBarrioContext } from "../../components/MapBarrioProvider";
 import { mapBarrioKeys } from "../../utils/auxUtils";
@@ -341,7 +341,7 @@ function VisorBarrio() {
       exit={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <SubBar
+      <SubUpBar
         title={"Visor de Datos Urbanos - Escala Barrio"}
         crumbs={[
           ["Inicio", "/"],
@@ -365,7 +365,7 @@ function VisorBarrio() {
         <Box
           display={"grid"}
           gridTemplateColumns={"repeat(12,1fr)"}
-          //60 topbar + 40 subbar + 20 gaps + 10 extra
+          //60 topbar + 40 SubUpBar + 20 gaps + 10 extra
           gridAutoRows={`calc((100vh - 60px - 40px - 20px - 10px) / 23)`}
           gap={"7px"}
         >

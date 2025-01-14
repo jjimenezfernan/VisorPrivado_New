@@ -9,7 +9,7 @@ import Visor from "./pages/visorSSCC";
 import VisorParcelas from "./pages/VisorParcelas";
 import VisorBarrio from "./pages/visorBarrio";
 import Descargas from "./pages/descargas";
-import BottomBar from "./pages/global/BottomBar";
+import UpBar from "./pages/global/UpBar";
 import SideBar from "./pages/global/SideBar";
 import MapParcelasProvider from "./components/MapParcelasProvider";
 import MapSSCCProvider from "./components/MapSSCCProvider";
@@ -40,7 +40,7 @@ function App() {
             {shouldShowOverlay && <Overlay closeOverlay={closeOverlay} />}
             <SideBar />
             <main className="content">
-              <BottomBar /> {/* <Bottom bar acts as topbar now /> */}
+              <UpBar /> 
               <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/derivacion" element={<Derivacion />} />

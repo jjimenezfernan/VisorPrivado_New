@@ -3,8 +3,9 @@
 import { Box, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import emsv_color_imagen_institucional from "../../assets/emsv_color_imagen_institucional.png";
+import getafe_institucional from "../../assets/getafe_institucional.png";
 
-function BottomBar() {
+function UpBar() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -27,11 +28,11 @@ function BottomBar() {
     >
       <Box
         display="flex"
-        flex={1}
-        alignItems={"center"}
+        alignItems={"end"}
         justifyContent={"flex-start"}
+        gap={2}
       >
-        <Box display="flex" mr={"25px"}>
+        <Box >
           <a
             href="https://emsvgetafe.org/"
             target="_blank"
@@ -44,9 +45,22 @@ function BottomBar() {
             />
           </a>
         </Box>
+        <Box >
+          <a
+            href="https://getafe.es/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={getafe_institucional}
+              alt="Ayuntamiento de Getafe"
+              height={"27px"}
+            />
+          </a>
+        </Box>
       </Box>
     </Box>
   );
 }
 
-export default BottomBar;
+export default UpBar;

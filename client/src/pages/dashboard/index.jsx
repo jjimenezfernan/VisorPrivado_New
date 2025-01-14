@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import SubBar from "../global/SubBar";
+import SubUpBar from "../global/SubUpBar";
 import BarChartDash2 from "../../components/BarChartDash2";
 import BarChartDash3 from "../../components/BarChartDash3";
 import BarChartDash4 from "../../components/BarChartDash4";
@@ -64,7 +64,7 @@ function Dashboard() {
       exit={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <SubBar
+      <SubUpBar
         title={"Principales estadísticas del servicio de la OHS"}
         crumbs={[["Inicio", "/"]]}
         info={{
@@ -76,7 +76,7 @@ function Dashboard() {
         <Box
           display={"grid"}
           gridTemplateColumns={"repeat(12,1fr)"}
-          //60 topbar + 40 subbar + 20 gaps + 10 extra
+          //60 topbar + 40 SubUpBar + 20 gaps + 10 extra
           gridAutoRows={`calc((100vh - 60px - 40px - 20px - 10px) / 6.5)`}
           gap={"10px"}
         >

@@ -7,7 +7,7 @@ import axios from "axios";
 import { tokens } from "../../theme";
 import DownloadIcon from "@mui/icons-material/Download";
 import { motion } from "framer-motion";
-import SubBar from "../global/SubBar";
+import SubUpBar from "../global/SubUpBar";
 
 import {DIRECTION} from "../../data/direccion_server";
 
@@ -40,7 +40,7 @@ function Descargas() {
       exit={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <SubBar
+      <SubUpBar
         title={"Descargas"}
         crumbs={[
           ["Inicio", "/"],

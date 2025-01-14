@@ -8,7 +8,7 @@ import axios from "axios";
 import { tokens } from "../../theme";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { motion } from "framer-motion";
-import SubBar from "../global/SubBar";
+import SubUpBar from "../global/SubUpBar";
 
 import {DIRECTION} from "../../data/direccion_server";
 
@@ -70,7 +70,7 @@ function ActualizarArchivos() {
       exit={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <SubBar
+      <SubUpBar
         title={"Actualizar Archivos"}
         crumbs={[
           ["Inicio", "/"],

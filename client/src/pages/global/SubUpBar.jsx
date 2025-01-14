@@ -7,7 +7,7 @@ import {
 import { tokens } from "../../theme";
 import DynamicBreadcrumbs from "../../components/DynamicBreadCrumbs";
 
-function SubBar({ title, crumbs, info }) {
+function SubUpBar({ title, crumbs, info }) {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -54,4 +54,4 @@ function SubBar({ title, crumbs, info }) {
   );
 }
 
-export default SubBar;
+export default SubUpBar;

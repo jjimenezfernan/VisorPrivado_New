@@ -4,6 +4,7 @@ import { Button, Typography, Box, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import emsv_color_imagen_institucional from "../../assets/emsv_color_imagen_institucional.png";
+import getafe_institucional from "../../assets/getafe_institucional.png";
 
 function Overlay({ closeOverlay }) {
   const theme = useTheme();
@@ -74,6 +75,11 @@ function Overlay({ closeOverlay }) {
               alt="Empresa municipal del suelo y la vivienda de Getafe"
               height={"40px"}
             />
+            <img
+              src={getafe_institucional}
+              alt="Ayuntamiento de Getafe"
+              height={"40px"}
+            />
           </Box>
         </Box>
       </Box>
@@ -93,7 +99,7 @@ function Overlay({ closeOverlay }) {
           Para su visualización óptima le recomendamos:
           <br />
           <strong>En portátiles:</strong> Reducir el zoom del navegador al{" "}
-          <strong>80%</strong> <ZoomOutIcon />
+          <strong>75%</strong> <ZoomOutIcon />
           <br />
           <strong>En monitores:</strong> No es necesario realizar ningún ajuste
           de zoom.
