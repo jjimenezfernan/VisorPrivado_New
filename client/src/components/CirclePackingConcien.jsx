@@ -38,9 +38,9 @@ function CirclePacking({ data }) {
       >
         <Button
           sx={{
-            backgroundColor: colors.blueAccent[400],
+            backgroundColor: "#f73f5b",
             "&:hover": {
-              backgroundColor: colors.blueAccent[300],
+              backgroundColor: "#b9122c",
             },
           }}
           onClick={() => {

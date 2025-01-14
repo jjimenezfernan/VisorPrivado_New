@@ -823,6 +823,24 @@ app.get("/api/derivacion", (req, res) => {
   res.json(data);
 });
 
+const colors_concienciacion = [
+  "#F53652",
+  "#F57036",
+  "#A0588E",
+  "#F54F36",
+  "#f59f36",
+  "#e13bb7",
+  "#A06E58",
+  "#9258A0",
+  "#A06258",
+  "#F5B0BB",
+  "#F57387",
+  "#4B4342",
+  "#d9b858",
+  "#be22e3",
+  "#900C3F",
+];
+
 app.get("/api/concienciacion", (req, res) => {
   let data1 = loadExcelData(dataPathExcel_concienciacion, true, 0);
   let data2 = loadExcelData(dataPathExcel_concienciacion, true, 1);
@@ -843,7 +861,7 @@ app.get("/api/concienciacion", (req, res) => {
 
   const circlesData = {
     name: "Conciencación",
-    color: "#9cc2e5",
+    color: "#f88193",
     children: [],
   };
 
@@ -857,7 +875,7 @@ app.get("/api/concienciacion", (req, res) => {
       if (!categories.has(category)) {
         const categoryObj = {
           name: category,
-          color: "#487aa9",
+          color: "#d93c54",
           children: [],
         };
         categories.set(category, categoryObj);
@@ -867,7 +885,7 @@ app.get("/api/concienciacion", (req, res) => {
       const childName = category === name ? `- ${name}` : name;
       const childObj = {
         name: childName,
-        color: "#243d54",
+        color: "#b9122c",
         valor,
       };
 
@@ -880,7 +898,7 @@ app.get("/api/concienciacion", (req, res) => {
       if (!categories.has(category)) {
         const categoryObj = {
           name: category,
-          color: "#487aa9",
+          color: "#d93c54",
           children: [],
         };
         categories.set(category, categoryObj);
@@ -888,7 +906,7 @@ app.get("/api/concienciacion", (req, res) => {
       }
       const lastChild = {
         name: `${subcategory} - ${name}`,
-        color: "#243d54",
+        color: "#b9122c",
         valor,
       };
 
@@ -897,7 +915,7 @@ app.get("/api/concienciacion", (req, res) => {
         //subcategory does not exist
         const subcategoryObj = {
           name: subcategory,
-          color: "#71aace",
+          color: "#f73f5b",
           children: [],
         };
         subcategoryObj.children.push(lastChild);
