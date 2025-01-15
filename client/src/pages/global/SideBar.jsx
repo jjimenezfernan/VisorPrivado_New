@@ -38,7 +38,6 @@ function SideBar() {
             // sidebar close
             onClick={() => {
               collapseSidebar();
-              console.log("collapsed", collapsed);
             }}
             icon={collapsed ? <MenuOutlinedIcon color="red" /> : undefined}
             style={{

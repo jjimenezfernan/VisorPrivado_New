@@ -80,8 +80,6 @@ function MapInfo2({ position, info }) {
     )
   );
 
-  // console.log(info);
-
   const infoPanel1 = Object.entries(infoFiltered).filter(([key]) =>
     keysPanel1.includes(key)
   );
@@ -97,8 +95,6 @@ function MapInfo2({ position, info }) {
   const infoPanel4 = Object.entries(infoFiltered).filter(([key]) =>
     keysPanel4.includes(key)
   );
-
-  // console.log(infoPanel1);
 
   const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />

@@ -593,7 +593,6 @@ app.get("/api/visor-parcelas", async (req, res) => {
 
       Object.entries(mediasGlobalesKmediasCertificadosKeysParcelas).forEach(
         ([certKey, value]) => {
-          // console.log(value);
           let maxKey = null;
           let maxValue = -Infinity;
 
@@ -682,7 +681,6 @@ app.get("/api/dashboard", (req, res) => {
       });
     }
     obj["data"] = data;
-    // console.log("data", data);
     lineData.push(obj);
   }
 
@@ -777,8 +775,6 @@ app.get("/api/derivacion", (req, res) => {
 
   sankeyData.nodes = nodes;
   sankeyData.links = removeCircularLinks(links);
-
-  console.log(sankeyData);
 
   globalData1.push(data2[0]);
 
@@ -946,7 +942,6 @@ app.get("/api/concienciacion", (req, res) => {
   globalData.push(data2[0]);
   globalData.push(data3[0]);
   globalData.push(data3[1]);
-  console.log("globalData", globalData);
   // processing pie chart data
   for (let i = 0; i < data4.length; i++) {
     let obj = {};
@@ -1193,7 +1188,6 @@ const upload = multer({
 
 // Para poder subir archivos
 app.post('/api/upload', upload.single('file'), (req, res) => {
-  console.log('Archivo subido:', req.file);
   try {
     res.status(200).json({
       message: 'Archivo subido con éxito',
@@ -1228,7 +1222,6 @@ app.use((err, req, res, next) => {
 // Endpoint para descargar los archivos
 app.get("/api/descargas/:filename", (req, res) => {
   const { filename } = req.params;
-  console.log("filename", filename);
   let fileName = "";
   switch (filename) {
     case "dashboard":

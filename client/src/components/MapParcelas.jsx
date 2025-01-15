@@ -137,10 +137,6 @@ function Map2({ mapRef, geojson, geojsonLimites }) {
   const { selectionValue, updateInfo } = useMapParcelasContext();
   const [tooltipValue, setTooltipValue] = useState("");
 
-  useEffect(() => {
-    console.log("selectionValue", selectionValue);
-  }, [selectionValue]);
-
   function SetViewOnClick() {
     const map = useMapEvent("click", (e) => {
       map.setView(e.latlng, map.getZoom(), {
@@ -152,8 +148,6 @@ function Map2({ mapRef, geojson, geojsonLimites }) {
   }
 
   function onEachFeature(feature, layer) {
-    // console.log("feature props", feature.properties);
-    // console.log("layer", layer);
 
     let tooltipLabel = Selections[pathToSelect(selectionValue)].label;
     let tooltipValue = eval(selectionValue);
@@ -185,7 +179,6 @@ function Map2({ mapRef, geojson, geojsonLimites }) {
       click: (e) => {
         setInfo(feature.properties);
         updateInfo(feature.properties);
-        console.log(feature.properties);
       },
       mouseover: highlightFeature,
       mouseout: resetHighlight,

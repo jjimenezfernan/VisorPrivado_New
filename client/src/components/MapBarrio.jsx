@@ -81,13 +81,7 @@ function Map3({ mapRef, geojson }) {
   const { selectionValue, updateInfo } = useMapBarrioContext();
   const [tooltipValue, setTooltipValue] = useState("");
 
-  useEffect(() => {
-    console.log("selectionValue", selectionValue);
-  }, [selectionValue]);
-
   function onEachFeature(feature, layer) {
-    // console.log("feature props", feature.properties);
-    // console.log("layer", layer);
 
     let tooltipLabel = Selections[pathToSelect(selectionValue)].label;
     let tooltipValue = eval(selectionValue);
@@ -119,7 +113,6 @@ function Map3({ mapRef, geojson }) {
       click: (e) => {
         setInfo(feature.properties);
         updateInfo(feature.properties);
-        console.log(feature.properties);
       },
       mouseover: highlightFeature,
       mouseout: resetHighlight,

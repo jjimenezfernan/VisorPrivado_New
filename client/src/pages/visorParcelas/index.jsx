@@ -262,7 +262,6 @@ function VisorParcelas() {
   }
 
   function globalText(key) {
-    // console.log("key", key);
     return (
       <div
         style={{
