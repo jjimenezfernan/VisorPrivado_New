@@ -87,6 +87,7 @@ function BarriosDashboard() {
             alignItems={"center"}
             justifyContent={"center"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             {barrios.length > 0 ? (
               <>
@@ -112,6 +113,7 @@ function BarriosDashboard() {
             gridTemplateColumns={"repeat(1,1fr)"}
             gridTemplateRows={`repeat(${barrioSelected === "Todos los Barrios" ? 4 : 6}, 1fr)`}
             padding={"10px 5px 10px 20px"}
+            borderRadius={"10px"}
           >
             {/* Datos relevantes */}
             <Typography
@@ -270,6 +272,7 @@ function BarriosDashboard() {
             justifyContent={"center"}
             padding={"10px 5px 10px 5px"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             {dataBarrioSelected.length > 0 ? (
               <>
@@ -295,6 +298,7 @@ function BarriosDashboard() {
             justifyContent={"center"}
             padding={"10px 5px 10px 5px"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             {dataBarrioSelected.length > 0 ? (
               barrioSelected === "Todos los Barrios" ? (
@@ -328,6 +332,7 @@ function BarriosDashboard() {
             justifyContent={"center"}
             padding={"10px 5px 10px 5px"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             {dataBarrioSelected.length > 0 ? (
               <>
@@ -353,6 +358,7 @@ function BarriosDashboard() {
             justifyContent={"center"}
             padding={"10px 5px 10px 5px"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             {dataBarrioSelected.length > 0 ? (
               <>

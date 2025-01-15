@@ -1,4 +1,7 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+/**
+ * Visor de Datos Urbanos – Escala Parcelas
+ */
+import { useState, useRef, useLayoutEffect } from "react";
 import { Box, Typography, useTheme, Link } from "@mui/material";
 import { tokens } from "../../theme";
 import axios from "axios";
@@ -317,6 +320,7 @@ function VisorParcelas() {
           gridAutoRows={`calc((100vh - 60px - 40px - 20px - 10px) / 8.8)`}
           gap={"10px"}
         >
+          {/* Mapa */}
           <Box
             gridColumn={"span 8"}
             gridRow={"span 8"}
@@ -325,6 +329,7 @@ function VisorParcelas() {
             alignItems={"center"}
             justifyContent={"space-evenly"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             {Object.keys(geoParcelas).length > 0 ? ( // Check if geojson is not empty
               <Map
@@ -338,6 +343,7 @@ function VisorParcelas() {
               </Typography>
             )}
           </Box>
+          {/* Panel Datos Castastrales */}
           <Box
             gridColumn={"span 3"}
             gridRow={"span 3"}
@@ -348,6 +354,7 @@ function VisorParcelas() {
             py={"5px"}
             px={"1rem"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h6"}
@@ -362,7 +369,7 @@ function VisorParcelas() {
               ? infoText(infoPanel1)
               : infoTextDefault(1)}
           </Box>
-
+          {/* Panel Datos Globales Castratales */}
           <Box
             gridColumn={"span 1"}
             gridRow={"span 3"}
@@ -373,6 +380,7 @@ function VisorParcelas() {
             py={"5px"}
             px={"1rem"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h6"}
@@ -397,6 +405,7 @@ function VisorParcelas() {
             {globalText("n_exptes")}
             {globalText("Building_Getafe_porc viv OHS")}
           </Box>
+          {/* Panel Datos OHS */}
           <Box
             gridColumn={"span 3"}
             gridRow={"span 1"}
@@ -407,6 +416,7 @@ function VisorParcelas() {
             py={"5px"}
             px={"1rem"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h6"}
@@ -421,6 +431,7 @@ function VisorParcelas() {
               ? infoText(infoPanel2)
               : infoTextDefault(2)}
           </Box>
+          {/* Panel Datos Globales OHS */}
           <Box
             gridColumn={"span 1"}
             gridRow={"span 1"}
@@ -431,6 +442,7 @@ function VisorParcelas() {
             py={"5px"}
             px={"1rem"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h6"}
@@ -444,6 +456,7 @@ function VisorParcelas() {
             {globalTextDash()}
             {globalTextDash()}
           </Box>
+          {/* Panel Datos Población */}
           <Box
             gridColumn={"span 3"}
             gridRow={"span 2"}
@@ -454,6 +467,7 @@ function VisorParcelas() {
             py={"5px"}
             px={"1rem"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h6"}
@@ -468,6 +482,7 @@ function VisorParcelas() {
               ? infoText(infoPanel3)
               : infoTextDefault(3)}
           </Box>
+          {/* Panel Datos Globales Población */}
           <Box
             gridColumn={"span 1"}
             gridRow={"span 2"}
@@ -478,6 +493,7 @@ function VisorParcelas() {
             py={"5px"}
             px={"1rem"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h6"}
@@ -494,6 +510,7 @@ function VisorParcelas() {
             {globalText("Building_Getafe_disconfort inv")}
             {globalText("Building_Getafe_disconfort ver")}
           </Box>
+          {/* Panel Datos Características de la Vivienda */}
           <Box
             gridColumn={"span 3"}
             gridRow={"span 2"}
@@ -504,6 +521,7 @@ function VisorParcelas() {
             py={"5px"}
             px={"1rem"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h6"}
@@ -518,6 +536,7 @@ function VisorParcelas() {
               ? infoText(infoPanel4)
               : infoTextDefault(4)}
           </Box>
+          {/* Panel Datos Globales Características de la Vivienda */}
           <Box
             gridColumn={"span 1"}
             gridRow={"span 2"}
@@ -528,6 +547,7 @@ function VisorParcelas() {
             py={"5px"}
             px={"1rem"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h6"}

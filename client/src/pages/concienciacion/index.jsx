@@ -105,6 +105,7 @@ function Concienciacion() {
             justifyContent={"center"}
             flexDirection={"column"}
             pt={"10px"}
+            borderRadius={"10px"}
           >
             {circlesData && Object.keys(circlesData).length > 0 ? (
               <CirclePacking data={circlesData} />
@@ -123,6 +124,7 @@ function Concienciacion() {
             alignItems={"center"}
             justifyContent={"center"}
             pt={"10px"}
+            borderRadius={"10px"}
           >
             <Typography variant={"h5"} color={colors.gray[100]} sx={{padding: "7px",}}>
               Número de personas con conciencia sobre PE
@@ -154,6 +156,7 @@ function Concienciacion() {
             alignItems={"center"}
             justifyContent={"center"}
             pt={"10px"}
+            borderRadius={"10px"}
           >
             <Typography variant={"h5"} color={colors.gray[100]}>
               Población de Getafe sensibilizada

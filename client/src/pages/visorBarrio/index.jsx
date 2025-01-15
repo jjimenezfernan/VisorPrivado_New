@@ -1,4 +1,7 @@
-import React, { useState, useLayoutEffect, useEffect, useRef } from "react";
+/**
+ * Visor de Datos Urbanos - Escala Barrio
+ */
+import { useState, useEffect, useRef } from "react";
 import { Box, Typography, useTheme, Link } from "@mui/material";
 import { tokens } from "../../theme";
 import axios from "axios";
@@ -369,6 +372,7 @@ function VisorBarrio() {
           gridAutoRows={`calc((100vh - 60px - 40px - 20px - 10px) / 23)`}
           gap={"7px"}
         >
+          {/* Mapa */}
           <Box
             gridColumn={"span 8"}
             gridRow={"span 19"}
@@ -377,6 +381,7 @@ function VisorBarrio() {
             alignItems={"center"}
             justifyContent={"center"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             {Object.keys(geoBarrio).length > 0 ? ( // Check if geojson is not empty
               <Map mapRef={mapRef} geojson={geoBarrio} />
@@ -386,6 +391,7 @@ function VisorBarrio() {
               </Typography>
             )}
           </Box>
+          {/* Panel Datos Catastrales */}
           <Box
             gridColumn={"span 3"}
             gridRow={"span 2"}
@@ -396,6 +402,7 @@ function VisorBarrio() {
             py={"5px"}
             px={"1rem"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"body1"}
@@ -410,6 +417,7 @@ function VisorBarrio() {
               ? infoText(infoPanel1)
               : infoTextDefault(1)}
           </Box>
+          {/* Panel Datos Globales Castastrales*/}
           <Box
             gridColumn={"span 1"}
             gridRow={"span 2"}
@@ -420,6 +428,7 @@ function VisorBarrio() {
             py={"5px"}
             px={"1rem"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"body1"}
@@ -437,6 +446,7 @@ function VisorBarrio() {
             {globalText("t18_1")}
             {globalText("ano")}
           </Box>
+          {/* Panel Datos Socioeconómicos */}
           <Box
             id={"infoPanel2"}
             gridColumn={"span 3"}
@@ -449,6 +459,7 @@ function VisorBarrio() {
             px={"1rem"}
             flexDirection={"column"}
             overflow={"auto"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"body1"}
@@ -463,6 +474,7 @@ function VisorBarrio() {
               ? infoText(infoPanel2)
               : infoTextDefault(2)}
           </Box>
+          {/* Panel Datos Globales Socioeconómicos */}
           <Box
             id={"infoPanel2Global"}
             gridColumn={"span 1"}
@@ -475,6 +487,7 @@ function VisorBarrio() {
             px={"1rem"}
             flexDirection={"column"}
             overflow={"auto"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"body1"}
@@ -495,6 +508,7 @@ function VisorBarrio() {
             {globalText("ac_origen_eventos")}
             {globalText("ac_origen_conocido")}
           </Box>
+          {/* Panel Características Socioeconómicas */}
           <Box
             id={"infoPanel3"}
             gridColumn={"span 3"}
@@ -507,6 +521,13 @@ function VisorBarrio() {
             px={"1rem"}
             flexDirection={"column"}
             overflow={"auto"}
+            borderRadius={"10px"}
+            sx={{ 
+              scrollbarWidth: 'none', // Firefox
+              '&::-webkit-scrollbar': {
+                display: 'none', // Chrome, Safari y Edge
+              },
+            }}
           >
             <Typography
               variant={"body1"}
@@ -521,6 +542,7 @@ function VisorBarrio() {
               ? infoText(infoPanel3)
               : infoTextDefault(3)}
           </Box>
+          {/* Panel Datos Globales Socioeconómicos */}
           <Box
             id={"infoPanel3Global"}
             gridColumn={"span 1"}
@@ -533,6 +555,13 @@ function VisorBarrio() {
             px={"1rem"}
             flexDirection={"column"}
             overflow={"auto"}
+            borderRadius={"10px"}
+            sx={{ 
+              scrollbarWidth: 'none', // Firefox
+              '&::-webkit-scrollbar': {
+                display: 'none', // Chrome, Safari y Edge
+              },
+            }}
           >
             <Typography
               variant={"body1"}
@@ -551,6 +580,7 @@ function VisorBarrio() {
             {globalText("n_alquiler")}
             {globalText("precio_alquiler")}
           </Box>
+          {/* Panel Características de los hogares */}
           <Box
             id={"infoPanel4"}
             gridColumn={"span 3"}
@@ -563,6 +593,7 @@ function VisorBarrio() {
             px={"1rem"}
             flexDirection={"column"}
             overflow={"auto"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"body1"}
@@ -577,6 +608,7 @@ function VisorBarrio() {
               ? infoText(infoPanel4)
               : infoTextDefault(4)}
           </Box>
+          {/* Panel Datos Globales de los hogares */}
           <Box
             id={"infoPanel4Global"}
             gridColumn={"span 1"}
@@ -589,6 +621,7 @@ function VisorBarrio() {
             px={"1rem"}
             flexDirection={"column"}
             overflow={"auto"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"body1"}
@@ -601,6 +634,7 @@ function VisorBarrio() {
             {globalText("renta_hogar")}
             {globalText("t22_1_porc")}
           </Box>
+          {/* Panel Gráfico */}
           <Box
             gridColumn={"span 4"}
             gridRow={"span 6"}
@@ -610,6 +644,7 @@ function VisorBarrio() {
             justifyContent={"center"}
             padding={"7px 5px 7px 5px"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             {barrioChart.length === 0 ? (
               <Typography variant="body1" color={colors.gray[100]}>

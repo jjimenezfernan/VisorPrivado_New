@@ -183,7 +183,11 @@ function Map({ mapRef, geojson }) {
       center={VIEW_SSCC}
       zoom={13}
       ref={mapRef}
-      style={{ height: "100%", width: "100%" }}
+      style={{ 
+        height: "100%", 
+        width: "100%",
+        borderRadius: "10px",
+      }}
       zoomControl={false}
     >
       <TileLayer

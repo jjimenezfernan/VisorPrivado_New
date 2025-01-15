@@ -273,7 +273,11 @@ function Map2({ mapRef, geojson, geojsonLimites }) {
       center={viewParcelas}
       zoom={15}
       ref={mapRef}
-      style={{ height: "100%", width: "100%" }}
+      style={{ 
+        height: "100%", 
+        width: "100%",
+        borderRadius: "10px", 
+      }}
       zoomControl={false}
     >
       <TileLayer

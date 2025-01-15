@@ -1,4 +1,7 @@
-import React, { useState, useLayoutEffect, useEffect, useRef } from "react";
+/**
+ * Visor de Datos Urbanos – Escala Sección Censal
+ */
+import { useState, useLayoutEffect, useRef } from "react";
 import { Box, Typography, useTheme, Link } from "@mui/material";
 import { tokens } from "../../theme";
 import axios from "axios";
@@ -334,6 +337,7 @@ function Visor() {
           gridAutoRows={`calc((100vh - 60px - 40px - 20px - 10px) / 14)`}
           gap={"10px"}
         >
+          {/* Mapa */}
           <Box
             gridColumn={"span 8"}
             gridRow={"span 12"}
@@ -342,6 +346,7 @@ function Visor() {
             alignItems={"center"}
             justifyContent={"center"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             {Object.keys(geoSSCC).length > 0 ? ( // Check if geojson is not empty
               <Map mapRef={mapRef} geojson={geoSSCC} />
@@ -351,6 +356,7 @@ function Visor() {
               </Typography>
             )}
           </Box>
+          {/* Panel Datos Castrastales */}
           <Box
             gridColumn={"span 3"}
             gridRow={"span 2"}
@@ -361,6 +367,7 @@ function Visor() {
             py={"5px"}
             px={"1rem"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h7"}
@@ -375,6 +382,7 @@ function Visor() {
               ? infoText(infoPanel1)
               : infoTextDefault(1)}
           </Box>
+          {/* Panel Datos Globales Castrastales */}
           <Box
             gridColumn={"span 1"}
             gridRow={"span 2"}
@@ -385,6 +393,7 @@ function Visor() {
             py={"5px"}
             px={"1rem"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h7"}
@@ -403,6 +412,7 @@ function Visor() {
             {globalText("t18_1")}
             {globalText("ano")}
           </Box>
+          {/* Panel Datos Socioeconómicos */}
           <Box
             id={"infoPanel2"}
             gridColumn={"span 3"}
@@ -415,6 +425,7 @@ function Visor() {
             px={"1rem"}
             flexDirection={"column"}
             overflow={"auto"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h7"}
@@ -429,6 +440,7 @@ function Visor() {
               ? infoText(infoPanel2)
               : infoTextDefault(2)}
           </Box>
+          {/* Panel Datos Globales Socioeconómicos */}
           <Box
             id={"infoPanel2Global"}
             gridColumn={"span 1"}
@@ -441,6 +453,7 @@ function Visor() {
             px={"1rem"}
             flexDirection={"column"}
             overflow={"auto"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h7"}
@@ -461,6 +474,7 @@ function Visor() {
             {globalText("porc ERRP y OTC")}
             {globalText("porc Eventos/Difusión")}
           </Box>
+          {/* Panel Datos Socioeconómicos */}
           <Box
             id={"infoPanel3"}
             gridColumn={"span 3"}
@@ -473,6 +487,7 @@ function Visor() {
             px={"1rem"}
             flexDirection={"column"}
             overflow={"auto"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h7"}
@@ -487,6 +502,7 @@ function Visor() {
               ? infoText(infoPanel3)
               : infoTextDefault(3)}
           </Box>
+          {/* Panel Datos Globales Socioeconómicos */}
           <Box
             id={"infoPanel3Global"}
             gridColumn={"span 1"}
@@ -499,6 +515,7 @@ function Visor() {
             px={"1rem"}
             flexDirection={"column"}
             overflow={"auto"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h7"}
@@ -519,6 +536,7 @@ function Visor() {
             {globalText("n_alquiler")}
             {globalText("precio_alquiler")}
           </Box>
+          {/* Panel Datos Caracteristcias de los hogares */}
           <Box
             id={"infoPanel4"}
             gridColumn={"span 3"}
@@ -531,6 +549,7 @@ function Visor() {
             px={"1rem"}
             flexDirection={"column"}
             overflow={"auto"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h7"}
@@ -545,6 +564,7 @@ function Visor() {
               ? infoText(infoPanel4)
               : infoTextDefault(4)}
           </Box>
+          {/* Panel Datos Globales Caracteristcias de los hogares */}
           <Box
             id={"infoPanel4Global"}
             gridColumn={"span 1"}
@@ -557,6 +577,7 @@ function Visor() {
             px={"1rem"}
             flexDirection={"column"}
             overflow={"auto"}
+            borderRadius={"10px"}
           >
             <Typography
               variant={"h7"}

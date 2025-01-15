@@ -159,6 +159,7 @@ function ActualizarArchivos() {
               color="success"
               endIcon={<FileUploadIcon />}
               onClick={handleUpload}
+              //disabled={true}
             >
               Upload
             </Button>

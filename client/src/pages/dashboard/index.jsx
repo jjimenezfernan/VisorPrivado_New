@@ -87,9 +87,8 @@ function Dashboard() {
             display={"grid"}
             gridTemplateColumns={"repeat(2,1fr)"}
             gridTemplateRows={"repeat(3, 1fr)"}
-            // justifyContent={"space-evenly"}
             padding={"10px 5px 10px 20px"}
-            // flexDirection={"column"}
+            borderRadius={"10px"}
           >
             {globalData.length > 0 ? (
               <>
@@ -157,6 +156,7 @@ function Dashboard() {
             justifyContent={"center"}
             padding={"10px 5px 10px 5px"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography variant={"h5"} color={colors.gray[100]}>
               Origen de usuarios
@@ -172,6 +172,7 @@ function Dashboard() {
             justifyContent={"center"}
             padding={"10px 5px 10px 5px"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography variant={"h5"} color={colors.gray[100]}>
               Reparto por barrios
@@ -186,6 +187,7 @@ function Dashboard() {
             gridTemplateColumns={"repeat(2,1fr)"}
             gridTemplateRows={"repeat(4, 1fr)"}
             padding={"10px 5px 10px 20px"}
+            borderRadius={"10px"}
           >
             {infoSocialEco.length > 0 ? (
               <>
@@ -326,6 +328,7 @@ function Dashboard() {
             gridTemplateColumns={"repeat(2,1fr)"}
             gridTemplateRows={"repeat(2, 1fr)"}
             padding={"10px 5px 10px 20px"}
+            borderRadius={"10px"}
           >
             {infoEvol.length > 0 ? (
               <>
@@ -371,6 +374,7 @@ function Dashboard() {
             justifyContent={"center"}
             padding={"10px 5px 10px 5px"}
             flexDirection={"column"}
+            borderRadius={"10px"}
           >
             <Typography variant={"h6"} color={colors.gray[100]}>
               Evolución del Número de Usuarios por mes y las Derivaciones de

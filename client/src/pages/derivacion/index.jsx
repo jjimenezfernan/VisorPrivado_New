@@ -73,7 +73,7 @@ function Derivacion() {
           gridAutoRows={`calc((100vh - 60px - 40px - 20px - 10px) / 6.5)`}
           gap={"10px"}
         >
-          {/* Row 1 */}
+          {/* Sankey */}
           <Box
             gridColumn={"span 8"}
             gridRow={"span 6"}
@@ -82,6 +82,7 @@ function Derivacion() {
             alignItems={"center"}
             justifyContent={"center"}
             pt={"10px"}
+            borderRadius={"10px"}
           >
             {sankeyData && Object.keys(sankeyData).length > 0 ? (
               <SankeyChart data={sankeyData} />
@@ -98,6 +99,7 @@ function Derivacion() {
             alignItems={"center"}
             justifyContent={"center"}
             pt={"10px"}
+            borderRadius={"10px"}
           >
             <Typography variant={"h4"} color={colors.gray[100]}>
               Número total de derivaciones
@@ -129,6 +131,7 @@ function Derivacion() {
             alignItems={"center"}
             justifyContent={"center"}
             pt={"10px"}
+            borderRadius={"10px"}
           >
             <Typography variant={"h4"} color={colors.gray[100]}>
               Origen de la Derivación
@@ -148,6 +151,7 @@ function Derivacion() {
             justifyContent={"center"}
             flexDirection={"column"}
             pt={"10px"}
+            borderRadius={"10px"}
           >
             <Typography variant={"h4"} color={colors.gray[100]}>
               Motivo de la Consulta
