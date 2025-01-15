@@ -971,10 +971,13 @@ app.get("/api/barrios_dashboard", (req, res) => {
   // Para eliminar la fila con el nombre de las columnas de los datos
   poblacionTotalBarriosFilter.shift();
 
+  // El objeto quedará "acronimo_barrio": nombre_barrio
+  const acronimoNombreBarriosParsed = {};
   // El objeto quedará "acronimo_barrio": poblacion_total_barrio
   const poblacionTotalBarriosParsed = {};
   poblacionTotalBarriosFilter.forEach((value, index) => {
       poblacionTotalBarriosParsed[value[0]] = value[2];
+      acronimoNombreBarriosParsed[value[0]] = value[1];
   });
 
   // Parseo de datos de numMedioHabitantesHogar
@@ -1139,6 +1142,7 @@ app.get("/api/barrios_dashboard", (req, res) => {
     });
 
   const data = {
+    acronimoNombreBarriosParsed,
     barrios,
     globalDataParsed,
   };

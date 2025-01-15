@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Página de barrios_dashboard, donde se muestra la información de los barrios
+ */
+
 import { useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
@@ -27,6 +31,7 @@ function BarriosDashboard() {
   const [barrios, setbarrios] = useState([]);
   const [barrioSelected, setBarrioSelected] = useState("");
   const [dataBarrioSelected, setDataBarrioSelected] = useState([]);
+  const [acronimoNombreBarrios, setAcronimoNombreBarrios] = useState({});
 
   useEffect(() => {
 
@@ -35,6 +40,7 @@ function BarriosDashboard() {
       const data = res.data;
       setGlobalData(data.globalDataParsed);
       setbarrios(data.barrios);
+      setAcronimoNombreBarrios(data.acronimoNombreBarriosParsed);
       console.log("Created by Khora Urban Thinkers");
       console.log("Contact with us in https://khoraurbanthinkers.es/en/home-en/")
       console.log("Our X account https://x.com/khoraurban")
@@ -134,10 +140,10 @@ function BarriosDashboard() {
               gridRow={"span 1"}
             >
               <HolidayVillageIcon fontSize={"large"} sx={{ mr: "15px" }} />
-                Barrio Seleccionado:
+                Barrio Seleccionado:&nbsp;
                 <strong>
                   {dataBarrioSelected.length > 0 ? (
-                      barrioSelected
+                      barrioSelected === "Todos los Barrios" ? (barrioSelected) : (acronimoNombreBarrios[barrioSelected])
                     ) :(
                       "Loading..."
                     )
@@ -150,7 +156,7 @@ function BarriosDashboard() {
               gridRow={"span 1"}
             >
               <CallIcon fontSize={"large"} sx={{ mr: "15px" }} />
-              Total de Interacciones: 
+              Total de Interacciones:&nbsp;
               <strong>
                 {dataBarrioSelected.length > 0 ? (
                     dataBarrioSelected[0].sumatorio_interaciones
@@ -167,7 +173,7 @@ function BarriosDashboard() {
               gridRow={"span 1"}
             >
               <WcIcon fontSize={"large"} sx={{ mr: "15px" }} />
-                Número de usuarios totales: 
+                Número de usuarios totales:&nbsp;
                 <strong>
                   {dataBarrioSelected.length > 0 ? (
                       dataBarrioSelected[0].num_total_usuarios
@@ -187,7 +193,7 @@ function BarriosDashboard() {
                           ml: "70px",
                         }}
                       > 
-                        Mujeres: 
+                        Mujeres:&nbsp;
                         <strong>
                           {dataBarrioSelected.length > 0 ? (
                               dataBarrioSelected[0].procentaje_total_usuarios_femeninos + "%"
@@ -205,7 +211,7 @@ function BarriosDashboard() {
                           ml: "70px",
                         }}
                       > 
-                        Hombres: 
+                        Hombres:&nbsp;
                         <strong>
                           {dataBarrioSelected.length > 0 ? (
                               dataBarrioSelected[0].procentaje_total_usuarios_masculinos + "%"
@@ -231,7 +237,7 @@ function BarriosDashboard() {
                       gridRow={"span 1"}
                     >
                       <StickyNote2Icon fontSize={"large"} sx={{ mr: "15px" }} />
-                      Expedientes sobre Total: 
+                      Expedientes sobre Total:&nbsp;
                       <strong>
                         {dataBarrioSelected.length > 0 ? (
                             dataBarrioSelected[0].procentaje_expedientes_sobre_total + "%"
@@ -247,7 +253,7 @@ function BarriosDashboard() {
                       gridRow={"span 1"}
                     >
                       <FamilyRestroomIcon fontSize={"large"} sx={{ mr: "15px" }} />
-                      Personas Sensibilizadas en el Barrio: 
+                      Personas Sensibilizadas en el Barrio:&nbsp;
                       <strong>
                         {dataBarrioSelected.length > 0 ? (
                             dataBarrioSelected[0].procentaje_personas_sensibilizadas_barrio + "%"
