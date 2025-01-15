@@ -11,6 +11,8 @@ import { motion } from "framer-motion";
 import FamilyRestroomIcon from "@mui/icons-material/FamilyRestroom";
 import CallIcon from "@mui/icons-material/Call";
 import WcIcon from '@mui/icons-material/Wc';
+import StickyNote2Icon from '@mui/icons-material/StickyNote2';
+import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
 import {DIRECTION} from "../../data/direccion_server";
 import ButtonBarriosDashboard from "../../components/ButtonBarriosDashboard";
 import PieChartBarrios from "../../components/PieChartBarrios";
@@ -131,7 +133,7 @@ function BarriosDashboard() {
               color={colors.gray[100]}
               gridRow={"span 1"}
             >
-              <FamilyRestroomIcon fontSize={"large"} sx={{ mr: "15px" }} />
+              <HolidayVillageIcon fontSize={"large"} sx={{ mr: "15px" }} />
                 Barrio Seleccionado:
                 <strong>
                   {dataBarrioSelected.length > 0 ? (
@@ -228,7 +230,7 @@ function BarriosDashboard() {
                       color={colors.gray[100]}
                       gridRow={"span 1"}
                     >
-                      <CallIcon fontSize={"large"} sx={{ mr: "15px" }} />
+                      <StickyNote2Icon fontSize={"large"} sx={{ mr: "15px" }} />
                       Expedientes sobre Total: 
                       <strong>
                         {dataBarrioSelected.length > 0 ? (
@@ -244,7 +246,7 @@ function BarriosDashboard() {
                       color={colors.gray[100]}
                       gridRow={"span 1"}
                     >
-                      <CallIcon fontSize={"large"} sx={{ mr: "15px" }} />
+                      <FamilyRestroomIcon fontSize={"large"} sx={{ mr: "15px" }} />
                       Personas Sensibilizadas en el Barrio: 
                       <strong>
                         {dataBarrioSelected.length > 0 ? (
