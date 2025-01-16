@@ -13,7 +13,7 @@ function UpBar() {
     <Box
       position="sticky"
       top={0}
-      zIndex={1}
+      zIndex={1000}
       width="100%"
       display="flex"
       justifyContent="space-between"
@@ -26,38 +26,29 @@ function UpBar() {
         borderColor: colors.gray[800],
       }}
     >
-      <Box
-        display="flex"
-        alignItems={"end"}
-        justifyContent={"flex-start"}
-        gap={2}
+      <a
+        href="https://emsvgetafe.org/"
+        target="_blank"
+        rel="noopener noreferrer"
       >
-        <Box >
-          <a
-            href="https://emsvgetafe.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src={emsv_color_imagen_institucional}
-              alt="Empresa municipal del suelo y la vivienda de Getafe"
-              height={"40px"}
-            />
-          </a>
-        </Box>
-        <Box >
-          <a
-            href="https://getafe.es/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src={getafe_institucional}
-              alt="Ayuntamiento de Getafe"
-              height={"27px"}
-            />
-          </a>
-        </Box>
+        <img
+          src={emsv_color_imagen_institucional}
+          alt="Empresa municipal del suelo y la vivienda de Getafe"
+          height={"40px"}
+        />
+      </a>
+      <Box marginTop={1.5}>
+        <a 
+          href="https://getafe.es/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src={getafe_institucional}
+            alt="Ayuntamiento de Getafe"
+            height={"27px"}
+          />
+        </a>
       </Box>
     </Box>
   );
