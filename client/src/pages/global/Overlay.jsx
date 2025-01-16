@@ -19,7 +19,7 @@ function Overlay({ closeOverlay }) {
         width: "100%",
         height: "100%",
         backgroundColor: colors.primary[200],
-        zIndex: 999,
+        zIndex: 9999,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -36,7 +36,7 @@ function Overlay({ closeOverlay }) {
           width: "5rem",
         }}
       >
-        <Typography align="center" fontSize={"7rem"} color={colors.gray[200]}>
+        <Typography align="center" fontFamily={"Rubik"} fontSize={"7rem"} color={colors.gray[200]}>
           ×
         </Typography>
       </Button>
@@ -44,25 +44,12 @@ function Overlay({ closeOverlay }) {
         <Box width={"42rem"}>
           <Typography
             variant="h1"
-            align="center"
             color={colors.gray[200]}
             fontWeight={400}
             paddingBottom={"1rem"}
-            borderBottom={`1px solid ${colors.gray[800]}`}
+            borderBottom={`10px solid ${'#f43653'}`}
           >
-            EMSV Visor Interno
-          </Typography>
-          <Typography
-            variant="h5"
-            align="justify"
-            paddingTop={"1rem"}
-            width={"auto"}
-            margin={"auto"}
-            color={colors.gray[200]}
-            paddingBottom={"1rem"}
-          >
-            <br />
-            Bienvenido al visor interno de la Empresa Municipal del Suelo y la Vivienda de Getafe.
+            Visor Interno de Datos <br/> EMSV Getafe
           </Typography>
           <Box
             display={"flex"}
