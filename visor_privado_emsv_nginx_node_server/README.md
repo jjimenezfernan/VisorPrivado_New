@@ -1,6 +1,6 @@
 # Configuración de Nginx y docker de Node para el Visor privado de la EMSV
 
-**En primer lugar, para poder entender esta parte es obligatorio haber examinado el repostorio [Docker-Nginx-Php-Node](https://github.com/KhoraUrbanThinkers/Docker-Nginx-Php-Node), adémas de ser de vital importancia enteder el apartado [Introducción de una nueva página web en el servidor web](https://github.com/KhoraUrbanThinkers/Docker-Nginx-Php-Node/blob/main/README.md#introducci%C3%B3n-de-una-nueva-p%C3%A1gina-web-en-el-servidor-web)**
+**En primer lugar, para poder entender esta parte es obligatorio haber examinado el repostorio [Web-Server-NGINX-PHPFPM](https://github.com/KhoraUrbanThinkers/Web-Server-NGINX-PHPFPM), adémas de ser de vital importancia enteder el apartado [Introducción de una nueva página web en el servidor web](https://github.com/KhoraUrbanThinkers/Web-Server-NGINX-PHPFPM/tree/main/Docker_Nginx#introducci%C3%B3n-de-una-nueva-p%C3%A1gina-web-en-el-servidor-web)**
 
 Este dirrectorio contiene los pasos para subir el visor a nuestro servidor Kutone, además del código para ejecutar el docker del servidor de *nodejs*.
 
