@@ -136,6 +136,17 @@ function Map2({ mapRef, geojson, geojsonLimites }) {
   const [info, setInfo] = useState({});
   const { selectionValue, updateInfo } = useMapParcelasContext();
   const [tooltipValue, setTooltipValue] = useState("");
+  
+  // Para fuerzar un re-render solo la primera vez
+  console.log("redner")
+  const [geoKey, setGeoKey] = useState(0);
+  const [firstRender, setFirstRender] = useState(true);
+  useEffect(() => {
+    if (firstRender) {
+      setGeoKey((prev) => prev + 1);
+      setFirstRender(false);
+    }
+  }, []); // Se ejecuta solo una vez en el primer render
 
   function SetViewOnClick() {
     const map = useMapEvent("click", (e) => {
@@ -251,6 +262,7 @@ function Map2({ mapRef, geojson, geojsonLimites }) {
     const geoJSONComponent = useMemo(() => {
       return (
         <GeoJSON
+          key={geoKey} // Esto fuerza un re-render solo la primera vez
           data={geojsonData}
           onEachFeature={onEachFeature}
           style={mapStyle}
@@ -278,12 +290,12 @@ function Map2({ mapRef, geojson, geojsonLimites }) {
         url="https://api.maptiler.com/maps/basic-v2-light/256/{z}/{x}/{y}.png?key=BLmB8erci1WE7XYWuf5R"
       />
       <ZoomControl position="bottomright" />
-      <DynamicGeoJSON
+      { geojson.features && <DynamicGeoJSON
         geojsonData={geojson.features}
         selectionValue={selectionValue}
         onEachFeature={onEachFeature}
         mapStyle={mapStyle1}
-      />
+      />}
       <GeoJSON data={geojsonLimites.features} style={mapStyleLimites} />
       <MapLegendParcelas position={"bottomleft"} selection={selectionValue} />
     </MapContainer>
