@@ -1220,7 +1220,7 @@ app.get("/api/descargas/:filename", (req, res) => {
       fileName = "data_derivacion.xlsx";
       break;
     case "dashboard_por_barrio":
-      fileName = "dashboard_por_barrio.xlsx";
+      fileName = "data_dashboard_por_barrio.xlsx";
       break;
     case "barrio_geojson":
       fileName = "map/barrio.geojson";
