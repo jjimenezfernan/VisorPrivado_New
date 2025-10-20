@@ -315,3 +315,73 @@ def lookup_address(street: str, number: str, include_feature: bool = False):
         gjson_str, ref_val = feat[0]
         feature = {"type": "Feature", "geometry": json.loads(gjson_str), "properties": {"reference": ref_val}}
     return {"reference": reference, "feature": feature}
+
+
+
+
+# ---------- CELS (autoconsumos) ----------
+from pydantic import Field
+
+def _norm_str(s: str) -> str:
+    import unicodedata
+    s = "" if s is None else s
+    s = unicodedata.normalize("NFD", s)
+    s = "".join(ch for ch in s if unicodedata.category(ch) != "Mn")
+    s = s.upper().strip()
+    return " ".join(s.split())
+
+class CelsCreate(BaseModel):
+    nombre: str = Field(..., description="Nombre del CELS / proyecto")
+    street_norm: str = Field(..., description="Calle normalizada (p.ej. ALBENIZ)")
+    number_norm: int = Field(..., description="Número del portal")
+    reference: str = Field(..., description="Referencia catastral")
+    auto_CEL: int = Field(..., description="Autoconsumo o CEL")
+
+
+@app.post("/cels")
+def create_cels(item: CelsCreate):
+    if READ_ONLY:
+        raise HTTPException(403, "Esta API está en modo read-only")
+
+    nombre = item.nombre.strip()
+    street_norm = _norm_str(item.street_norm)
+    number_norm = int(item.number_norm)
+    reference = item.reference.strip()
+
+    try:
+        assert _con is not None
+        _con.execute("BEGIN")
+
+        # Evitar duplicados por reference (si tienes UNIQUE en reference esto también lo impide)
+        exists = _con.execute(
+            "SELECT 1 FROM autoconsumos_CELS WHERE UPPER(reference) = UPPER(?) LIMIT 1;",
+            [reference],
+        ).fetchone()
+        if exists:
+            _con.execute("ROLLBACK")
+            raise HTTPException(409, "Ya existe un registro con esa 'reference'")
+
+        # Generar id (sin fiarse de AUTOINCREMENT)
+        new_id = _con.execute("SELECT COALESCE(MAX(id),0) + 1 FROM autoconsumos_CELS;").fetchone()[0]
+
+        _con.execute(
+            """
+            INSERT INTO autoconsumos_CELS (id, nombre, street_norm, number_norm, reference, auto_CEL)
+            VALUES (?, ?, ?, ?, ?,?);
+            """,
+            [int(new_id), nombre, street_norm, number_norm, reference, item.auto_CEL],
+        )
+
+        _con.execute("COMMIT")
+        return {"ok": True, "id": int(new_id)}
+    except HTTPException:
+        raise
+    except Exception as e:
+        try:
+            _con.execute("ROLLBACK")
+        except Exception:
+            pass
+        raise HTTPException(500, f"Error insertando CELS: {e}")
+
+
+

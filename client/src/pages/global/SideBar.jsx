@@ -137,16 +137,23 @@ function SideBar() {
               >
                 Mapas Solares
               </MenuItem>
+              
 
-              <MenuItem
-                style={{
-                  color: colors.gray[100],
-                }}
-                icon={<CloudUploadIcon />}
-                component={<Link to="/actualizar-archivos" />}
-              >
-                Actualizar Archivos
-              </MenuItem>
+              <SubMenu icon={<CloudUploadIcon />} label="Actualización de datos">
+                <MenuItem
+                  style={{
+                    color: colors.gray[100],
+                  }}
+                  component={<Link to="/actualizar-archivos" />}
+                >
+                  Actualizar Archivos
+                </MenuItem>
+                <MenuItem
+                  style={{ color: colors.gray[100] }}
+                  component={<Link to="/cels/nuevo" />}>
+                  Registrar CELS
+                </MenuItem>
+              </SubMenu>
               <MenuItem
                 style={{
                   color: colors.gray[100],

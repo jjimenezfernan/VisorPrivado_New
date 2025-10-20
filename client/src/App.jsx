@@ -23,6 +23,7 @@ import MapasExtra from "./pages/mapaSolar/mapaIrradianciaSombras";
 import MapEMSVProvider from "./components/MapEMSVProvider";
 import MapZoomProvider from "./components/MapZoomProvider";
 import MapTypeSelectProvider from "./components/MapTypeSelectProvider";
+import ActualizarCELS from "./pages/mapaSolar/actualizarCELS";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -89,6 +90,7 @@ function App() {
                         </MapEMSVProvider>
                       }
                 />
+                <Route path="/cels/nuevo" element={<ActualizarCELS />} />
               </Routes>
             </main>
           </div>
@@ -99,3 +101,4 @@ function App() {
 }
 
 export default App;
+
