@@ -4,9 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "env NODE_ENV=development vite",
-    "build": "env NODE_ENV=production vite build",
-    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "dev": "vite",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -26,10 +25,12 @@
     "@nivo/sankey": "^0.87.0",
     "@nivo/sunburst": "^0.87.0",
     "@nivo/swarmplot": "^0.88.0",
+    "@turf/turf": "^7.2.0",
     "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
     "framer-motion": "^10.12.7",
     "leaflet": "^1.9.4",
+    "leaflet-draw": "^1.0.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",

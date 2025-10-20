@@ -19,6 +19,11 @@ import { AnimatePresence } from "framer-motion";
 import BarriosDashboard from "./pages/barrios_dashboard";
 import ActualizarArchivos from "./pages/actualizar_archivos";
 
+import MapasExtra from "./pages/mapaSolar/mapaIrradianciaSombras";
+import MapEMSVProvider from "./components/MapEMSVProvider";
+import MapZoomProvider from "./components/MapZoomProvider";
+import MapTypeSelectProvider from "./components/MapTypeSelectProvider";
+
 function App() {
   const [theme, colorMode] = useMode();
   const location = useLocation();
@@ -72,6 +77,18 @@ function App() {
                 />
                 <Route path="/descargas" element={<Descargas />} />
                 <Route path="/actualizar-archivos" element={<ActualizarArchivos />} />
+                <Route
+                      path="/mapas"
+                      element={
+                        <MapEMSVProvider>
+                          <MapZoomProvider>
+                            <MapTypeSelectProvider>
+                              <MapasExtra />
+                            </MapTypeSelectProvider>
+                          </MapZoomProvider>
+                        </MapEMSVProvider>
+                      }
+                />
               </Routes>
             </main>
           </div>

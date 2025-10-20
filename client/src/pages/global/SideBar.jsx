@@ -16,6 +16,9 @@ import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import MapIcon from "@mui/icons-material/Map";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
+import WbSunnyRoundedIcon from "@mui/icons-material/WbSunnyRounded";
+
+
 function SideBar() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -127,6 +130,14 @@ function SideBar() {
                   Visor Parcelas
                 </MenuItem>
               </SubMenu>
+              <MenuItem
+                style={{ color: colors.gray[100] }}
+                icon={<WbSunnyRoundedIcon />}
+                component={<Link to="/mapas" />}
+              >
+                Mapas Solares
+              </MenuItem>
+
               <MenuItem
                 style={{
                   color: colors.gray[100],
