@@ -317,6 +317,59 @@ def lookup_address(street: str, number: str, include_feature: bool = False):
     return {"reference": reference, "feature": feature}
 
 
+# --- helpers para convertir tablas a FeatureCollection y mapa calle->número->ref
+
+def table_to_featurecollection(table_name: str) -> dict | None:
+    try:
+        rows = q(f"""
+            WITH f AS (
+              SELECT geom, * EXCLUDE (geom)
+              FROM {table_name}
+            )
+            SELECT ST_AsGeoJSON(geom) AS gjson, to_json(f) AS props
+            FROM f;
+        """)
+    except HTTPException:
+        return None
+
+    if not rows:
+        return None
+
+    feats = []
+    for gjson, props in rows:
+        feats.append({
+            "type": "Feature",
+            "geometry": json.loads(gjson),
+            "properties": json.loads(props) if isinstance(props, str) else (props or {}),
+        })
+    return {"type": "FeatureCollection", "features": feats}
+
+def build_street_number_index() -> dict | None:
+    try:
+        rows = q("SELECT street_norm, number_norm, reference FROM address_index;")
+    except HTTPException:
+        return None
+    if not rows:
+        return None
+    out = {}
+    for street_norm, number_norm, reference in rows:
+        street = str(street_norm or "").upper()
+        number = str(number_norm)
+        out.setdefault(street, {})[number] = reference
+    return out
+
+@app.get("/api/visor_emsv")
+def get_visor_emsv():
+    limites = table_to_featurecollection("geo_limites_getafe_emsv")
+    con_viv = table_to_featurecollection("geo_emsv_parcela_con_vivienda")
+    sin_viv = table_to_featurecollection("geo_emsv_parcela_sin_vivienda")
+    calle_num_ref = build_street_number_index()
+    return {
+        "geo_limites_getafe_emsv": limites,
+        "geo_emsv_parcela_con_vivienda": con_viv,
+        "geo_emsv_parcela_sin_vivienda": sin_viv,
+        "json_emsv_calle_num_reference": calle_num_ref,
+    }
 
 
 # ---------- CELS (autoconsumos) ----------
@@ -335,8 +388,7 @@ class CelsCreate(BaseModel):
     street_norm: str = Field(..., description="Calle normalizada (p.ej. ALBENIZ)")
     number_norm: int = Field(..., description="Número del portal")
     reference: str = Field(..., description="Referencia catastral")
-    auto_CEL: int = Field(..., description="Autoconsumo o CEL")
-
+    auto_CEL: int = Field(..., description="Autoconsumo o CEL (1=CEL, 2=Autoconsumo compartido)")
 
 @app.post("/cels")
 def create_cels(item: CelsCreate):
@@ -352,7 +404,6 @@ def create_cels(item: CelsCreate):
         assert _con is not None
         _con.execute("BEGIN")
 
-        # Evitar duplicados por reference (si tienes UNIQUE en reference esto también lo impide)
         exists = _con.execute(
             "SELECT 1 FROM autoconsumos_CELS WHERE UPPER(reference) = UPPER(?) LIMIT 1;",
             [reference],
@@ -361,13 +412,12 @@ def create_cels(item: CelsCreate):
             _con.execute("ROLLBACK")
             raise HTTPException(409, "Ya existe un registro con esa 'reference'")
 
-        # Generar id (sin fiarse de AUTOINCREMENT)
         new_id = _con.execute("SELECT COALESCE(MAX(id),0) + 1 FROM autoconsumos_CELS;").fetchone()[0]
 
         _con.execute(
             """
             INSERT INTO autoconsumos_CELS (id, nombre, street_norm, number_norm, reference, auto_CEL)
-            VALUES (?, ?, ?, ?, ?,?);
+            VALUES (?, ?, ?, ?, ?, ?);
             """,
             [int(new_id), nombre, street_norm, number_norm, reference, item.auto_CEL],
         )
@@ -382,6 +432,3 @@ def create_cels(item: CelsCreate):
         except Exception:
             pass
         raise HTTPException(500, f"Error insertando CELS: {e}")
-
-
-

@@ -1,34 +1,15 @@
-/**
- * Página para registrar CELS (autoconsumos)
- * Formulario: nombre, street_norm, number_norm, reference
- */
-
 import { useState } from "react";
 import {
-  Box,
-  Typography,
-  useTheme,
-  Button,
-  Stack,
-  TextField,
-  Alert,
-  Snackbar,
-  Paper,
+  Box, Typography, useTheme, Button, Stack, TextField,
+  Alert, Snackbar, Paper, MenuItem, Select, InputLabel, FormControl
 } from "@mui/material";
-import { MenuItem, Select, InputLabel, FormControl, Autocomplete} from "@mui/material";
 import axios from "axios";
 import { tokens } from "../../theme";
 import { motion } from "framer-motion";
 import SubUpBar from "../global/SubUpBar";
-import { DIRECTION } from "../../data/direccion_server";
 
-
-
-const baseURL = `${DIRECTION}/cels`;
-
-
-
-console.log("DIRECTION =", DIRECTION);
+// ✅ UNA sola base: lee VITE_API_BASE o usa 8000 por defecto
+const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 
 function ActualizarCELS() {
   const theme = useTheme();
@@ -44,18 +25,17 @@ function ActualizarCELS() {
 
   const [loading, setLoading] = useState(false);
   const [snack, setSnack] = useState({ open: false, msg: "", severity: "success" });
-
   const onCloseSnack = () => setSnack(s => ({ ...s, open: false }));
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((f) => ({ ...f, [name]: value }));
+    setForm(f => ({ ...f, [name]: value }));
   };
 
   const validate = () => {
     if (!form.nombre.trim()) return "El nombre es obligatorio.";
     if (!form.street_norm.trim()) return "La calle (street_norm) es obligatoria.";
-    if (!String(form.number_norm).trim() || isNaN(Number(form.number_norm)))
+    if (!String(form.number_norm).trim() || Number.isNaN(Number(form.number_norm)))
       return "El número (number_norm) debe ser un entero.";
     if (!form.reference.trim()) return "La referencia es obligatoria.";
     return null;
@@ -63,22 +43,19 @@ function ActualizarCELS() {
 
   const handleSubmit = async () => {
     const err = validate();
-    if (err) {
-      setSnack({ open: true, msg: err, severity: "error" });
-      return;
-    }
+    if (err) return setSnack({ open: true, msg: err, severity: "error" });
 
     try {
       setLoading(true);
-      await axios.post(baseURL, {
+      await axios.post(`${API_BASE}/cels`, {
         nombre: form.nombre.trim(),
-        street_norm: form.street_norm, // se normaliza en la API
-        number_norm: Number(form.number_norm),
+        street_norm: form.street_norm,           // normaliza la API
+        number_norm: Number(form.number_norm),   // número
         reference: form.reference.trim(),
-        auto_CEL: Number(form.auto_CEL),
+        auto_CEL: Number(form.auto_CEL),         // número
       });
       setSnack({ open: true, msg: "CELS registrado correctamente.", severity: "success" });
-      setForm({ nombre: "", street_norm: "", number_norm: "", reference: "" });
+      setForm({ nombre: "", street_norm: "", number_norm: "", reference: "", auto_CEL: 1 });
     } catch (error) {
       let msg = "Error en el servidor.";
       if (error.response?.status === 403) msg = "La API está en modo solo lectura (READ_ONLY).";
@@ -91,86 +68,45 @@ function ActualizarCELS() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 1 }} transition={{ duration: 0.6 }}
-    >
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
       <SubUpBar
-        title={"Registrar CELS"}
+        title="Registrar CELS"
         crumbs={[["Inicio", "/"], ["Actualización de datos", "/actualizar-archivos"], ["Registrar CELS", "/cels/nuevo"]]}
         info={{
           title: "Alta de autoconsumos (CELS)",
-          description: (
-            <Typography variant="h5" sx={{ color: colors.gray[400] }}>
-              Introduce la información del CELS para añadirlo a la base de datos.
-            </Typography>
-          ),
+          description: <Typography variant="h5" sx={{ color: colors.gray[400] }}>
+            Introduce la información del CELS para añadirlo a la base de datos.
+          </Typography>
         }}
       />
 
       <Box m="10px">
-        <Paper
-          elevation={3}
-          sx={{
-            p: 2.5,
-            backgroundColor: colors.gray[900],
-            borderRadius: 2,
-          }}
-        >
+        <Paper elevation={3} sx={{ p: 2.5, backgroundColor: colors.gray[900], borderRadius: 2 }}>
           <Typography variant="h6" sx={{ mb: 2, color: colors.gray[200], fontWeight: 700 }}>
             Formulario de registro
           </Typography>
 
           <Stack spacing={2} direction={{ xs: "column", sm: "row" }}>
+            <TextField fullWidth label="Nombre" name="nombre" value={form.nombre} onChange={handleChange} />
             <TextField
-              fullWidth
-              label="Nombre"
-              name="nombre"
-              value={form.nombre}
-              onChange={handleChange}
-            />
-            <TextField
-              fullWidth
-              label="Calle (street_norm)"
-              name="street_norm"
-              value={form.street_norm}
-              onChange={handleChange}
-              placeholder="ALBENIZ"
-              helperText="Se normaliza en el servidor (mayúsculas y sin acentos)."
+              fullWidth label="Calle (street_norm)" name="street_norm" value={form.street_norm} onChange={handleChange}
+              placeholder="ALBENIZ" helperText="Se normaliza en el servidor (mayúsculas y sin acentos)."
             />
           </Stack>
 
           <Stack spacing={2} direction={{ xs: "column", sm: "row" }} sx={{ mt: 2 }}>
-            <TextField
-              fullWidth
-              label="Número (number_norm)"
-              name="number_norm"
-              type="number"
-              value={form.number_norm}
-              onChange={handleChange}
-            />
-            <TextField
-              fullWidth
-              label="Referencia"
-              name="reference"
-              value={form.reference}
-              onChange={handleChange}
-              placeholder="7326410VK3672N"
-            />
+            <TextField fullWidth label="Número (number_norm)" name="number_norm" type="number"
+              value={form.number_norm} onChange={handleChange} />
+            <TextField fullWidth label="Referencia" name="reference" value={form.reference}
+              onChange={handleChange} placeholder="7326410VK3672N" />
             <FormControl fullWidth sx={{ mt: 2 }}>
               <InputLabel id="auto-cel-label">Tipo de proyecto</InputLabel>
-              <Select
-                labelId="auto-cel-label"
-                name="auto_CEL"
-                value={form.auto_CEL}
-                label="Tipo de proyecto"
-                onChange={(e) => setForm((f) => ({ ...f, auto_CEL: e.target.value }))}
-              >
+              <Select labelId="auto-cel-label" name="auto_CEL" value={form.auto_CEL}
+                label="Tipo de proyecto" onChange={(e) => setForm(f => ({ ...f, auto_CEL: e.target.value }))}>
                 <MenuItem value={1}>CEL</MenuItem>
                 <MenuItem value={2}>Autoconsumo compartido</MenuItem>
               </Select>
             </FormControl>
-
-
           </Stack>
 
           <Box mt={3} display="flex" gap={1.5}>
@@ -179,7 +115,7 @@ function ActualizarCELS() {
             </Button>
             <Button
               variant="outlined"
-              onClick={() => setForm({ nombre: "", street_norm: "", number_norm: "", reference: "" })}
+              onClick={() => setForm({ nombre: "", street_norm: "", number_norm: "", reference: "", auto_CEL: 1 })}
               disabled={loading}
             >
               Limpiar
@@ -188,7 +124,8 @@ function ActualizarCELS() {
         </Paper>
       </Box>
 
-      <Snackbar open={snack.open} autoHideDuration={3500} onClose={onCloseSnack} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
+      <Snackbar open={snack.open} autoHideDuration={3500} onClose={onCloseSnack}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
         <Alert onClose={onCloseSnack} severity={snack.severity} sx={{ width: "100%" }}>
           {snack.msg}
         </Alert>
@@ -198,4 +135,3 @@ function ActualizarCELS() {
 }
 
 export default ActualizarCELS;
-

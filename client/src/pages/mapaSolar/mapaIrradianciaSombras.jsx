@@ -29,10 +29,9 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import MapLoadingOverlay from "../../components/PantallaCarga"; 
 
-const API_BASE = "http://127.0.0.1:8000";
-import { DIRECTION } from "../../data/direccion_server";
-const EMSV_URL = `${DIRECTION}/api/visor_emsv`;
 
+const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
+const EMSV_URL = `${API_BASE}/api/visor_emsv`;
 
 // ---- leyenda ----
 const BINS = [
