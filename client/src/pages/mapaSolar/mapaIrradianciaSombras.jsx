@@ -28,7 +28,7 @@ import AdditionalPanel from "../../components/AdditionalPanel";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import MapLoadingOverlay from "../../components/PantallaCarga"; 
-
+import { useLayoutEffect } from "react";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 const EMSV_URL = `${API_BASE}/api/visor_emsv`;
@@ -524,6 +524,184 @@ function SetupLimitPanes() {
 
 
 
+function CustomZoom({ min=1, max=19, shadowMin=17, shadowMax=18 }) {
+  const map = useMap();
+  const [z, setZ] = useState(() => map?.getZoom?.() ?? 0);
+
+  useEffect(() => {
+    const onZoom = () => setZ(map.getZoom());
+    map.on("zoomend", onZoom);
+    setZ(map.getZoom());
+    return () => map.off("zoomend", onZoom);
+  }, [map]);
+
+  const zoomIn  = () => map.setZoom(Math.min(max, (map.getZoom() ?? z) + 1));
+  const zoomOut = () => map.setZoom(Math.max(min, (map.getZoom() ?? z) - 1));
+
+  const inRange = z >= shadowMin && z <= shadowMax;
+  const badgeBg = inRange ? "#10b981" /* verde */ : "#f59e0b" /* ámbar */;
+
+  return (
+    <div style={{
+      background: "white",
+      borderRadius: 10,
+      boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+      padding: 10,
+      font: "12px system-ui",
+      minWidth: 160
+    }}>
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+          <span style={{ width:10, height:10, borderRadius:9999, background:badgeBg, display:"inline-block" }} />
+          <strong>Nivel de zoom</strong>
+        </div>
+        <span style={{ fontWeight:600 }}>{z}</span>
+      </div>
+      <div style={{ display:"flex", gap:8 }}>
+        <button
+          onClick={zoomIn}
+          title="Acercar"
+          style={{ flex:1, border:"none", borderRadius:8, padding:"6px 0", cursor:"pointer", background:"#3b82f6", color:"#fff", fontWeight:600 }}
+        >+</button>
+        <button
+          onClick={zoomOut}
+          title="Alejar"
+          style={{ flex:1, border:"none", borderRadius:8, padding:"6px 0", cursor:"pointer", background:"#6b7280", color:"#fff", fontWeight:600 }}
+        >−</button>
+      </div>
+    </div>
+  );
+}
+
+function ControlsColumn({ shadowsVisible, onToggleShadows, shadowMin=17, shadowMax=18 }) {
+  const map = useMap();
+  const [z, setZ] = useState(() => map?.getZoom?.() ?? 0);
+
+  useEffect(() => {
+    const onZoom = () => setZ(map.getZoom());
+    map.on("zoomend", onZoom);
+    setZ(map.getZoom());
+    return () => map.off("zoomend", onZoom);
+  }, [map]);
+
+  const inRange = z >= shadowMin && z <= shadowMax;
+  const needText =
+    z < shadowMin
+      ? `Acércate ${shadowMin - z} nivel${shadowMin - z === 1 ? "" : "es"} para ver sombras`
+      : z > shadowMax
+      ? `Aléjate ${z - shadowMax} nivel${z - shadowMax === 1 ? "" : "es"} para ver sombras`
+      : "Sombras activas (niveles 17–18).";
+  const targetZoom = z < shadowMin ? shadowMin : z > shadowMax ? shadowMax : z;
+
+  return (
+    <div style={{
+      position:"absolute", top:12, right:12, zIndex:1000,
+      display:"flex", flexDirection:"column", alignItems:"flex-end", gap:10
+    }}>
+      {/* (1) Botón sombras */}
+      <button
+        onClick={onToggleShadows}
+        style={{
+          border:"none",
+          background: shadowsVisible ? "#3b82f6" : "#6b7280",
+          color:"#fff",
+          borderRadius:10,
+          padding:"8px 12px",
+          cursor:"pointer",
+          fontWeight:700,
+          display:"flex", alignItems:"center", gap:8,
+          boxShadow:"0 2px 8px rgba(0,0,0,0.15)"
+        }}
+      >
+        <span role="img" aria-label="sol">☀️</span>
+        {shadowsVisible ? "Ocultar sombras" : "Mostrar sombras"}
+      </button>
+
+      {/* (2) Zoom con punto verde/ámbar */}
+      <CustomZoom min={14} max={18} shadowMin={shadowMin} shadowMax={shadowMax} />
+
+      {/* (3) Tarjeta Sombras */}
+      <div style={{
+        background:"white",
+        borderRadius:10,
+        boxShadow:"0 2px 8px rgba(0,0,0,0.15)",
+        padding:"10px 12px",
+        font:"12px system-ui",
+        minWidth: 240
+      }}>
+        <div style={{ fontWeight:700, marginBottom:6 }}>Sombras</div>
+        <div style={{ marginBottom: inRange ? 0 : 8 }}>
+          {needText}
+        </div>
+        {!inRange && (
+          <button
+            onClick={() => map.flyTo(map.getCenter(), targetZoom, { duration: 0.6 })}
+            style={{
+              border:"none",
+              background:"#3b82f6",
+              color:"#fff",
+              borderRadius:8,
+              padding:"6px 10px",
+              cursor:"pointer",
+              fontWeight:600
+            }}
+          >
+            Ir a zoom {targetZoom}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function useFillToBottom(ref, extraBottom = 0) {
+  const [h, setH] = useState(400);
+  useLayoutEffect(() => {
+    const calc = () => {
+      if (!ref.current) return;
+      const top = ref.current.getBoundingClientRect().top; // distancia desde el viewport
+      const height = Math.max(300, window.innerHeight - top - extraBottom);
+      setH(height);
+    };
+    calc();
+    window.addEventListener("resize", calc);
+    window.addEventListener("orientationchange", calc);
+    return () => {
+      window.removeEventListener("resize", calc);
+      window.removeEventListener("orientationchange", calc);
+    };
+  }, [ref, extraBottom]);
+  return h;
+}
+
+
+function InvalidateOnDeps({ deps = [] }) {
+  const map = useMap();
+  useEffect(() => {
+    // siguiente tick, así Leaflet mide el tamaño real
+    const t = setTimeout(() => map.invalidateSize(), 0);
+    return () => clearTimeout(t);
+  }, [map, ...deps]);
+  return null;
+}
+
+function AutoInvalidateOnResize({ observeRef }) {
+  const map = useMap();
+  useEffect(() => {
+    if (!observeRef?.current) return;
+    const ro = new ResizeObserver(() => {
+      map.invalidateSize({ animate: false });
+    });
+    ro.observe(observeRef.current);
+    // también al empezar
+    map.invalidateSize({ animate: false });
+    return () => ro.disconnect();
+  }, [map, observeRef]);
+  return null;
+}
+
+
+
 
 export default function NewMap() {
   const [shadowsVisible, setShadowsVisible] = useState(true);
@@ -569,6 +747,8 @@ export default function NewMap() {
     return res.json();
   }
 
+  const mapBoxRef = useRef(null);
+  const mapHeight = useFillToBottom(mapBoxRef, 8);
 
 
   // fetch EMSV on mount
@@ -801,20 +981,19 @@ export default function NewMap() {
           info={{ title: "Visor de Datos Públicos de Vivienda", description: (<Typography />) }}
         />
         <Box m="10px">
-          <Grid container spacing={2}>
-            {/* Columna izquierda: MAPA (xs=12, md=8) */}
+          <Grid container spacing={2} alignItems="stretch">
             <Grid item xs={12} md={8}>
               <Box
-                bgcolor="#f9fafb"
-                borderRadius="10px"
-                overflow="hidden"
-                position="relative"
-                sx={{
-                  height: { xs: "60vh", md: "calc(100vh - 160px)" },
-                  minHeight: 380,
-                }}
-              >
-                {/* 👇 ADD THIS: Toggle button for shadows */}
+              ref={mapBoxRef}
+              sx={{
+                height: mapHeight,
+                minHeight: 380,
+                bgcolor: "#f9fafb",
+                borderRadius: "10px",
+                overflow: "hidden",
+                position: "relative",
+              }}
+              > 
                 <Box
                   sx={{
                     position: "absolute",
@@ -823,27 +1002,7 @@ export default function NewMap() {
                     zIndex: 1000,
                   }}
                 >
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => setShadowsVisible(!shadowsVisible)}
-                    sx={{
-                      backgroundColor: shadowsVisible ? "#3b82f6" : "#6b7280",
-                      color: "white",
-                      textTransform: "none",
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-                      "&:hover": {
-                        backgroundColor: shadowsVisible ? "#2563eb" : "#4b5563",
-                      },
-                      fontSize: "12px",
-                      fontWeight: 600,
-                      minWidth: "140px",
-                    }}
-                  >
-                    {shadowsVisible ? "🌑 Ocultar sombras" : "☀️ Mostrar sombras"}
-                  </Button>
                 </Box>
-
                 <MapContainer
                   center={[40.307927, -3.732297]}
                   minZoom={14}
@@ -852,7 +1011,8 @@ export default function NewMap() {
                   maxBounds={bounds}
                   maxBoundsViscosity={1.0}
                   style={{ height: "100%", width: "100%", background: "#f3f4f6" }}
-                >
+                > 
+                  <AutoInvalidateOnResize observeRef={mapBoxRef} />
                   <MapLoadingOverlay loading={!buildingsLoaded} />
                   <StaticBuildingsLayer 
                     apiBase={API_BASE} 
@@ -872,12 +1032,16 @@ export default function NewMap() {
                     zIndex={0}
                   />
                   
-                  {}
+                  <ControlsColumn
+                    shadowsVisible={shadowsVisible}
+                    onToggleShadows={() => setShadowsVisible(v => !v)}
+                    shadowMin={17}
+                    shadowMax={18}
+                  />
                   {shadowsVisible && (
                     <>
                       <ShadowsLayer bbox={bbox} minZoom={17} maxZoom={18} />
                       <Legend minZoom={17} maxZoom={18} />
-                      <ZoomStatus minZoom={17} maxZoom={18} />
                     </>
                   )}
                   
@@ -902,8 +1066,6 @@ export default function NewMap() {
                 </MapContainer>
               </Box>
             </Grid>
-
-            {/* Rest of your component stays the same... */}
             <Grid item xs={12} md={4}>
               <Stack spacing={2} sx={{ height: "100%" }}>
                 <Box
