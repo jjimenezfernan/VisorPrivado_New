@@ -177,6 +177,10 @@ export default function RightLayerPanel({
                 value={fmt(m.pot_kWp, 1)}
               />
               <InfoRow
+                label="Porcentaje%%%%%"
+                value={fmt(m.porc_superficie_util_cat, 1)}
+              />
+              <InfoRow
                 label="Energía fotovoltaica anual estimada (kWh/año)"
                 value={fmt(m.energy_total_kWh, 0)}
               />

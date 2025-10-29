@@ -152,7 +152,7 @@ function SideBar() {
                   style={{
                     color: colors.gray[100],
                   }}
-                  component={<Link to="/visor-sscc" />}
+                  component={<Link to="/mapas/irradiancia" />}
                 >
                   Espacio público
                 </MenuItem>

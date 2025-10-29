@@ -25,7 +25,7 @@ import MapZoomProvider from "./components/MapZoomProvider";
 import MapTypeSelectProvider from "./components/MapTypeSelectProvider";
 import ActualizarCELS from "./pages/mapaSolar/actualizarCELS";
 
-import mapaIrradiancia from "./pages/mapaSolar/mapaIrradiancia";
+import MapaIrradiancia from "./pages/mapaSolar/mapaIrradiancia";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -91,6 +91,18 @@ function App() {
                           </MapZoomProvider>
                         </MapEMSVProvider>
                       }
+                />
+                <Route
+                 path="/mapas/irradiancia"
+                 element={
+                   <MapEMSVProvider>
+                     <MapZoomProvider>
+                       <MapTypeSelectProvider>
+                         <MapaIrradiancia />
+                       </MapTypeSelectProvider>
+                     </MapZoomProvider>
+                   </MapEMSVProvider>
+                 }
                 />
                 <Route path="/cels/nuevo" element={<ActualizarCELS />} />
               </Routes>

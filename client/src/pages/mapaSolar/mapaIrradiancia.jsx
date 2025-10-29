@@ -1,4 +1,3 @@
-// newMap.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MapContainer, TileLayer, useMap, LayersControl, LayerGroup } from "react-leaflet";
 import L from "leaflet";
@@ -31,16 +30,13 @@ import MapLoadingOverlay from "../../components/PantallaCarga";
 
 const API_BASE = "http://127.0.0.1:8000";
 import { DIRECTION } from "../../data/direccion_server";
-const EMSV_URL = `${DIRECTION}/api/visor_emsv`;
+const EMSV_URL = `${API_BASE.replace(/\/$/, "")}/api/visor_emsv`;
 import { useLayoutEffect } from "react";
 import RightLayerPanel from "../../components/RightLayerPanel";
 
 
 
-// ---- leyenda irradiancia ----
-// kWh/m²·año (ajusta rangos si tu dataset tiene otros valores)
-// ---- leyenda irradiancia (kWh/m²·a) ----
-// rangos de tu imagen
+
 const IRR_BINS = [
   { min: 183.78,  max: 1112.49, color: "#053bd3" },
   { min: 1112.49, max: 1491.41, color: "#28b6f6" },

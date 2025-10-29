@@ -372,63 +372,323 @@ def get_visor_emsv():
     }
 
 
-# ---------- CELS (autoconsumos) ----------
-from pydantic import Field
-
-def _norm_str(s: str) -> str:
-    import unicodedata
-    s = "" if s is None else s
-    s = unicodedata.normalize("NFD", s)
-    s = "".join(ch for ch in s if unicodedata.category(ch) != "Mn")
-    s = s.upper().strip()
-    return " ".join(s.split())
-
-class CelsCreate(BaseModel):
-    nombre: str = Field(..., description="Nombre del CELS / proyecto")
-    street_norm: str = Field(..., description="Calle normalizada (p.ej. ALBENIZ)")
-    number_norm: int = Field(..., description="Número del portal")
-    reference: str = Field(..., description="Referencia catastral")
-    auto_CEL: int = Field(..., description="Autoconsumo o CEL (1=CEL, 2=Autoconsumo compartido)")
-
-@app.post("/cels")
-def create_cels(item: CelsCreate):
-    if READ_ONLY:
-        raise HTTPException(403, "Esta API está en modo read-only")
-
-    nombre = item.nombre.strip()
-    street_norm = _norm_str(item.street_norm)
-    number_norm = int(item.number_norm)
-    reference = item.reference.strip()
-
-    try:
-        assert _con is not None
-        _con.execute("BEGIN")
-
-        exists = _con.execute(
-            "SELECT 1 FROM autoconsumos_CELS WHERE UPPER(reference) = UPPER(?) LIMIT 1;",
-            [reference],
-        ).fetchone()
-        if exists:
-            _con.execute("ROLLBACK")
-            raise HTTPException(409, "Ya existe un registro con esa 'reference'")
-
-        new_id = _con.execute("SELECT COALESCE(MAX(id),0) + 1 FROM autoconsumos_CELS;").fetchone()[0]
-
-        _con.execute(
-            """
-            INSERT INTO autoconsumos_CELS (id, nombre, street_norm, number_norm, reference, auto_CEL)
-            VALUES (?, ?, ?, ?, ?, ?);
-            """,
-            [int(new_id), nombre, street_norm, number_norm, reference, item.auto_CEL],
+# ---------- CELS points (centroids) ----------
+@app.get("/cels/features")
+def cels_features(
+    bbox: str | None = Query(None, description="minx,miny,maxx,maxy (WGS84)"),
+    limit: int = 20000,
+    offset: int = 0,
+):
+    where, params = parse_bbox(bbox)
+    rows = q(f"""
+        WITH j AS (
+          SELECT 
+            ST_PointOnSurface(b.geom) AS pt,  -- point we’ll use for geometry & bbox
+            c.id,
+            c.nombre,
+            c.street_norm,
+            c.number_norm,
+            c.reference,
+            c.auto_CEL
+          FROM buildings b
+          JOIN autoconsumos_CELS c
+            ON LEFT(UPPER(b.reference), 14) = LEFT(UPPER(c.reference), 14)
+          {where.replace("geom", "pt")}      -- make the bbox filter use the POINT
+          LIMIT ? OFFSET ?
         )
+        SELECT 
+          ST_AsGeoJSON(pt) AS gjson,
+          to_json(struct_pack(
+            id := id,
+            nombre := nombre,
+            street_norm := street_norm,
+            number_norm := number_norm,
+            reference := reference,
+            auto_CEL := auto_CEL
+          )) AS props
+        FROM j;
+    """, params + [limit, offset])
 
-        _con.execute("COMMIT")
-        return {"ok": True, "id": int(new_id)}
-    except HTTPException:
-        raise
+    return {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": json.loads(gjson),
+                "properties": json.loads(props) if isinstance(props, str) else (props or {}),
+            }
+            for gjson, props in rows
+        ],
+    }
+
+
+
+
+
+# ---------- CELS membership check ----------
+class CelsWithinReq(BaseModel):
+    geometry: dict  # GeoJSON geometry (Point, Polygon, etc.)
+
+@app.post("/cels/within")
+def cels_within_buffer(
+    req: CelsWithinReq,
+    radius_m: float = Query(500, description="Radio del buffer CELS en metros")
+):
+    """
+    Devuelve todos los CELS cuyos buffers contienen (intersectan) la geometría dada.
+    Versión simplificada usando distancia en grados (aproximada).
+    """
+    geojson_str = json.dumps(req.geometry)
+    
+    # Convertir metros a grados aproximadamente (1 grado ≈ 111km en latitud)
+    # Para Madrid (40°N), 1 grado longitud ≈ 85km
+    radius_deg = radius_m / 85000.0  # aproximación para longitud en Madrid
+    
+    try:
+        rows = q("""
+            WITH input_geom AS (
+              SELECT ST_GeomFromGeoJSON(?::VARCHAR) AS geom
+            ),
+            cels_points AS (
+              SELECT 
+                c.id,
+                c.nombre,
+                c.street_norm,
+                c.number_norm,
+                c.reference AS cels_ref,
+                c.auto_CEL,
+                ST_Centroid(b.geom) AS point_geom
+              FROM autoconsumos_CELS c
+              JOIN buildings b 
+                ON LEFT(UPPER(b.reference), 14) = LEFT(UPPER(c.reference), 14)
+            ),
+            input_point AS (
+              SELECT ST_Centroid(geom) AS center FROM input_geom
+            )
+            SELECT 
+              cp.id,
+              cp.nombre,
+              cp.street_norm,
+              cp.number_norm,
+              cp.cels_ref,
+              cp.auto_CEL,
+              ST_Distance(cp.point_geom, ip.center) AS distance_deg
+            FROM cels_points cp, input_point ip
+            WHERE ST_Distance(cp.point_geom, ip.center) <= ?
+            ORDER BY distance_deg;
+        """, [geojson_str, radius_deg])
+        
+        cels = []
+        for row in rows:
+            # Convertir distancia de grados a metros (aproximado)
+            distance_deg = float(row[6]) if row[6] is not None else None
+            distance_m = distance_deg * 85000.0 if distance_deg else None
+            
+            cels.append({
+                "id": row[0],
+                "nombre": row[1] if row[1] else "(sin nombre)",
+                "street_norm": row[2],
+                "number_norm": row[3],
+                "reference": row[4],
+                "auto_CEL": int(row[5]) if row[5] is not None else None,
+                "distance_m": distance_m,
+            })
+        
+        return {
+            "count": len(cels),
+            "cels": cels,
+            "radius_m": radius_m
+        }
     except Exception as e:
-        try:
-            _con.execute("ROLLBACK")
-        except Exception:
-            pass
-        raise HTTPException(500, f"Error insertando CELS: {e}")
+        print(f"Error in /cels/within: {e}")
+        raise HTTPException(500, f"Error: {str(e)}")
+
+
+
+
+
+
+# Agrega este endpoint temporal para debug en app.py
+@app.get("/debug/cels/count")
+def debug_cels_count():
+    """Endpoint temporal para verificar datos CELS"""
+    try:
+        # Contar registros en autoconsumos_CELS
+        count_cels = q("SELECT COUNT(*) FROM autoconsumos_CELS")[0][0]
+        
+        # Contar registros en buildings que coinciden
+        count_matches = q("""
+            SELECT COUNT(*)
+            FROM buildings b
+            JOIN autoconsumos_CELS c
+              ON LEFT(UPPER(b.reference), 14) = LEFT(UPPER(c.reference), 14)
+        """)[0][0]
+        
+        # Muestra ejemplo
+        sample = q("""
+            SELECT c.id, c.nombre, c.reference, c.auto_CEL
+            FROM autoconsumos_CELS c
+            LIMIT 5
+        """)
+        
+        return {
+            "cels_count": int(count_cels),
+            "buildings_with_cels": int(count_matches),
+            "sample": [{"id": r[0], "nombre": r[1], "reference": r[2], "auto_CEL": r[3]} for r in sample]
+        }
+    except Exception as e:
+        return {"error": str(e)}
+    
+
+@app.get("/cadastre/feature")
+def cadastre_by_refcat(
+    refcat: str = Query(..., description="Referencia catastral"),
+    include_feature: bool = Query(False, description="Incluir geometría GeoJSON")
+):
+    """Busca un edificio por referencia catastral exacta"""
+    ref_norm = refcat.strip()
+    
+    if not include_feature:
+        # Solo devolver si existe
+        exists = q("SELECT 1 FROM buildings WHERE UPPER(reference) = UPPER(?) LIMIT 1", [ref_norm])
+        if not exists:
+            raise HTTPException(404, "Referencia catastral no encontrada")
+        return {"reference": ref_norm}
+    
+    # Con geometría
+    rows = q("""
+        WITH f AS (
+          SELECT geom, * EXCLUDE (geom)
+          FROM buildings
+          WHERE UPPER(reference) = UPPER(?)
+          LIMIT 1
+        )
+        SELECT ST_AsGeoJSON(geom) AS gjson, to_json(f) AS props FROM f;
+    """, [ref_norm])
+
+    if not rows:
+        raise HTTPException(404, "Referencia catastral no encontrada")
+
+    gjson, props = rows[0]
+    return {
+        "reference": ref_norm,
+        "feature": {
+            "type": "Feature",
+            "geometry": json.loads(gjson),
+            "properties": json.loads(props) if isinstance(props, str) else (props or {})
+        }
+    }
+
+
+
+
+
+
+
+class ZonalReq(BaseModel):
+    geometry: dict  # GeoJSON Polygon/MultiPolygon/Point/...
+
+@app.post("/irradiance/zonal")
+def irradiance_zonal(req: ZonalReq):
+    geojson = json.dumps(req.geometry)
+    n, avg, mn, mx = q("""
+        WITH zone AS (
+          SELECT ST_Transform(
+                     ST_GeomFromGeoJSON(?::VARCHAR),
+                     'EPSG:4326','EPSG:25830', TRUE   -- <-- fuerza lon,lat de entrada
+                 ) AS g
+        ),
+        hits AS (
+          SELECT p.value
+          FROM irr_points p, zone z
+          WHERE ST_Intersects(p.geom, z.g)
+        )
+        SELECT COUNT(*), AVG(value), MIN(value), MAX(value) FROM hits;
+    """, [geojson])[0]
+
+    return {
+        "count": int(n or 0),
+        "avg": float(avg) if avg is not None else None,
+        "min": float(mn) if mn is not None else None,
+        "max": float(mx) if mx is not None else None,
+    }
+
+def parse_bbox_for_srid(bbox: str | None, target_srid: int) -> tuple[str, list]:
+    if not bbox:
+        return "", []
+    parts = bbox.split(",")
+    if len(parts) != 4:
+        raise HTTPException(400, "bbox debe ser 'minx,miny,maxx,maxy'")
+    minx, miny, maxx, maxy = map(float, parts)
+    where = (
+        "WHERE ST_Intersects("
+        "  geom,"
+        "  ST_Transform("
+        "    ST_MakeEnvelope(?, ?, ?, ?),"
+        "    'EPSG:4326',"
+        f"    'EPSG:{target_srid}',"
+        "    TRUE"                  # <-- fuerza lon,lat
+        "  )"
+        ")"
+    )
+    params = [minx, miny, maxx, maxy]
+    return where, params
+
+
+@app.get("/irradiance/features")
+def irradiance_features(
+    bbox: str | None = Query(None, description="minx,miny,maxx,maxy (WGS84)"),
+):
+    where, params = parse_bbox_for_srid(bbox, target_srid=25830)
+    rows = q(f"""
+        SELECT
+          ST_AsGeoJSON(ST_Transform(geom, 'EPSG:25830','EPSG:4326', TRUE)) AS gjson,
+          value
+        FROM irr_points
+        {where};
+    """, params)
+
+    features = [{
+        "type": "Feature",
+        "geometry": json.loads(gjson),
+        "properties": {"value": float(val) if val is not None else None}
+    } for gjson, val in rows]
+
+    return fc(features)
+
+
+
+# ---------- Building metrics ----------
+@app.get("/buildings/metrics")
+def buildings_metrics(reference: str):
+    ref = reference.strip()
+    rows = q("""
+        SELECT reference,
+               irr_average,
+               area_m2,
+               superficie_util_m2,
+               pot_kWp,
+               energy_total_kWh,
+               factor_capacidad_pct,
+               irr_mean_kWhm2_y
+        FROM edificios_metrics
+        WHERE UPPER(reference) = UPPER(?)
+        LIMIT 1;
+    """, [ref])
+
+    if not rows:
+        raise HTTPException(404, "No metrics for this reference")
+
+    r = rows[0]
+    return {
+        "reference": r[0],
+        "metrics": {
+            "irr_average": float(r[1]) if r[1] is not None else None,
+            "area_m2": float(r[2]) if r[2] is not None else None,
+            "superficie_util_m2": float(r[3]) if r[3] is not None else None,
+            "pot_kWp": float(r[4]) if r[4] is not None else None,
+            "energy_total_kWh": float(r[5]) if r[5] is not None else None,
+            "factor_capacidad_pct": float(r[6]) if r[6] is not None else None,
+            "irr_mean_kWhm2_y": float(r[7]) if r[7] is not None else None,
+        }
+    }
