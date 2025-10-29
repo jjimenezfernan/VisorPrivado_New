@@ -697,8 +697,16 @@ def buildings_metrics(reference: str):
 
 
 
+from pydantic import  Field, confloat
+
+
+
+
 from pydantic import BaseModel
 from fastapi import HTTPException, Query
+
+# ----------------- Pydantic -----------------
+Percent_0_100 = confloat(ge=0, le=100)
 
 class CelsBase(BaseModel):
     nombre: str
@@ -706,26 +714,38 @@ class CelsBase(BaseModel):
     number_norm: int
     reference: str
     auto_CEL: int  # 1=CEL, 2=Autoconsumo compartido
+    por_ocupacion: Percent_0_100 | None = Field(
+        default=None, description="Porcentaje de ocupación 0–100"
+    )
+
+
 
 class CelsOut(CelsBase):
     id: int
 
 @app.get("/cels")
-def list_cels(query: str | None = None, limit: int = 200, offset: int = 0):
+def list_cels(
+    query: str | None = Query(None),
+    search: str | None = Query(None),       # alias usado por el frontend
+    limit: int = 200,
+    offset: int = 0,
+):
+    term = query or search
     where = ""
     params: list = []
-    if query:
+    if term:
         where = (
             "WHERE "
             "UPPER(nombre) LIKE UPPER(?) OR "
             "UPPER(street_norm) LIKE UPPER(?) OR "
             "UPPER(reference) LIKE UPPER(?)"
         )
-        like = f"%{query}%"
+        like = f"%{term}%"
         params = [like, like, like]
+
     rows = q(
         f"""
-        SELECT id, nombre, street_norm, number_norm, reference, auto_CEL
+        SELECT id, nombre, street_norm, number_norm, reference, auto_CEL, por_ocupacion
         FROM autoconsumos_CELS
         {where}
         ORDER BY id
@@ -733,6 +753,7 @@ def list_cels(query: str | None = None, limit: int = 200, offset: int = 0):
         """,
         params + [limit, offset],
     )
+
     items = [
         {
             "id": int(r[0]),
@@ -741,16 +762,18 @@ def list_cels(query: str | None = None, limit: int = 200, offset: int = 0):
             "number_norm": int(r[3]) if r[3] is not None else None,
             "reference": r[4],
             "auto_CEL": int(r[5]) if r[5] is not None else None,
+            "por_ocupacion": float(r[6]) if r[6] is not None else None,  # 0–100
         }
         for r in rows
     ]
     return {"items": items, "limit": limit, "offset": offset, "count": len(items)}
 
+
 @app.get("/cels/{cid}")
 def get_cels(cid: int):
     rows = q(
         """
-        SELECT id, nombre, street_norm, number_norm, reference, auto_CEL
+        SELECT id, nombre, street_norm, number_norm, reference, auto_CEL, por_ocupacion
         FROM autoconsumos_CELS
         WHERE id = ?
         LIMIT 1
@@ -767,7 +790,12 @@ def get_cels(cid: int):
         "number_norm": int(r[3]) if r[3] is not None else None,
         "reference": r[4],
         "auto_CEL": int(r[5]) if r[5] is not None else None,
+        "por_ocupacion": float(r[6]) if r[6] is not None else None,  # 0–100
     }
+
+
+
+
 
 @app.post("/cels")
 def create_cels(req: CelsBase):
@@ -783,10 +811,18 @@ def create_cels(req: CelsBase):
         new_id = _con.execute("SELECT COALESCE(MAX(id),0)+1 FROM autoconsumos_CELS").fetchone()[0]
         _con.execute(
             """
-            INSERT INTO autoconsumos_CELS (id, nombre, street_norm, number_norm, reference, auto_CEL)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO autoconsumos_CELS (id, nombre, street_norm, number_norm, reference, auto_CEL, por_ocupacion)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
-            [new_id, req.nombre, req.street_norm, int(req.number_norm), req.reference, int(req.auto_CEL)],
+            [
+                new_id,
+                req.nombre,
+                req.street_norm,
+                int(req.number_norm),
+                req.reference,
+                int(req.auto_CEL),
+                float(req.por_ocupacion) if req.por_ocupacion is not None else None,
+            ],
         )
         _con.execute("COMMIT")
         return {"ok": True, "id": int(new_id)}
@@ -796,6 +832,7 @@ def create_cels(req: CelsBase):
     except Exception as e:
         _con.execute("ROLLBACK")
         raise HTTPException(500, f"Error creando CELS: {e}")
+
 
 @app.put("/cels/{cid}")
 def update_cels(cid: int, req: CelsBase):
@@ -818,10 +855,18 @@ def update_cels(cid: int, req: CelsBase):
         _con.execute(
             """
             UPDATE autoconsumos_CELS
-            SET nombre = ?, street_norm = ?, number_norm = ?, reference = ?, auto_CEL = ?
+            SET nombre = ?, street_norm = ?, number_norm = ?, reference = ?, auto_CEL = ?, por_ocupacion = ?
             WHERE id = ?
             """,
-            [req.nombre, req.street_norm, int(req.number_norm), req.reference, int(req.auto_CEL), cid],
+            [
+                req.nombre,
+                req.street_norm,
+                int(req.number_norm),
+                req.reference,
+                int(req.auto_CEL),
+                float(req.por_ocupacion) if req.por_ocupacion is not None else None,
+                cid,
+            ],
         )
         _con.execute("COMMIT")
         return {"ok": True, "id": int(cid)}
@@ -831,3 +876,23 @@ def update_cels(cid: int, req: CelsBase):
     except Exception as e:
         _con.execute("ROLLBACK")
         raise HTTPException(500, f"Error actualizando CELS: {e}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

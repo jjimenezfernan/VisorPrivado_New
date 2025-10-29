@@ -154,7 +154,7 @@ function SideBar() {
                   }}
                   component={<Link to="/mapas/irradiancia" />}
                 >
-                  Espacio público
+                  Edificios Irradiancia
                 </MenuItem>
               </SubMenu>
 

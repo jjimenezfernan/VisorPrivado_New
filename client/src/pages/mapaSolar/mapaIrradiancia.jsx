@@ -31,6 +31,7 @@ import MapLoadingOverlay from "../../components/PantallaCarga";
 const API_BASE = "http://127.0.0.1:8000";
 import { DIRECTION } from "../../data/direccion_server";
 const EMSV_URL = `${API_BASE.replace(/\/$/, "")}/api/visor_emsv`;
+
 import { useLayoutEffect } from "react";
 import RightLayerPanel from "../../components/RightLayerPanel";
 

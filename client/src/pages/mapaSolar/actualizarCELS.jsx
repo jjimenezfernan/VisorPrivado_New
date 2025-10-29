@@ -13,11 +13,12 @@ import {
   Select,
   InputLabel,
   FormControl,
-  ToggleButtonGroup,
-  ToggleButton,
   Divider,
   CircularProgress,
+  ButtonGroup,
 } from "@mui/material";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import axios from "axios";
 import { tokens } from "../../theme";
 import { motion } from "framer-motion";
@@ -42,10 +43,19 @@ function ActualizarCELS() {
     number_norm: "",
     reference: "",
     auto_CEL: 1,
+    // por_ocupacion en % para el input (0-100). Se guardará en 0-1.
+    por_ocupacion: "",
   });
 
   const resetForm = () => {
-    setForm({ nombre: "", street_norm: "", number_norm: "", reference: "", auto_CEL: 1 });
+    setForm({
+      nombre: "",
+      street_norm: "",
+      number_norm: "",
+      reference: "",
+      auto_CEL: 1,
+      por_ocupacion: "",
+    });
     setSelectedId(null);
   };
 
@@ -60,7 +70,7 @@ function ActualizarCELS() {
   const [numbers, setNumbers] = useState([]);
 
   // ---- CELS existentes ----
-  const [search, setSearch] = useState(""); // criterio de búsqueda (nombre o referencia)
+  const [search, setSearch] = useState("");
   const [cels, setCels] = useState([]);
   const [loadingCels, setLoadingCels] = useState(false);
 
@@ -113,6 +123,12 @@ function ActualizarCELS() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    // normalizamos por_ocupacion (solo números y punto/coma)
+    if (name === "por_ocupacion") {
+      const clean = value.replace(",", "."); // permitir coma
+      setForm((f) => ({ ...f, por_ocupacion: clean }));
+      return;
+    }
     setForm((f) => ({ ...f, [name]: value }));
   };
 
@@ -122,6 +138,8 @@ function ActualizarCELS() {
     if (!String(form.number_norm).trim() || Number.isNaN(Number(form.number_norm)))
       return "El número (number_norm) debe ser un entero.";
     if (!form.reference.trim()) return "La referencia es obligatoria.";
+    if (form.por_ocupacion !== "" && (Number(form.por_ocupacion) < 0 || Number(form.por_ocupacion) > 100))
+      return "El porcentaje de ocupación debe estar entre 0 y 100.";
     return null;
   };
 
@@ -129,26 +147,31 @@ function ActualizarCELS() {
     const err = validate();
     if (err) return setSnack({ open: true, msg: err, severity: "error" });
 
+    // convertir % (0-100) a decimal (0-1) si viene informado
+    const porDecimal =
+      form.por_ocupacion === "" || isNaN(Number(form.por_ocupacion))
+        ? null
+        : Number(form.por_ocupacion) / 100;
+
     try {
       setLoading(true);
+      const payload = {
+        nombre: form.nombre.trim(),
+        street_norm: form.street_norm,
+        number_norm: Number(form.number_norm),
+        reference: form.reference.trim(),
+        auto_CEL: Number(form.auto_CEL),
+        ...(form.por_ocupacion === "" || isNaN(Number(form.por_ocupacion))
+        ? {}
+        : { por_ocupacion: Number(form.por_ocupacion) }), // 0–100 tal cual
+      };
+
       if (mode === "crear" || !selectedId) {
-        await axios.post(`${API_BASE}/cels`, {
-          nombre: form.nombre.trim(),
-          street_norm: form.street_norm,
-          number_norm: Number(form.number_norm),
-          reference: form.reference.trim(),
-          auto_CEL: Number(form.auto_CEL),
-        });
+        await axios.post(`${API_BASE}/cels`, payload);
         setSnack({ open: true, msg: "CEL registrado correctamente.", severity: "success" });
         resetForm();
       } else {
-        await axios.put(`${API_BASE}/cels/${selectedId}`, {
-          nombre: form.nombre.trim(),
-          street_norm: form.street_norm,
-          number_norm: Number(form.number_norm),
-          reference: form.reference.trim(),
-          auto_CEL: Number(form.auto_CEL),
-        });
+        await axios.put(`${API_BASE}/cels/${selectedId}`, payload);
         setSnack({ open: true, msg: "CEL actualizado correctamente.", severity: "success" });
       }
     } catch (error) {
@@ -168,12 +191,17 @@ function ActualizarCELS() {
       return;
     }
     setSelectedId(cel.id);
+
+    const por = typeof cel.por_ocupacion === "number" && !isNaN(cel.por_ocupacion)
+    ? Math.min(100, Math.round(cel.por_ocupacion * 100) / 100)   // ya viene 0–100
+    : "";
     setForm({
       nombre: cel.nombre || "",
       street_norm: cel.street_norm || "",
       number_norm: String(cel.number_norm ?? ""),
       reference: cel.reference || "",
       auto_CEL: Number(cel.auto_CEL ?? 1),
+      por_ocupacion: por === "" ? "" : String(por),
     });
   };
 
@@ -195,8 +223,7 @@ function ActualizarCELS() {
         title="Gestionar CELS"
         crumbs={[
           ["Inicio", "/"],
-          ["Actualización de datos", "/actualizar-archivos"],
-          ["CELS", "/cels"],
+          ["Actualizar-Modificar CELS y AC", "/cels"],
         ]}
         info={{
           title: "Alta y edición de autoconsumos (CELS)",
@@ -210,37 +237,38 @@ function ActualizarCELS() {
 
       <Box m="10px">
         <Paper elevation={3} sx={{ p: 2.5, backgroundColor: colors.gray[900], borderRadius: 2 }}>
-          {/* Selector de modo */}
+          {/* Selector de modo - más visible */}
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
             <Typography variant="h6" sx={{ color: colors.gray[200], fontWeight: 700 }}>
-              {mode === "crear" ? "Formulario de registro" : "Editar CELS"}
+              {mode === "crear"
+                ? "Formulario de registro de CEL o autoconsumo compartido"
+                : "Formulario para editar CEL o autoconsumo compartido"}
             </Typography>
-            <ToggleButtonGroup
-              color="primary"
-              value={mode}
-              exclusive
-              onChange={(_, val) => {
-                if (!val) return;
-                setMode(val);
-                if (val === "crear") resetForm();
-              }}
-              size="small"
-            >
-              <ToggleButton value="crear">Crear</ToggleButton>
-              <ToggleButton value="modificar">Modificar</ToggleButton>
-            </ToggleButtonGroup>
+
+            <ButtonGroup variant="outlined" size="small">
+              <Button
+                startIcon={<AddCircleOutlineIcon />}
+                variant={mode === "crear" ? "contained" : "outlined"}
+                onClick={() => {
+                  setMode("crear");
+                  resetForm();
+                }}
+              >
+                Crear
+              </Button>
+              <Button
+                startIcon={<EditOutlinedIcon />}
+                variant={mode === "modificar" ? "contained" : "outlined"}
+                onClick={() => setMode("modificar")}
+              >
+                Modificar
+              </Button>
+            </ButtonGroup>
           </Stack>
 
           {mode === "modificar" && (
             <>
               <Stack spacing={2} direction={{ xs: "column", sm: "row" }} sx={{ mb: 2 }}>
-                <TextField
-                  fullWidth
-                  label="Buscar por nombre o referencia"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Ej.: 7326410VK3672N o 'Colegio XYZ'"
-                />
                 <Autocomplete
                   fullWidth
                   options={celOptions}
@@ -328,6 +356,20 @@ function ActualizarCELS() {
                 <MenuItem value={2}>Autoconsumo compartido</MenuItem>
               </Select>
             </FormControl>
+          </Stack>
+
+          {/* --- Porcentaje ocupación (nuevo) --- */}
+          <Stack spacing={2} direction={{ xs: "column", sm: "row" }} sx={{ mt: 2 }}>
+            <TextField
+              fullWidth
+              label="Porcentaje de ocupación (%)"
+              name="por_ocupacion"
+              value={form.por_ocupacion}
+              onChange={handleChange}
+              type="number"
+              inputProps={{ min: 0, max: 100, step: "0.01" }}
+              helperText="Introduce 0–100. Se guardará como 0–100."
+            />
           </Stack>
 
           {/* --- Botones --- */}
