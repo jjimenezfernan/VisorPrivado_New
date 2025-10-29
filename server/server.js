@@ -1256,3 +1256,25 @@ console.log("Created by Khora Urban Thinkers");
 console.log("Contact with us in https://khoraurbanthinkers.es/en/home-en/")
 console.log("Our X account https://x.com/khoraurban")
 console.log("Our Linkedin account https://www.linkedin.com/company/khora-urban-thinkers/posts/?feedView=all")
+
+
+
+
+
+
+const callesPath = path.join(__dirname, "resources/map/emsv_calle_num_reference.json");
+let cache = null;
+
+function loadCache() {
+  const raw = fs.readFileSync(callesPath, "utf8");
+  const data = JSON.parse(raw);
+  cache = { calles_num_ref: data };
+}
+loadCache();
+
+app.get("/api/visor_emsv", (req, res) => {
+  if (!cache) return res.status(500).send("Cache no cargada");
+  res.json(cache);
+});
+
+app.listen(3041, () => console.log("API en 3041"));

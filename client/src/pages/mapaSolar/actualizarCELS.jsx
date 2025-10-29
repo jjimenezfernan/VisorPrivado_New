@@ -25,8 +25,11 @@ import { motion } from "framer-motion";
 import SubUpBar from "../global/SubUpBar";
 import { Autocomplete } from "@mui/material";
 
+// para /api/visor_emsv usa DIRECTION (tu Node API: 3041)
+import { DIRECTION } from "../../data/direccion_server";
+
 const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
-const EMSV_URL = `${API_BASE}/api/visor_emsv`;
+const EMSV_URL = `${DIRECTION}/api/visor_emsv`;
 
 function ActualizarCELS() {
   const theme = useTheme();
@@ -43,7 +46,6 @@ function ActualizarCELS() {
     number_norm: "",
     reference: "",
     auto_CEL: 1,
-    // por_ocupacion en % para el input (0-100). Se guardará en 0-1.
     por_ocupacion: "",
   });
 
@@ -64,38 +66,51 @@ function ActualizarCELS() {
   const [snack, setSnack] = useState({ open: false, msg: "", severity: "success" });
   const onCloseSnack = () => setSnack((s) => ({ ...s, open: false }));
 
-  // ---- Direcciones EMSV ----
-  const [jsonRef, setJsonRef] = useState(null);
+  // ---- Direcciones EMSV (desde Node API) ----
+  const [refIndex, setRefIndex] = useState({});
   const [streets, setStreets] = useState([]);
   const [numbers, setNumbers] = useState([]);
+  const [loadingIdx, setLoadingIdx] = useState(true);
 
   // ---- CELS existentes ----
   const [search, setSearch] = useState("");
   const [cels, setCels] = useState([]);
   const [loadingCels, setLoadingCels] = useState(false);
 
-  // Cargar dataset de calles/números al montar
+  // Cargar dataset de calles/números al montar (desde /api/visor_emsv)
   useEffect(() => {
     (async () => {
       try {
+        setLoadingIdx(true);
         const res = await axios.get(EMSV_URL);
-        const data = res.data;
-        const ref = data.json_emsv_calle_num_reference || {};
-        setJsonRef(ref);
+        const ref = res.data?.calles_num_ref || {};
+        setRefIndex(ref);
         const calleList = Object.keys(ref || {});
         setStreets(calleList.sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" })));
       } catch (err) {
         console.error("Error cargando calles:", err);
+        setRefIndex({});
+        setStreets([]);
+      } finally {
+        setLoadingIdx(false);
       }
     })();
   }, []);
 
   // Actualizar números cuando cambia la calle seleccionada
   useEffect(() => {
-    if (!form.street_norm || !jsonRef) return;
-    const nums = Object.keys(jsonRef[form.street_norm] || {});
-    setNumbers(nums.sort((a, b) => parseInt(a) - parseInt(b)));
-  }, [form.street_norm, jsonRef]);
+    if (!form.street_norm || !refIndex) {
+      setNumbers([]);
+      return;
+    }
+    const nums = Object.keys(refIndex[form.street_norm] || {});
+    nums.sort((a, b) => {
+      const na = parseInt(a, 10), nb = parseInt(b, 10);
+      if (Number.isFinite(na) && Number.isFinite(nb)) return na - nb;
+      return String(a).localeCompare(String(b), "es", { sensitivity: "base" });
+    });
+    setNumbers(nums.map(String));
+  }, [form.street_norm, refIndex]);
 
   // Buscar CELS existentes (cuando modo='modificar' o cambia el search)
   useEffect(() => {
@@ -123,9 +138,8 @@ function ActualizarCELS() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // normalizamos por_ocupacion (solo números y punto/coma)
     if (name === "por_ocupacion") {
-      const clean = value.replace(",", "."); // permitir coma
+      const clean = value.replace(",", ".");
       setForm((f) => ({ ...f, por_ocupacion: clean }));
       return;
     }
@@ -147,12 +161,6 @@ function ActualizarCELS() {
     const err = validate();
     if (err) return setSnack({ open: true, msg: err, severity: "error" });
 
-    // convertir % (0-100) a decimal (0-1) si viene informado
-    const porDecimal =
-      form.por_ocupacion === "" || isNaN(Number(form.por_ocupacion))
-        ? null
-        : Number(form.por_ocupacion) / 100;
-
     try {
       setLoading(true);
       const payload = {
@@ -162,8 +170,8 @@ function ActualizarCELS() {
         reference: form.reference.trim(),
         auto_CEL: Number(form.auto_CEL),
         ...(form.por_ocupacion === "" || isNaN(Number(form.por_ocupacion))
-        ? {}
-        : { por_ocupacion: Number(form.por_ocupacion) }), // 0–100 tal cual
+          ? {}
+          : { por_ocupacion: Number(form.por_ocupacion) }), // guardas 0–100
       };
 
       if (mode === "crear" || !selectedId) {
@@ -192,9 +200,11 @@ function ActualizarCELS() {
     }
     setSelectedId(cel.id);
 
-    const por = typeof cel.por_ocupacion === "number" && !isNaN(cel.por_ocupacion)
-    ? Math.min(100, Math.round(cel.por_ocupacion * 100) / 100)   // ya viene 0–100
-    : "";
+    const por =
+      typeof cel.por_ocupacion === "number" && !isNaN(cel.por_ocupacion)
+        ? Math.min(100, Math.round(cel.por_ocupacion * 100) / 100)
+        : "";
+
     setForm({
       nombre: cel.nombre || "",
       street_norm: cel.street_norm || "",
@@ -209,14 +219,33 @@ function ActualizarCELS() {
     () =>
       cels.map((c) => ({
         ...c,
-        label:
-          c.nombre
-            ? `${c.nombre} • ${c.reference} • ${c.street_norm} ${c.number_norm}`
-            : `${c.reference} • ${c.street_norm} ${c.number_norm}`,
+        label: c.nombre
+          ? `${c.nombre} • ${c.reference} • ${c.street_norm} ${c.number_norm}`
+          : `${c.reference} • ${c.street_norm} ${c.number_norm}`,
       })),
     [cels]
   );
 
+  // cuando eliges número, autofill de la referencia desde refIndex
+  const handleSelectNumber = (n) => {
+    const refcat = refIndex?.[form.street_norm]?.[String(n)] ?? "";
+    setForm((f) => ({ ...f, number_norm: n, reference: refcat }));
+  };
+
+
+  const btnSx = {
+    selected: {
+      backgroundColor: theme.palette.primary.main,
+      color: "#fff",
+      "&:hover": { backgroundColor: theme.palette.primary.dark },
+    },
+    unselected: {
+      backgroundColor: colors.gray[800],         // visible en fondo oscuro
+      color: colors.gray[100],
+      border: `1px solid ${colors.gray[600]}`,
+      "&:hover": { backgroundColor: colors.gray[700] },
+    },
+  };
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
       <SubUpBar
@@ -237,34 +266,64 @@ function ActualizarCELS() {
 
       <Box m="10px">
         <Paper elevation={3} sx={{ p: 2.5, backgroundColor: colors.gray[900], borderRadius: 2 }}>
-          {/* Selector de modo - más visible */}
-          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
-            <Typography variant="h6" sx={{ color: colors.gray[200], fontWeight: 700 }}>
-              {mode === "crear"
-                ? "Formulario de registro de CEL o autoconsumo compartido"
-                : "Formulario para editar CEL o autoconsumo compartido"}
-            </Typography>
+  
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+          <Typography variant="h6" sx={{ color: colors.gray[200], fontWeight: 700 }}>
+            {mode === "crear"
+              ? "Formulario de registro de CEL o autoconsumo compartido"
+              : "Formulario para editar CEL o autoconsumo compartido"}
+          </Typography>
 
-            <ButtonGroup variant="outlined" size="small">
-              <Button
-                startIcon={<AddCircleOutlineIcon />}
-                variant={mode === "crear" ? "contained" : "outlined"}
-                onClick={() => {
-                  setMode("crear");
-                  resetForm();
-                }}
-              >
-                Crear
-              </Button>
-              <Button
-                startIcon={<EditOutlinedIcon />}
-                variant={mode === "modificar" ? "contained" : "outlined"}
-                onClick={() => setMode("modificar")}
-              >
-                Modificar
-              </Button>
-            </ButtonGroup>
+          <Stack direction="row" spacing={1}>
+            <Button
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => {
+                setMode("crear");
+                resetForm();
+              }}
+              disableElevation
+              sx={{
+                px: 2,
+                fontWeight: 600,
+                borderRadius: 2,
+                border: 1,
+                borderColor: mode === "crear" ? "transparent" : colors.gray[600],
+                backgroundColor: mode === "crear" ? theme.palette.primary.main : colors.gray[800],
+                color: mode === "crear" ? "#fff" : colors.gray[100],
+                "&:hover": {
+                  backgroundColor: mode === "crear"
+                    ? theme.palette.primary.dark
+                    : colors.gray[700],
+                },
+              }}
+            >
+              Crear
+            </Button>
+
+            <Button
+              startIcon={<EditOutlinedIcon />}
+              onClick={() => setMode("modificar")}
+              disableElevation
+              sx={{
+                px: 2,
+                fontWeight: 600,
+                borderRadius: 2,
+                border: 1,
+                borderColor: mode === "modificar" ? "transparent" : colors.gray[600],
+                backgroundColor: mode === "modificar" ? theme.palette.primary.main : colors.gray[800],
+                color: mode === "modificar" ? "#fff" : colors.gray[100],
+                "&:hover": {
+                  backgroundColor: mode === "modificar"
+                    ? theme.palette.primary.dark
+                    : colors.gray[700],
+                },
+              }}
+            >
+              Modificar
+            </Button>
           </Stack>
+        </Stack>
+
 
           {mode === "modificar" && (
             <>
@@ -307,22 +366,28 @@ function ActualizarCELS() {
               fullWidth
               options={streets}
               value={form.street_norm || null}
-              onChange={(_e, newValue) =>
-                setForm((f) => ({ ...f, street_norm: newValue || "", number_norm: "" }))
-              }
+              onChange={(_e, newValue) => {
+                setForm((f) => ({ ...f, street_norm: newValue || "", number_norm: "", reference: "" }));
+              }}
+              loading={loadingIdx}
               renderInput={(params) => (
-                <TextField {...params} label="Calle" placeholder="Escribe para buscar..." variant="outlined" />
+                <TextField
+                  {...params}
+                  label="Calle"
+                  placeholder={loadingIdx ? "Cargando calles..." : "Escribe para buscar..."}
+                  variant="outlined"
+                />
               )}
               disableClearable={false}
             />
 
-            <FormControl fullWidth disabled={!form.street_norm}>
+            <FormControl fullWidth disabled={!form.street_norm || loadingIdx}>
               <InputLabel>Número</InputLabel>
               <Select
                 name="number_norm"
                 value={form.number_norm}
                 label="Número"
-                onChange={(e) => setForm((f) => ({ ...f, number_norm: e.target.value }))}
+                onChange={(e) => handleSelectNumber(e.target.value)}
               >
                 {numbers.map((n) => (
                   <MenuItem key={n} value={n}>
@@ -342,6 +407,7 @@ function ActualizarCELS() {
               value={form.reference}
               onChange={handleChange}
               placeholder="7326410VK3672N"
+              helperText="Se autocompleta al elegir número; puedes editarla si lo necesitas."
             />
             <FormControl fullWidth>
               <InputLabel id="auto-cel-label">Tipo de proyecto</InputLabel>
@@ -358,7 +424,7 @@ function ActualizarCELS() {
             </FormControl>
           </Stack>
 
-          {/* --- Porcentaje ocupación (nuevo) --- */}
+          {/* --- Porcentaje ocupación (0–100) --- */}
           <Stack spacing={2} direction={{ xs: "column", sm: "row" }} sx={{ mt: 2 }}>
             <TextField
               fullWidth
