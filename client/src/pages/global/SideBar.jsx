@@ -26,7 +26,7 @@ function SideBar() {
     useProSidebar();
   return (
     //zIndex so the leaflet map isnt on top of the sidebar
-    <Box display={"flex"} height={"100%"} zIndex={900}>
+    <Box display={"flex"} height={"100%"} zIndex={3000}>
       <Sidebar
         defaultCollapsed={true}
         rootStyles={{

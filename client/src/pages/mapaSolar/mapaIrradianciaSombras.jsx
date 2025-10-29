@@ -1012,7 +1012,7 @@ export default function NewMap() {
                   maxBoundsViscosity={1.0}
                   style={{ height: "100%", width: "100%", background: "#f3f4f6" }}
                 > 
-                  <AutoInvalidateOnResize observeRef={mapBoxRef} />
+                <AutoInvalidateOnResize observeRef={mapBoxRef} />
                   <MapLoadingOverlay loading={!buildingsLoaded} />
                   <StaticBuildingsLayer 
                     apiBase={API_BASE} 
