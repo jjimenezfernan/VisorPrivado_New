@@ -19,11 +19,13 @@ import { AnimatePresence } from "framer-motion";
 import BarriosDashboard from "./pages/barrios_dashboard";
 import ActualizarArchivos from "./pages/actualizar_archivos";
 
-import MapasExtra from "./pages/mapaSolar/mapaIrradianciaSombras";
+import MapasExtra from "./pages/mapaSolar/mapaSombras";
 import MapEMSVProvider from "./components/MapEMSVProvider";
 import MapZoomProvider from "./components/MapZoomProvider";
 import MapTypeSelectProvider from "./components/MapTypeSelectProvider";
 import ActualizarCELS from "./pages/mapaSolar/actualizarCELS";
+
+import mapaIrradiancia from "./pages/mapaSolar/mapaIrradiancia";
 
 function App() {
   const [theme, colorMode] = useMode();

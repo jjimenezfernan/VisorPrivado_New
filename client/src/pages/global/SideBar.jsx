@@ -130,14 +130,33 @@ function SideBar() {
                   Visor Parcelas
                 </MenuItem>
               </SubMenu>
+              {/*
               <MenuItem
                 style={{ color: colors.gray[100] }}
                 icon={<WbSunnyRoundedIcon />}
                 component={<Link to="/mapas" />}
               >
-                Mapas Solares
+                Visores Solares
               </MenuItem>
-              
+              */}
+              <SubMenu icon={<WbSunnyRoundedIcon />} label="Visores Solares">
+                <MenuItem
+                  style={{
+                    color: colors.gray[100],
+                  }}
+                  component={<Link to="/mapas" />}
+                >
+                  Edificios
+                </MenuItem>
+                <MenuItem
+                  style={{
+                    color: colors.gray[100],
+                  }}
+                  component={<Link to="/visor-sscc" />}
+                >
+                  Espacio público
+                </MenuItem>
+              </SubMenu>
 
               <SubMenu icon={<CloudUploadIcon />} label="Actualización de datos">
                 <MenuItem
