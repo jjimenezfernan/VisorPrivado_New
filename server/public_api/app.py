@@ -692,3 +692,142 @@ def buildings_metrics(reference: str):
             "irr_mean_kWhm2_y": float(r[7]) if r[7] is not None else None,
         }
     }
+
+
+
+
+
+from pydantic import BaseModel
+from fastapi import HTTPException, Query
+
+class CelsBase(BaseModel):
+    nombre: str
+    street_norm: str
+    number_norm: int
+    reference: str
+    auto_CEL: int  # 1=CEL, 2=Autoconsumo compartido
+
+class CelsOut(CelsBase):
+    id: int
+
+@app.get("/cels")
+def list_cels(query: str | None = None, limit: int = 200, offset: int = 0):
+    where = ""
+    params: list = []
+    if query:
+        where = (
+            "WHERE "
+            "UPPER(nombre) LIKE UPPER(?) OR "
+            "UPPER(street_norm) LIKE UPPER(?) OR "
+            "UPPER(reference) LIKE UPPER(?)"
+        )
+        like = f"%{query}%"
+        params = [like, like, like]
+    rows = q(
+        f"""
+        SELECT id, nombre, street_norm, number_norm, reference, auto_CEL
+        FROM autoconsumos_CELS
+        {where}
+        ORDER BY id
+        LIMIT ? OFFSET ?
+        """,
+        params + [limit, offset],
+    )
+    items = [
+        {
+            "id": int(r[0]),
+            "nombre": r[1],
+            "street_norm": r[2],
+            "number_norm": int(r[3]) if r[3] is not None else None,
+            "reference": r[4],
+            "auto_CEL": int(r[5]) if r[5] is not None else None,
+        }
+        for r in rows
+    ]
+    return {"items": items, "limit": limit, "offset": offset, "count": len(items)}
+
+@app.get("/cels/{cid}")
+def get_cels(cid: int):
+    rows = q(
+        """
+        SELECT id, nombre, street_norm, number_norm, reference, auto_CEL
+        FROM autoconsumos_CELS
+        WHERE id = ?
+        LIMIT 1
+        """,
+        [cid],
+    )
+    if not rows:
+        raise HTTPException(404, "CELS no encontrado")
+    r = rows[0]
+    return {
+        "id": int(r[0]),
+        "nombre": r[1],
+        "street_norm": r[2],
+        "number_norm": int(r[3]) if r[3] is not None else None,
+        "reference": r[4],
+        "auto_CEL": int(r[5]) if r[5] is not None else None,
+    }
+
+@app.post("/cels")
+def create_cels(req: CelsBase):
+    if READ_ONLY:
+        raise HTTPException(403, "La API está en modo read-only (READ_ONLY)")
+    try:
+        assert _con is not None
+        _con.execute("BEGIN")
+        # evitar duplicados por referencia
+        dup = q("SELECT 1 FROM autoconsumos_CELS WHERE UPPER(reference) = UPPER(?) LIMIT 1;", [req.reference])
+        if dup:
+            raise HTTPException(409, "Ya existe un registro con esa referencia.")
+        new_id = _con.execute("SELECT COALESCE(MAX(id),0)+1 FROM autoconsumos_CELS").fetchone()[0]
+        _con.execute(
+            """
+            INSERT INTO autoconsumos_CELS (id, nombre, street_norm, number_norm, reference, auto_CEL)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            [new_id, req.nombre, req.street_norm, int(req.number_norm), req.reference, int(req.auto_CEL)],
+        )
+        _con.execute("COMMIT")
+        return {"ok": True, "id": int(new_id)}
+    except HTTPException:
+        _con.execute("ROLLBACK")
+        raise
+    except Exception as e:
+        _con.execute("ROLLBACK")
+        raise HTTPException(500, f"Error creando CELS: {e}")
+
+@app.put("/cels/{cid}")
+def update_cels(cid: int, req: CelsBase):
+    if READ_ONLY:
+        raise HTTPException(403, "La API está en modo read-only (READ_ONLY)")
+    try:
+        assert _con is not None
+        _con.execute("BEGIN")
+        # validar existencia
+        cur = q("SELECT 1 FROM autoconsumos_CELS WHERE id = ? LIMIT 1;", [cid])
+        if not cur:
+            raise HTTPException(404, "CELS no encontrado")
+        # chequear ref duplicada en otro id
+        dup = q(
+            "SELECT 1 FROM autoconsumos_CELS WHERE UPPER(reference) = UPPER(?) AND id <> ? LIMIT 1;",
+            [req.reference, cid],
+        )
+        if dup:
+            raise HTTPException(409, "Ya existe un registro con esa referencia.")
+        _con.execute(
+            """
+            UPDATE autoconsumos_CELS
+            SET nombre = ?, street_norm = ?, number_norm = ?, reference = ?, auto_CEL = ?
+            WHERE id = ?
+            """,
+            [req.nombre, req.street_norm, int(req.number_norm), req.reference, int(req.auto_CEL), cid],
+        )
+        _con.execute("COMMIT")
+        return {"ok": True, "id": int(cid)}
+    except HTTPException:
+        _con.execute("ROLLBACK")
+        raise
+    except Exception as e:
+        _con.execute("ROLLBACK")
+        raise HTTPException(500, f"Error actualizando CELS: {e}")

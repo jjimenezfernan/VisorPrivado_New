@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Box,
   Typography,
@@ -13,13 +13,16 @@ import {
   Select,
   InputLabel,
   FormControl,
+  ToggleButtonGroup,
+  ToggleButton,
+  Divider,
+  CircularProgress,
 } from "@mui/material";
 import axios from "axios";
 import { tokens } from "../../theme";
 import { motion } from "framer-motion";
 import SubUpBar from "../global/SubUpBar";
 import { Autocomplete } from "@mui/material";
-
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 const EMSV_URL = `${API_BASE}/api/visor_emsv`;
@@ -28,6 +31,11 @@ function ActualizarCELS() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  // ---- Modo de trabajo ----
+  const [mode, setMode] = useState("crear"); // 'crear' | 'modificar'
+  const [selectedId, setSelectedId] = useState(null);
+
+  // ---- Formulario ----
   const [form, setForm] = useState({
     nombre: "",
     street_norm: "",
@@ -36,6 +44,12 @@ function ActualizarCELS() {
     auto_CEL: 1,
   });
 
+  const resetForm = () => {
+    setForm({ nombre: "", street_norm: "", number_norm: "", reference: "", auto_CEL: 1 });
+    setSelectedId(null);
+  };
+
+  // ---- UI state ----
   const [loading, setLoading] = useState(false);
   const [snack, setSnack] = useState({ open: false, msg: "", severity: "success" });
   const onCloseSnack = () => setSnack((s) => ({ ...s, open: false }));
@@ -44,6 +58,11 @@ function ActualizarCELS() {
   const [jsonRef, setJsonRef] = useState(null);
   const [streets, setStreets] = useState([]);
   const [numbers, setNumbers] = useState([]);
+
+  // ---- CELS existentes ----
+  const [search, setSearch] = useState(""); // criterio de búsqueda (nombre o referencia)
+  const [cels, setCels] = useState([]);
+  const [loadingCels, setLoadingCels] = useState(false);
 
   // Cargar dataset de calles/números al montar
   useEffect(() => {
@@ -68,6 +87,30 @@ function ActualizarCELS() {
     setNumbers(nums.sort((a, b) => parseInt(a) - parseInt(b)));
   }, [form.street_norm, jsonRef]);
 
+  // Buscar CELS existentes (cuando modo='modificar' o cambia el search)
+  useEffect(() => {
+    if (mode !== "modificar") return;
+    let cancel = false;
+    (async () => {
+      try {
+        setLoadingCels(true);
+        const res = await axios.get(`${API_BASE}/cels`, {
+          params: { search: search || "", limit: 200 },
+        });
+        if (cancel) return;
+        setCels(res.data.items || []);
+      } catch (e) {
+        console.error(e);
+        setCels([]);
+      } finally {
+        if (!cancel) setLoadingCels(false);
+      }
+    })();
+    return () => {
+      cancel = true;
+    };
+  }, [mode, search]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
@@ -88,15 +131,26 @@ function ActualizarCELS() {
 
     try {
       setLoading(true);
-      await axios.post(`${API_BASE}/cels`, {
-        nombre: form.nombre.trim(),
-        street_norm: form.street_norm,
-        number_norm: Number(form.number_norm),
-        reference: form.reference.trim(),
-        auto_CEL: Number(form.auto_CEL),
-      });
-      setSnack({ open: true, msg: "CELS registrado correctamente.", severity: "success" });
-      setForm({ nombre: "", street_norm: "", number_norm: "", reference: "", auto_CEL: 1 });
+      if (mode === "crear" || !selectedId) {
+        await axios.post(`${API_BASE}/cels`, {
+          nombre: form.nombre.trim(),
+          street_norm: form.street_norm,
+          number_norm: Number(form.number_norm),
+          reference: form.reference.trim(),
+          auto_CEL: Number(form.auto_CEL),
+        });
+        setSnack({ open: true, msg: "CEL registrado correctamente.", severity: "success" });
+        resetForm();
+      } else {
+        await axios.put(`${API_BASE}/cels/${selectedId}`, {
+          nombre: form.nombre.trim(),
+          street_norm: form.street_norm,
+          number_norm: Number(form.number_norm),
+          reference: form.reference.trim(),
+          auto_CEL: Number(form.auto_CEL),
+        });
+        setSnack({ open: true, msg: "CEL actualizado correctamente.", severity: "success" });
+      }
     } catch (error) {
       let msg = "Error en el servidor.";
       if (error.response?.status === 403) msg = "La API está en modo solo lectura (READ_ONLY).";
@@ -108,51 +162,119 @@ function ActualizarCELS() {
     }
   };
 
+  const handleSelectCEL = async (cel) => {
+    if (!cel) {
+      resetForm();
+      return;
+    }
+    setSelectedId(cel.id);
+    setForm({
+      nombre: cel.nombre || "",
+      street_norm: cel.street_norm || "",
+      number_norm: String(cel.number_norm ?? ""),
+      reference: cel.reference || "",
+      auto_CEL: Number(cel.auto_CEL ?? 1),
+    });
+  };
+
+  const celOptions = useMemo(
+    () =>
+      cels.map((c) => ({
+        ...c,
+        label:
+          c.nombre
+            ? `${c.nombre} • ${c.reference} • ${c.street_norm} ${c.number_norm}`
+            : `${c.reference} • ${c.street_norm} ${c.number_norm}`,
+      })),
+    [cels]
+  );
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
       <SubUpBar
-        title="Registrar CELS"
+        title="Gestionar CELS"
         crumbs={[
           ["Inicio", "/"],
           ["Actualización de datos", "/actualizar-archivos"],
-          ["Registrar CELS", "/cels/nuevo"],
+          ["CELS", "/cels"],
         ]}
         info={{
-          title: "Alta de autoconsumos (CELS)",
+          title: "Alta y edición de autoconsumos (CELS)",
           description: (
             <Typography variant="h5" sx={{ color: colors.gray[400] }}>
-              Introduce la información del CELS para añadirlo a la base de datos.
+              Crea nuevos CELS o selecciona uno existente para modificarlo.
             </Typography>
           ),
         }}
       />
 
       <Box m="10px">
-        <Paper
-          elevation={3}
-          sx={{ p: 2.5, backgroundColor: colors.gray[900], borderRadius: 2 }}
-        >
-          <Typography
-            variant="h6"
-            sx={{ mb: 2, color: colors.gray[200], fontWeight: 700 }}
-          >
-            Formulario de registro
-          </Typography>
+        <Paper elevation={3} sx={{ p: 2.5, backgroundColor: colors.gray[900], borderRadius: 2 }}>
+          {/* Selector de modo */}
+          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ color: colors.gray[200], fontWeight: 700 }}>
+              {mode === "crear" ? "Formulario de registro" : "Editar CELS"}
+            </Typography>
+            <ToggleButtonGroup
+              color="primary"
+              value={mode}
+              exclusive
+              onChange={(_, val) => {
+                if (!val) return;
+                setMode(val);
+                if (val === "crear") resetForm();
+              }}
+              size="small"
+            >
+              <ToggleButton value="crear">Crear</ToggleButton>
+              <ToggleButton value="modificar">Modificar</ToggleButton>
+            </ToggleButtonGroup>
+          </Stack>
+
+          {mode === "modificar" && (
+            <>
+              <Stack spacing={2} direction={{ xs: "column", sm: "row" }} sx={{ mb: 2 }}>
+                <TextField
+                  fullWidth
+                  label="Buscar por nombre o referencia"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Ej.: 7326410VK3672N o 'Colegio XYZ'"
+                />
+                <Autocomplete
+                  fullWidth
+                  options={celOptions}
+                  loading={loadingCels}
+                  onChange={(_e, val) => handleSelectCEL(val || null)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Seleccionar CELS existente"
+                      placeholder={loadingCels ? "Cargando..." : "Escribe para filtrar"}
+                      InputProps={{
+                        ...params.InputProps,
+                        endAdornment: (
+                          <>
+                            {loadingCels ? <CircularProgress size={18} /> : null}
+                            {params.InputProps.endAdornment}
+                          </>
+                        ),
+                      }}
+                    />
+                  )}
+                />
+              </Stack>
+              <Divider sx={{ mb: 2, borderColor: colors.gray[700] }} />
+            </>
+          )}
 
           {/* --- Nombre --- */}
           <Stack spacing={2} direction={{ xs: "column", sm: "row" }}>
-            <TextField
-              fullWidth
-              label="Nombre"
-              name="nombre"
-              value={form.nombre}
-              onChange={handleChange}
-            />
+            <TextField fullWidth label="Nombre" name="nombre" value={form.nombre} onChange={handleChange} />
           </Stack>
 
           {/* --- Calle y número --- */}
           <Stack spacing={2} direction={{ xs: "column", sm: "row" }} sx={{ mt: 2 }}>
-
             <Autocomplete
               fullWidth
               options={streets}
@@ -161,19 +283,10 @@ function ActualizarCELS() {
                 setForm((f) => ({ ...f, street_norm: newValue || "", number_norm: "" }))
               }
               renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Calle"
-                  placeholder="Escribe para buscar..."
-                  variant="outlined"
-                />
+                <TextField {...params} label="Calle" placeholder="Escribe para buscar..." variant="outlined" />
               )}
-              
               disableClearable={false}
-              
             />
-
-
 
             <FormControl fullWidth disabled={!form.street_norm}>
               <InputLabel>Número</InputLabel>
@@ -181,9 +294,7 @@ function ActualizarCELS() {
                 name="number_norm"
                 value={form.number_norm}
                 label="Número"
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, number_norm: e.target.value }))
-                }
+                onChange={(e) => setForm((f) => ({ ...f, number_norm: e.target.value }))}
               >
                 {numbers.map((n) => (
                   <MenuItem key={n} value={n}>
@@ -211,9 +322,7 @@ function ActualizarCELS() {
                 name="auto_CEL"
                 value={form.auto_CEL}
                 label="Tipo de proyecto"
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, auto_CEL: e.target.value }))
-                }
+                onChange={(e) => setForm((f) => ({ ...f, auto_CEL: e.target.value }))}
               >
                 <MenuItem value={1}>CEL</MenuItem>
                 <MenuItem value={2}>Autoconsumo compartido</MenuItem>
@@ -223,27 +332,10 @@ function ActualizarCELS() {
 
           {/* --- Botones --- */}
           <Box mt={3} display="flex" gap={1.5}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSubmit}
-              disabled={loading}
-            >
-              {loading ? "Guardando..." : "Guardar"}
+            <Button variant="contained" color="primary" onClick={handleSubmit} disabled={loading}>
+              {loading ? "Guardando..." : mode === "crear" || !selectedId ? "Guardar" : "Actualizar"}
             </Button>
-            <Button
-              variant="outlined"
-              onClick={() =>
-                setForm({
-                  nombre: "",
-                  street_norm: "",
-                  number_norm: "",
-                  reference: "",
-                  auto_CEL: 1,
-                })
-              }
-              disabled={loading}
-            >
+            <Button variant="outlined" onClick={resetForm} disabled={loading}>
               Limpiar
             </Button>
           </Box>
@@ -256,11 +348,7 @@ function ActualizarCELS() {
         onClose={onCloseSnack}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
-        <Alert
-          onClose={onCloseSnack}
-          severity={snack.severity}
-          sx={{ width: "100%" }}
-        >
+        <Alert onClose={onCloseSnack} severity={snack.severity} sx={{ width: "100%" }}>
           {snack.msg}
         </Alert>
       </Snackbar>
